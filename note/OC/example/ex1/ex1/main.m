@@ -1,19 +1,57 @@
 #import <Foundation/Foundation.h>
 
-double area(double a, double b) {
-    return a * b;
+@interface Student : NSObject {
+    @public
+    NSString *_name;
+    int _age;
+    int _Chinese;
+    int _math;
+    int _English;
+}
+- (void)run;
+- (void)eat:(NSString *)food;
+- (int)sum:(int)num1 :(int)num2;
+- (int)sumWith:(int)num1 and:(int)num2;
+@end
+
+@implementation Student
+- (void)run {
+    NSLog(@"Running...");
 }
 
+- (void)eat:(NSString *)food {
+  NSLog(@"eating %@", food);
+}
+
+- (int)sum:(int)num1 :(int)num2 {
+  return num1 + num2;
+}
+
+- (int)sumWith:(int)num1 and:(int)num2 {
+  return num1 + num2;
+}
+@end
+
 int main(int argc, const char *argv[]) {
-    @autoreleasepool {
-        NSLog(@"3*3=%f", area(3.0,3.0));
-        // argc 就是第几个条件
-        // 终端输入 ./ex1 -s aa
-        //   argc==3 argv[0]=="./ex1" argv[1]=="-s" argv[2]=="aa"
-        for (int i = 0; i< argc; i++) {
-            NSLog(@"%s", argv[i]);
-        }
-    }
+    Student *s1 = [Student new];
+    s1->_name = @"Leo";
+    s1->_age = 18;
+    s1->_math = 100;
+    s1->_Chinese = 100;
+    s1->_English = 100;
+    
+    NSLog(@"Student s1 called %@, age is %d, math's Score is %d, Chinese's Score is %d, English's Score is %d",
+          s1->_name,
+          s1->_age,
+          s1->_math,
+          s1->_Chinese,
+          s1->_English
+          );
+    [s1 run];
+    [s1 eat:@"bat"];
+    int sum = [s1 sum:1 :2];
+    int sum1 = [s1 sumWith:1 and:2];
+    NSLog(@"%d %d", sum, sum1);
     return 0;
 
 }
