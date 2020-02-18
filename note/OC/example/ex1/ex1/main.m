@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 
+#pragma mark Student的声明
 @interface Student : NSObject {
     @public
     NSString *_name;
@@ -13,7 +14,7 @@
 - (int)sum:(int)num1 :(int)num2;
 - (int)sumWith:(int)num1 and:(int)num2;
 @end
-
+#pragma mark Student的实现
 @implementation Student
 - (void)run {
     NSLog(@"Running...");
@@ -31,7 +32,7 @@
   return num1 + num2;
 }
 @end
-
+#pragma mark -
 int main(int argc, const char *argv[]) {
     Student *s1 = [Student new];
     s1->_name = @"Leo";
