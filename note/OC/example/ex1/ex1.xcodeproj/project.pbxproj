@@ -16,6 +16,7 @@
 		B71A204B23FD0D4D002150C1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B78F9A8C23FCD9BE0051E4AA /* Person.m */; };
 		B71A205023FD0D7F002150C1 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204C23FD0D7E002150C1 /* Dog.m */; };
 		B71A205123FD0D7F002150C1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204D23FD0D7E002150C1 /* Person.m */; };
+		B71A205423FD4D36002150C1 /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A205323FD4D36002150C1 /* Student.m */; };
 		B7338F2723FA757100C2AA85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7338F2623FA757100C2AA85 /* main.m */; };
 		B733A69823FBBF3F003ABC59 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B733A69723FBBF3F003ABC59 /* test.c */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,8 @@
 		B71A204D23FD0D7E002150C1 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = package/Person.m; sourceTree = SOURCE_ROOT; };
 		B71A204E23FD0D7E002150C1 /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dog.h; path = package/Dog.h; sourceTree = SOURCE_ROOT; };
 		B71A204F23FD0D7F002150C1 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = package/Person.h; sourceTree = SOURCE_ROOT; };
+		B71A205223FD4D36002150C1 /* Student.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
+		B71A205323FD4D36002150C1 /* Student.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
 		B7338F2323FA757100C2AA85 /* ex1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ex1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7338F2623FA757100C2AA85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B733A69623FBBF3F003ABC59 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 				B78F9A8F23FCDDE50051E4AA /* Dog.h */,
 				B78F9A9023FCDDE50051E4AA /* Dog.m */,
 				B71A204523FD0C69002150C1 /* main.m */,
+				B71A205223FD4D36002150C1 /* Student.h */,
+				B71A205323FD4D36002150C1 /* Student.m */,
 			);
 			path = package;
 			sourceTree = "<group>";
@@ -275,6 +280,7 @@
 				B71A204B23FD0D4D002150C1 /* Person.m in Sources */,
 				B71A204A23FD0D4D002150C1 /* Dog.m in Sources */,
 				B71A204623FD0C69002150C1 /* main.m in Sources */,
+				B71A205423FD4D36002150C1 /* Student.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
