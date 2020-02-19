@@ -1,7 +1,11 @@
 #import <Foundation/Foundation.h>
+#import "Person.h"
 int main(int argc, const char * argv[]) {
-    NSString *str = @"中国我爱你";
-    unichar ch = [str characterAtIndex:2]; // 啊
-    NSLog(@"ch = %C", ch);// 啊，注意这里时大写的C
+    
+    Person *p1 = [Person new];
+    [p1 setAge:22];
+    [p1 setName:@"xiaohua"];
+    [p1 show];
+    NSLog(@"%@,%d岁",[p1 name], [p1 age]);
     return 0;
 }
