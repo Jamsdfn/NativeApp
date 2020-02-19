@@ -219,24 +219,6 @@ OC是兼容C的所以C的内存区域就是OC中的内存，C的内存有五大�
 
   - 那么为什么不把方法放入对象中呢，因为对象的属性是互不干扰的，所以没创建一个对象都要申请一块空间，而对象的方法是高度相同的，如果每次new都申请一块空间，那么将极大的浪费内存，因此对象方法不会放入对象（堆中的空间）中
 
-### nil 与 NULL
-
-NULL只能作为指针变量的值，如果一个指针变量的值为NULL则代表这个指针不指向内存中的任何空间，其实NULL等价于0，但是不完全等价，他不是整型的0
-
-nil只能作为指针变量的值代表这个指针不指向内存中的任何空间 nil完全等价于NULL
-
-虽然两者完全等价，还是要建议一下，nil只用于OC的类指针，NULL用于C指针，如果类指针指向nil如`Person *p1 = nil;`那么如果访问对象属性则会报错，但是掉用对象方法不会报错，而是不会执行任何操作，跳过这条语句了
-
-### 分组导航标记
-
-其实就是Xcode的一个小技巧在类声明前加上`#pragma mark xxx的声明`，类实现前加上`#pragma mark xxx的实现`。点击编辑区域导航条main后面的tab就可在导航条上分组如图
-
-![](./1.png)
-
-`#pragma mark -`则会加一条分割线
-
-`#pragma mark - x分类`则会加一条分割线，线后面紧接着加上一条分组
-
 ### 方法和函数的异同
 
 C语法的函数就叫做函数，OC类中写的方法就叫方法。
@@ -250,3 +232,242 @@ C语法的函数就叫做函数，OC类中写的方法就叫方法。
 - 方法是属于类，而函数是独立的
 
 **注**：就算把函数写在类中，函数也不属于类，创建的对象中也没有这个函数
+
+### 对象和方法
+
+对象可以作为方法的参数，对象也可以作为方法的返回值
+
+类的本质其实是我们自定义的一个数据类型，那么什么是数据类型呢，其实数据类型就是在内存中开辟空间的一个模版。类的本质就是一个数据类型，因为对象在内存中的大小是由我们决定的，多写几个属性，对象占的空间就大一点。
+
+正因为类的本质就是一个数据类型，所以我们可以把类作为一个方法的参数或者返回值
+
+- 类作为方法的参数
+
+```objc
+// Person.h
+#import <Foundation/Foundation.h>
+#import "Dog.h"
+@interface Person : NSObject {
+  NSString *_name;
+  int _age;
+}
+- (void)sayHi;
+- (void)dogShout:(Dog *)dog;
+@end
+  
+// Person.m
+#import "Person.h"
+@implementation Person
+- (void)sayHi {
+  NSLog(@"Hi");
+}
+- (void)dogShout:(Dog *)dog{
+  // 这个Dog类里有个sayHi方法
+  [dog sayHi];
+}
+@end
+ 
+// main.m
+#import "Person.h"
+  // 因为Person.h里引入过Dog.h了，所以不用再引一边Dog.h,不过为了可维护行我们也可以加上
+int main{
+  Person *p1 = [Person new];
+  [p1 sayHi];
+  Dog *d1 = [Dog new];
+  [p1 dogShout:d1];
+  return 0;
+}
+```
+
+- 类作为返回值
+
+```objc
+// Person.h
+#import <Foundation/Foundation.h>
+#import "Dog.h"
+@interface Person : NSObject {
+  NSString *_name;
+  int _age;
+}
+- (void)sayHi;
+- (Dog *)createDog;
+@end
+  
+// Person.m
+#import "Person.h"
+@implementation Person
+- (void)sayHi {
+  NSLog(@"Hi");
+}
+- (Dog *)createDog {
+	Dog *d1 = [Dog new];
+  return d1;
+}
+@end
+ 
+// main.m
+#import "Person.h"
+  // 因为Person.h里引入过Dog.h了，所以不用再引一边Dog.h,不过为了可维护行我们也可以加上
+int main{
+  Person *p1 = [Person new];
+  [p1 sayHi];
+  Dog *d1 = [p1 createDog];
+  [d1 sayHi];
+  return 0;
+}
+```
+
+- 对象作为类的属性
+
+引入好之后在属性中直接写就好了
+
+- 类的实现中如何调用自身别的方法 `[self fun];`
+
+### 类方法
+
+OC中的方法分为两种：对象方法/实例方法和类方法。
+
+对象方法就是必须先创建对象，通过类名来调用的方法；类方法的调用不依赖于对象，如果要调用类方法，不需要创建对象，而是直接通过类名来调用
+
+对象方法的声明使用 - 号 如`- (void)sayHi;` 
+
+类方法的声明使用 + 号，语法和对象方法一样；实现也是在 @implementation 中使用和对象方法也差不多 `[类名 类方法];`
+
+类方法的特点：
+
+- 节约空间：因为调用类方法不用创建对象
+- 提高效率：因为调用类方法不需要先找对象指针再找isa指针再找到代码段中的方法，一步到位
+
+**注**：在类方法中不能直接访问属性，也不能调用对象方法。如果方法不直接访问属性，也不调用对象方法，我们可以把方法定义为类方法，这样节约空间。如果我们写一个类，那么就要求为这个类提供一个和类名同名的类方法，这个方法一个最纯洁的对象返回。苹果和第三方都遵循这个规范。可以通过类方法给对象初始化值 `+ (void)类名With属性1:()属性 and属性2:()属性`
+
+### 匿名对象
+
+
+
+## nil 与 NULL
+
+NULL只能作为指针变量的值，如果一个指针变量的值为NULL则代表这个指针不指向内存中的任何空间，其实NULL等价于0，但是不完全等价，他不是整型的0
+
+nil只能作为指针变量的值代表这个指针不指向内存中的任何空间 nil完全等价于NULL
+
+虽然两者完全等价，还是要建议一下，nil只用于OC的类指针，NULL用于C指针，如果类指针指向nil如`Person *p1 = nil;`那么如果访问对象属性则会报错，但是掉用对象方法不会报错，而是不会执行任何操作，跳过这条语句了
+
+## NSString 常用类方法
+
+- `+ (instancetype)stringWithUTF8String:(const char *)nullTerminatedCString;`
+
+  - instancetype 作为返回值表示返回当前这个类的对象，作用：把C语言字符串转化为OC字符串对象
+
+  ```objc
+  char *s0 = "rose";
+  NSString *s1 = [NSString stringWithUTF8String:s0];
+  ```
+
+- `+ (instancetype)stringWithFormat:(NSString *)format,... `
+
+  - 作用：拼接字符串，使用变量或者其他数据拼接成OC字符串
+
+  ```objc
+  int age=10;
+  NSSting *name=@"ming";
+  NSString *s = [NSString stringWithFormat:@"大家好我叫%@,今年%d岁",name,age];
+  ```
+
+- [str length] 对象方法
+
+  - 得到字符串长度
+
+  ```objc
+  NSString *str = @"test";
+  NSUInteger len = [str length];
+  NSLog(@"%lu",len); // 4
+  // NSUInteger 其实就是 typedef unsigned long NSUInteger;
+  ```
+
+- [str characterAtIndex:2]
+
+  - 得到对应位置的字符
+
+  ```objc
+  NSString *str = @"你好啊";
+  unichar ch = [str characterAtIndex:2]; // 啊
+  NSLog(@"第三个字符是 %C", ch);// 啊，注意这里时大写的C
+  // unichar 就是一个官方定义 typedef unsigned short unichar;
+  ```
+
+- `- (BOOL)isEqualToString:(NSString *)aString;`
+
+  - 判断两个字符串是否相等
+
+  ```objc
+  NSString *str1 = @"jack";
+  NSString *str2 = [NSString stringWithFormat:@"jack"];
+  if([str1 isEqualToString:str2]){
+    NSLog(@"==");
+  }
+  // 判断不能直接用 == 判断，== 只对都是用str1的方式创建的OC字符串有效
+  ```
+
+## 分组导航标记
+
+其实就是Xcode的一个小技巧在类声明前加上`#pragma mark xxx的声明`，类实现前加上`#pragma mark xxx的实现`。点击编辑区域导航条main后面的tab就可在导航条上分组如图
+
+![](./1.png)
+
+`#pragma mark -`则会加一条分割线
+
+`#pragma mark - x分类`则会加一条分割线，线后面紧接着加上一条分组
+
+## 多文件开发
+
+通常我们把一个类写在一个模块之中，一个模块至少包含两个文件，一个是.h头文件，一个是.m实现文件，在头文件中写类的声明，在实现文件中写类的实现。因为头文件中要用到 Foundation 框架中的 NSObject 类，所以 .h 文件中要引入 Foundation 框架。因为.h文件引入过框架了，所以实现文件即使用到Foundation的类也可以不引入框架。
+
+xcode中直接新建一个 cocoa class 就可以自动生成.h .m文件，并且相关引入也会帮你引入好。
+
+在我们写好这个模块后，如果想使用的话直接在main中引入模块的头文件就可以使用了。
+
+```objc
+// Person.h
+#import <Foundation/Foundation.h>
+#import "Gender.h"
+@interface Person : NSObject {
+  NSString *_name;
+  int _age;
+  Gender _gender;
+}
+- (void)sayHi;
+@end
+  
+// Person.m
+#import "Person.h"
+@implementation Person
+- (void)sayHi {
+  NSLog(@"Hi");
+}
+@end
+ 
+// main.m
+#import "Person.h"
+
+int main{
+  Person *p1 = [Person new];
+  [p1 sayHi];
+  return 0;
+}
+// 如果我们多个类都用到了性别这个属性，我们为了提高代码的可阅读性，我们可以单独定义一个枚举的头文件，哪个类用到我们就引入就好了
+// Gender.h
+typedef enum {
+  Male,
+  Female
+} Gender;
+
+```
+
+## OC异常处理
+
+什么是异常：当程序在执行的时候处于某种特定调价下，程序的执行会终止。
+
+OC有自己的异常机制@try{}@catch(NSException *ex){}，将有可能有异常的代码放入@try{}中，如果出现异常，程序不会崩溃，而会立即跳入@catch中执行catch代码，和别的语言的try...catch 是一样的。正如别的语言一样OC也可以在try...catch后加一个@finally，即无论成功失败都会执行的代码。
+
+**注**：不是所有的运行时异常try...catch都能捕获到的，如C语言的异常是无法处理的，比如除数为0，所以用的是比较少的，避免异常的方式还是用逻辑判断。
+

@@ -7,11 +7,38 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B71A203123FCFA9D002150C1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A203023FCFA9D002150C1 /* main.m */; };
+		B71A203723FCFBCD002150C1 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A203623FCFBCD002150C1 /* Player.m */; };
+		B71A203B23FD0106002150C1 /* Robot.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A203A23FD0106002150C1 /* Robot.m */; };
+		B71A203E23FD0500002150C1 /* Judge.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A203D23FD0500002150C1 /* Judge.m */; };
+		B71A204623FD0C69002150C1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204523FD0C69002150C1 /* main.m */; };
+		B71A204A23FD0D4D002150C1 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B78F9A9023FCDDE50051E4AA /* Dog.m */; };
+		B71A204B23FD0D4D002150C1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B78F9A8C23FCD9BE0051E4AA /* Person.m */; };
+		B71A205023FD0D7F002150C1 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204C23FD0D7E002150C1 /* Dog.m */; };
+		B71A205123FD0D7F002150C1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204D23FD0D7E002150C1 /* Person.m */; };
 		B7338F2723FA757100C2AA85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7338F2623FA757100C2AA85 /* main.m */; };
 		B733A69823FBBF3F003ABC59 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B733A69723FBBF3F003ABC59 /* test.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B71A202C23FCFA9D002150C1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B71A204123FD0C68002150C1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		B7338F2123FA757100C2AA85 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -24,13 +51,46 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B71A202E23FCFA9D002150C1 /* game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = game; sourceTree = BUILT_PRODUCTS_DIR; };
+		B71A203023FCFA9D002150C1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B71A203523FCFBCD002150C1 /* Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		B71A203623FCFBCD002150C1 /* Player.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		B71A203823FCFC3F002150C1 /* FistType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FistType.h; sourceTree = "<group>"; };
+		B71A203923FD0106002150C1 /* Robot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Robot.h; sourceTree = "<group>"; };
+		B71A203A23FD0106002150C1 /* Robot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Robot.m; sourceTree = "<group>"; };
+		B71A203C23FD0500002150C1 /* Judge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Judge.h; sourceTree = "<group>"; };
+		B71A203D23FD0500002150C1 /* Judge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Judge.m; sourceTree = "<group>"; };
+		B71A204323FD0C68002150C1 /* package */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = package; sourceTree = BUILT_PRODUCTS_DIR; };
+		B71A204523FD0C69002150C1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B71A204C23FD0D7E002150C1 /* Dog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Dog.m; path = package/Dog.m; sourceTree = SOURCE_ROOT; };
+		B71A204D23FD0D7E002150C1 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Person.m; path = package/Person.m; sourceTree = SOURCE_ROOT; };
+		B71A204E23FD0D7E002150C1 /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dog.h; path = package/Dog.h; sourceTree = SOURCE_ROOT; };
+		B71A204F23FD0D7F002150C1 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = package/Person.h; sourceTree = SOURCE_ROOT; };
 		B7338F2323FA757100C2AA85 /* ex1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ex1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7338F2623FA757100C2AA85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B733A69623FBBF3F003ABC59 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		B733A69723FBBF3F003ABC59 /* test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		B78F9A8C23FCD9BE0051E4AA /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		B78F9A8E23FCD9D30051E4AA /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		B78F9A8F23FCDDE50051E4AA /* Dog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
+		B78F9A9023FCDDE50051E4AA /* Dog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B71A202B23FCFA9D002150C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71A204023FD0C68002150C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B7338F2023FA757100C2AA85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -41,10 +101,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B71A202F23FCFA9D002150C1 /* game */ = {
+			isa = PBXGroup;
+			children = (
+				B71A203023FCFA9D002150C1 /* main.m */,
+				B71A203523FCFBCD002150C1 /* Player.h */,
+				B71A203623FCFBCD002150C1 /* Player.m */,
+				B71A203823FCFC3F002150C1 /* FistType.h */,
+				B71A203923FD0106002150C1 /* Robot.h */,
+				B71A203A23FD0106002150C1 /* Robot.m */,
+				B71A203C23FD0500002150C1 /* Judge.h */,
+				B71A203D23FD0500002150C1 /* Judge.m */,
+			);
+			path = game;
+			sourceTree = "<group>";
+		};
+		B71A204423FD0C69002150C1 /* package */ = {
+			isa = PBXGroup;
+			children = (
+				B78F9A8C23FCD9BE0051E4AA /* Person.m */,
+				B78F9A8E23FCD9D30051E4AA /* Person.h */,
+				B78F9A8F23FCDDE50051E4AA /* Dog.h */,
+				B78F9A9023FCDDE50051E4AA /* Dog.m */,
+				B71A204523FD0C69002150C1 /* main.m */,
+			);
+			path = package;
+			sourceTree = "<group>";
+		};
 		B7338F1A23FA757100C2AA85 = {
 			isa = PBXGroup;
 			children = (
 				B7338F2523FA757100C2AA85 /* ex1 */,
+				B71A202F23FCFA9D002150C1 /* game */,
+				B71A204423FD0C69002150C1 /* package */,
 				B7338F2423FA757100C2AA85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,6 +142,8 @@
 			isa = PBXGroup;
 			children = (
 				B7338F2323FA757100C2AA85 /* ex1 */,
+				B71A202E23FCFA9D002150C1 /* game */,
+				B71A204323FD0C68002150C1 /* package */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,6 +154,10 @@
 				B7338F2623FA757100C2AA85 /* main.m */,
 				B733A69623FBBF3F003ABC59 /* test.h */,
 				B733A69723FBBF3F003ABC59 /* test.c */,
+				B71A204E23FD0D7E002150C1 /* Dog.h */,
+				B71A204C23FD0D7E002150C1 /* Dog.m */,
+				B71A204F23FD0D7F002150C1 /* Person.h */,
+				B71A204D23FD0D7E002150C1 /* Person.m */,
 			);
 			path = ex1;
 			sourceTree = "<group>";
@@ -70,6 +165,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B71A202D23FCFA9D002150C1 /* game */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B71A203423FCFA9D002150C1 /* Build configuration list for PBXNativeTarget "game" */;
+			buildPhases = (
+				B71A202A23FCFA9D002150C1 /* Sources */,
+				B71A202B23FCFA9D002150C1 /* Frameworks */,
+				B71A202C23FCFA9D002150C1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = game;
+			productName = game;
+			productReference = B71A202E23FCFA9D002150C1 /* game */;
+			productType = "com.apple.product-type.tool";
+		};
+		B71A204223FD0C68002150C1 /* package */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B71A204723FD0C69002150C1 /* Build configuration list for PBXNativeTarget "package" */;
+			buildPhases = (
+				B71A203F23FD0C68002150C1 /* Sources */,
+				B71A204023FD0C68002150C1 /* Frameworks */,
+				B71A204123FD0C68002150C1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = package;
+			productName = package;
+			productReference = B71A204323FD0C68002150C1 /* package */;
+			productType = "com.apple.product-type.tool";
+		};
 		B7338F2223FA757100C2AA85 /* ex1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B7338F2A23FA757100C2AA85 /* Build configuration list for PBXNativeTarget "ex1" */;
@@ -96,6 +225,12 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Alexander;
 				TargetAttributes = {
+					B71A202D23FCFA9D002150C1 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					B71A204223FD0C68002150C1 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
 					B7338F2223FA757100C2AA85 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -115,16 +250,41 @@
 			projectRoot = "";
 			targets = (
 				B7338F2223FA757100C2AA85 /* ex1 */,
+				B71A202D23FCFA9D002150C1 /* game */,
+				B71A204223FD0C68002150C1 /* package */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B71A202A23FCFA9D002150C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71A203B23FD0106002150C1 /* Robot.m in Sources */,
+				B71A203E23FD0500002150C1 /* Judge.m in Sources */,
+				B71A203723FCFBCD002150C1 /* Player.m in Sources */,
+				B71A203123FCFA9D002150C1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B71A203F23FD0C68002150C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B71A204B23FD0D4D002150C1 /* Person.m in Sources */,
+				B71A204A23FD0D4D002150C1 /* Dog.m in Sources */,
+				B71A204623FD0C69002150C1 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B7338F1F23FA757100C2AA85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B71A205023FD0D7F002150C1 /* Dog.m in Sources */,
 				B7338F2723FA757100C2AA85 /* main.m in Sources */,
+				B71A205123FD0D7F002150C1 /* Person.m in Sources */,
 				B733A69823FBBF3F003ABC59 /* test.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -132,6 +292,38 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		B71A203223FCFA9D002150C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B71A203323FCFA9D002150C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B71A204823FD0C69002150C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B71A204923FD0C69002150C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B7338F2823FA757100C2AA85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -260,6 +452,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B71A203423FCFA9D002150C1 /* Build configuration list for PBXNativeTarget "game" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B71A203223FCFA9D002150C1 /* Debug */,
+				B71A203323FCFA9D002150C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B71A204723FD0C69002150C1 /* Build configuration list for PBXNativeTarget "package" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B71A204823FD0C69002150C1 /* Debug */,
+				B71A204923FD0C69002150C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B7338F1E23FA757100C2AA85 /* Build configuration list for PBXProject "ex1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
