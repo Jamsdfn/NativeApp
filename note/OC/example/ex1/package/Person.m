@@ -3,7 +3,7 @@
 @implementation Person
 
 - (void)show{
-    NSLog(@"我叫%@，今年%d岁了", _name, _age);
+    NSLog(@"我叫%@，今年%d岁了，身高%f，体重%f", _name, _age, _height, _weight);
 }
 
 - (void)setAge:(int)age {
@@ -17,11 +17,8 @@
     return _age;
 }
 
-- (void)setName:(NSString *)name{
-    _name = name;
-}
-- (NSString *)name {
-    return _name;
-}
+@synthesize name;
+@synthesize height;
+@synthesize weight;
 
 @end

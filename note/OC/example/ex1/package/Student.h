@@ -7,6 +7,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 - (void)setStuNumber:(NSString *)Id;
 - (NSString *)stuNumber;
+
 @end
 
 NS_ASSUME_NONNULL_END
