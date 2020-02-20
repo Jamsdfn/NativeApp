@@ -7,7 +7,8 @@
 @property float height;
 @property float weight;
 
-
++ (instancetype)createSelf;
 - (void)show;
+- (instancetype)initWith:(NSString *)name andAge:(int)age;
 
 @end

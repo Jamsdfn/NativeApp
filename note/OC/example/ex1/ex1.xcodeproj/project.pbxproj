@@ -19,6 +19,8 @@
 		B71A205423FD4D36002150C1 /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A205323FD4D36002150C1 /* Student.m */; };
 		B7338F2723FA757100C2AA85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7338F2623FA757100C2AA85 /* main.m */; };
 		B733A69823FBBF3F003ABC59 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B733A69723FBBF3F003ABC59 /* test.c */; };
+		B7DA661323FEBFC2003E23B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA661223FEBFC2003E23B0 /* main.m */; };
+		B7DA661923FEC0E4003E23B0 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA661823FEC0E4003E23B0 /* Person.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +43,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		B7338F2123FA757100C2AA85 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B7DA660E23FEBFC2003E23B0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -77,6 +88,10 @@
 		B78F9A8E23FCD9D30051E4AA /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		B78F9A8F23FCDDE50051E4AA /* Dog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
 		B78F9A9023FCDDE50051E4AA /* Dog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
+		B7DA661023FEBFC2003E23B0 /* MRC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MRC; sourceTree = BUILT_PRODUCTS_DIR; };
+		B7DA661223FEBFC2003E23B0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B7DA661723FEC0E4003E23B0 /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		B7DA661823FEC0E4003E23B0 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +110,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B7338F2023FA757100C2AA85 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7DA660D23FEBFC2003E23B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,11 +144,11 @@
 		B71A204423FD0C69002150C1 /* package */ = {
 			isa = PBXGroup;
 			children = (
-				B78F9A8C23FCD9BE0051E4AA /* Person.m */,
-				B78F9A8E23FCD9D30051E4AA /* Person.h */,
 				B78F9A8F23FCDDE50051E4AA /* Dog.h */,
 				B78F9A9023FCDDE50051E4AA /* Dog.m */,
 				B71A204523FD0C69002150C1 /* main.m */,
+				B78F9A8E23FCD9D30051E4AA /* Person.h */,
+				B78F9A8C23FCD9BE0051E4AA /* Person.m */,
 				B71A205223FD4D36002150C1 /* Student.h */,
 				B71A205323FD4D36002150C1 /* Student.m */,
 			);
@@ -139,6 +161,7 @@
 				B7338F2523FA757100C2AA85 /* ex1 */,
 				B71A202F23FCFA9D002150C1 /* game */,
 				B71A204423FD0C69002150C1 /* package */,
+				B7DA661123FEBFC2003E23B0 /* MRC */,
 				B7338F2423FA757100C2AA85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -149,6 +172,7 @@
 				B7338F2323FA757100C2AA85 /* ex1 */,
 				B71A202E23FCFA9D002150C1 /* game */,
 				B71A204323FD0C68002150C1 /* package */,
+				B7DA661023FEBFC2003E23B0 /* MRC */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,6 +189,16 @@
 				B71A204D23FD0D7E002150C1 /* Person.m */,
 			);
 			path = ex1;
+			sourceTree = "<group>";
+		};
+		B7DA661123FEBFC2003E23B0 /* MRC */ = {
+			isa = PBXGroup;
+			children = (
+				B7DA661223FEBFC2003E23B0 /* main.m */,
+				B7DA661723FEC0E4003E23B0 /* Person.h */,
+				B7DA661823FEC0E4003E23B0 /* Person.m */,
+			);
+			path = MRC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +255,23 @@
 			productReference = B7338F2323FA757100C2AA85 /* ex1 */;
 			productType = "com.apple.product-type.tool";
 		};
+		B7DA660F23FEBFC2003E23B0 /* MRC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B7DA661423FEBFC2003E23B0 /* Build configuration list for PBXNativeTarget "MRC" */;
+			buildPhases = (
+				B7DA660C23FEBFC2003E23B0 /* Sources */,
+				B7DA660D23FEBFC2003E23B0 /* Frameworks */,
+				B7DA660E23FEBFC2003E23B0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MRC;
+			productName = MRC;
+			productReference = B7DA661023FEBFC2003E23B0 /* MRC */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -237,6 +288,9 @@
 						CreatedOnToolsVersion = 11.3.1;
 					};
 					B7338F2223FA757100C2AA85 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					B7DA660F23FEBFC2003E23B0 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
 				};
@@ -257,6 +311,7 @@
 				B7338F2223FA757100C2AA85 /* ex1 */,
 				B71A202D23FCFA9D002150C1 /* game */,
 				B71A204223FD0C68002150C1 /* package */,
+				B7DA660F23FEBFC2003E23B0 /* MRC */,
 			);
 		};
 /* End PBXProject section */
@@ -292,6 +347,15 @@
 				B7338F2723FA757100C2AA85 /* main.m in Sources */,
 				B71A205123FD0D7F002150C1 /* Person.m in Sources */,
 				B733A69823FBBF3F003ABC59 /* test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7DA660C23FEBFC2003E23B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7DA661923FEC0E4003E23B0 /* Person.m in Sources */,
+				B7DA661323FEBFC2003E23B0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +519,24 @@
 			};
 			name = Release;
 		};
+		B7DA661523FEBFC2003E23B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B7DA661623FEBFC2003E23B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -490,6 +572,15 @@
 			buildConfigurations = (
 				B7338F2B23FA757100C2AA85 /* Debug */,
 				B7338F2C23FA757100C2AA85 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B7DA661423FEBFC2003E23B0 /* Build configuration list for PBXNativeTarget "MRC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7DA661523FEBFC2003E23B0 /* Debug */,
+				B7DA661623FEBFC2003E23B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

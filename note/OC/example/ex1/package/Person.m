@@ -14,4 +14,23 @@
     }
 }
 
++ (instancetype)createSelf{
+    return [self new];
+}
+
+- (instancetype)init{
+  if (self = [super init]){
+    self.name = @"jack";
+  }
+  return self;
+}
+
+- (instancetype)initWith:(NSString *)name andAge:(int)age {
+if (self = [super init]){
+    self.name = name;
+    self.age = age;
+  }
+  return self;
+}
+
 @end

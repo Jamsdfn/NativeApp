@@ -460,7 +460,9 @@ SEL 是一个数据类型，所以要在内存中申请空间存储数据。SEL�
     - 堆的特点：空间相对较大，但是存储在堆中的数据访问的效率相对低一些
   - 赋值：结构体是值赋值，而类是对象指针地址赋值
 
-## nil 与 NULL
+## OC特有东西
+
+### nil 与 NULL
 
 NULL只能作为指针变量的值，如果一个指针变量的值为NULL则代表这个指针不指向内存中的任何空间，其实NULL等价于0，但是不完全等价，他不是整型的0
 
@@ -468,7 +470,7 @@ nil只能作为指针变量的值代表这个指针不指向内存中的任何�
 
 虽然两者完全等价，还是要建议一下，nil只用于OC的类指针，NULL用于C指针，如果类指针指向nil如 `Person *p1 = nil; ` 那么如果访问对象属性则会报错，但是掉用对象方法不会报错，而是不会执行任何操作，跳过这条语句了
 
-## NSString 常用类方法
+### NSString 常用类方法
 
 - `+ (instancetype)stringWithUTF8String:(const char *)nullTerminatedCString;`
 
@@ -524,13 +526,23 @@ nil只能作为指针变量的值代表这个指针不指向内存中的任何�
   // 判断不能直接用 == 判断，== 只对都是用str1的方式创建的OC字符串有效
   ```
 
-## static 关键字
+### OC异常处理
+
+什么是异常：当程序在执行的时候处于某种特定调价下，程序的执行会终止。
+
+OC有自己的异常机制@try{}@catch(NSException *ex){}，将有可能有异常的代码放入@try{}中，如果出现异常，程序不会崩溃，而会立即跳入@catch中执行catch代码，和别的语言的try...catch 是一样的。正如别的语言一样OC也可以在try...catch后加一个@finally，即无论成功失败都会执行的代码。
+
+**注**：不是所有的运行时异常try...catch都能捕获到的，如C语言的异常是无法处理的，比如除数为0，所以用的是比较少的，避免异常的方式还是用逻辑判断。
+
+### OC关键字
+
+- static 关键字
 
 C语言中用于修饰局部变量（使变量储存在常量区函数执行完毕后变量还存在，不会被回收）、修饰全局变量、修饰函数
 
 OC中static关键字不是修饰类属性和类方法，但可以修饰类方法中的局部变量作用和C语言一样
 
-## self 关键字
+- self 关键字
 
 在方法额你不可以定义一个和属性名相同的局部变量，这个时候如果在方法中访问这个同名变量，那么访问的是局部变量，如果不改变局部变量名就是要访问那个同名的属性`self->属性`，或者在对象方法内调用调用当前对象的另外一个对象方法`[self fun]`。这就要用到self关键字了。
 
@@ -538,21 +550,116 @@ self是一个指针，在对象方法中self指向当前对象（堆），在类
 
 对象方法和类方法的class方法可以查看对象所属的类或者类本身在代码段中的地址，可以用来验证类方法中的self指针指向的地址
 
-## super 关键字
+- super 关键字
 
 super关键字可以用在类方法和对象方法中。注意：super只能用来调用方法，不能用来访问属性
 
-- 对象方法
+​	**对象方法**
 
-  在对象方法中使用super关键字可以调用当前对象从父类继承过来的对象方法，如父类有个对象方法，子类在对象方法中想调用，可以用`[super sayHi];` 也可以用  `[self sayHi];`
+​	在对象方法中使用super关键字可以调用当前对象从父类继承过来的对象方法，如父类有个对象方法，子类在对象方法中想调用，可以用`[super sayHi];` 也可以用  `[self sayHi];`
 
-- 类方法
+​	**类方法**
 
-  在类方法中使用super关键字可以调用当前类从父类继承过来的类方法，`[super fun]` 当然因为是类方法所以 `[父类名 fun];[子类名 fun];[self fun]`的方式调用都是可以的。
+​	在类方法中使用super关键字可以调用当前类从父类继承过来的类方法，`[super fun]` 当然因为是类方法所以 `[父类名 fun];[子类名 fun];[self fun]`的方式调用都是可以的。
 
-如果方法是继承过来的，那么建议用super调用方法，因为这样可读性更高
+​	如果方法是继承过来的，那么建议用super调用方法，因为这样可读性更高
 
-## 访问修饰符
+- property关键字
+
+我们写一个类，要先为类属性，然后在声明属性的getter和setter方法，最后实现getter和setter方法，十分的繁琐。用property关键字就可以自动生成getter和setter的声明，因为省生成方法的声明所以房在类的声明之中。
+
+```objc
+@interface Person : NSObject
+{
+  NSString *_name;
+  int _age;
+}
+
+@property int age;
+@property NSString *name;
+
+@end
+```
+
+注意：实现还是要自己写的
+
+- synthesize关键字
+
+这个关键字就是帮我们自动生成getter和setter的实现的代码，所以要写在类的实现之中
+
+```objc
+@implementation Person
+  
+@synthesize age;
+/*
+	- (void)setAge:(int)age
+	{
+	// 这里的 age 是自动生成的私有属性，并不是自己定义的属性
+		self->age = age;
+	}
+	- (int)age{
+		返回自动生成的值
+		reutrn age;
+	}
+*/
+@synthesize name;
+
+@end
+```
+
+注意这个自动生成的代码赋值给的是@synthesize在implementation中自动生成的私有属性，而不是修改对象的属性，并且没有做任何的逻辑验证。
+
+如果根据默认的synthesize方法的话是自动生成的属性，无法根据需求设置访问权限，不好，我们希望@synthesize不去自动生成私有属性，操锁我们已经写好的属性
+
+```objc
+@synthesize age = _age;
+// 这样就不会自动生成私有属性，而是直接生成setter和getter的实现
+```
+
+注意：如果数据要进行逻辑验证那么还是老老实实自己写getter和setter的实现，如果多个property的类型是一致的可以批量声明 `@property float height, weight;`。如果是批量实现那么都可以写在一起 `@synthesize name = _name, weight = _weight, height = _height;`类型不一样也可以。
+
+- property增强
+
+上述的快速生成getter和setter的写法是Xcode4.4之前的写法，这之后Xcode对property做了一个增强，只用写一个property，**私有属性**、声明、实现全部帮你写好，属性的名称也自动帮你加了下划线。如果我们重写的setter方法，getter方法还是会自动生成的，如果同时重写getter和setter那么就不会自动生成私有属性了。
+
+注意：因为生成的是私有属性，所以如果父类使用@property生成的属性，子类访问只能用getter方法访问属性。比如子类的方法实现中用 self.age 调用继承自父类的属性
+
+- instancetype关键字
+
+instancetype 只能作为返回值表示返回当前这个类的对象。
+
+```objc
+@interface Person : NSobject
+@property NSString *name;
+@property int age;
+// 根据规范洗一个声明一个纯净对象的类方法，子类继承也能用
++ (instancetype)createSelf();
+
+@end
+  
+@implement Person
++ (instancetype)createSelf {
+  return [self new];
+}
+@end
+  // ------------------
+@interface Person : Student
+@property NSString *stuNumber;
+@end
+  
+@implement Person
+
+@end
+  // -------------------
+int main(){
+  Person *p = [Person createSelf];
+  Student *s = [Student createSelf];
+  return 0;
+}
+  
+```
+
+### 访问修饰符
 
 用来修饰属性，可以限定对象的属性在那一段范围之中访问，不能用来修饰方法
 
@@ -601,13 +708,13 @@ super关键字可以用在类方法和对象方法中。注意：super只能用�
 // 如果这样写私有属性的话，在@implementation中写什么访问修饰符都是没有用的，都会当成私有属性
 ```
 
-### 私有方法
+#### 私有方法
 
 想写一个方法只能是本类的其他方法调用，外界不能调用，那么这样的方法就是私有方法
 
 如果想方法不被外界调用，我们***可以只写实现不写声明***，那么这个方法就是私有方法了，外界就不能调用了。本类调用 `[self fun];`
 
-## 点语法
+### 点语法
 
 OC中也有点语法，OC中可以使用点语法访问对象的属性，但是OC的点语法和Java C#的点语法的原理是完全不一样的
 
@@ -619,67 +726,9 @@ OC中也有点语法，OC中可以使用点语法访问对象的属性，但是O
 
 其实是点语法就是帮我们自动调用getter 和 setter 方法而已，因此和别的语言是不一样的。注意如果我们的setter和getter方法的命名不符合规范则点语法失效而报错。
 
-## property关键字
+### 
 
-我们写一个类，要先为类属性，然后在声明属性的getter和setter方法，最后实现getter和setter方法，十分的繁琐。用property关键字就可以自动生成getter和setter的声明，因为省生成方法的声明所以房在类的声明之中。
-
-```objc
-@interface Person : NSObject
-{
-  NSString *_name;
-  int _age;
-}
-
-@property int age;
-@property NSString *name;
-
-@end
-```
-
-注意：实现还是要自己写的
-
-## synthesize关键字
-
-这个关键字就是帮我们自动生成getter和setter的实现的代码，所以要写在类的实现之中
-
-```objc
-@implementation Person
-  
-@synthesize age;
-/*
-	- (void)setAge:(int)age
-	{
-	// 这里的 age 是自动生成的私有属性，并不是自己定义的属性
-		self->age = age;
-	}
-	- (int)age{
-		返回自动生成的值
-		reutrn age;
-	}
-*/
-@synthesize name;
-
-@end
-```
-
-注意这个自动生成的代码赋值给的是@synthesize在implementation中自动生成的私有属性，而不是修改对象的属性，并且没有做任何的逻辑验证。
-
-如果根据默认的synthesize方法的话是自动生成的属性，无法根据需求设置访问权限，不好，我们希望@synthesize不去自动生成私有属性，操锁我们已经写好的属性
-
-```objc
-@synthesize age = _age;
-// 这样就不会自动生成私有属性，而是直接生成setter和getter的实现
-```
-
-注意：如果数据要进行逻辑验证那么还是老老实实自己写getter和setter的实现，如果多个property的类型是一致的可以批量声明 `@property float height, weight;`。如果是批量实现那么都可以写在一起 `@synthesize name = _name, weight = _weight, height = _height;`类型不一样也可以。
-
-## property增强
-
-上述的快速生成getter和setter的写法是Xcode4.4之前的写法，这之后Xcode对property做了一个增强，只用写一个property，**私有属性**、声明、实现全部帮你写好，属性的名称也自动帮你加了下划线。如果我们重写的setter方法，getter方法还是会自动生成的，如果同时重写getter和setter那么就不会自动生成私有属性了。
-
-注意：因为生成的是私有属性，所以如果父类使用@property生成的属性，子类访问只能用getter方法访问属性。比如子类的方法实现中用 self.age 调用继承自父类的属性
-
-## 动态类型和静态类型
+### 动态类型和静态类型
 
 OC编译的时候语法检查没有那么严格，因此有优点也有缺点。
 
@@ -689,7 +738,181 @@ OC编译的时候语法检查没有那么严格，因此有优点也有缺点。
 
 编译检查：编译器在编译指针调用对象的时候，如果指针所属的对象有这个方法则编译通过，没有则失败。因此如果强转指针类型调用对象不存在的方法是可以骗过编译检查的，但是程序运行时会报错。
 
-## 分组导航标记
+### NSObject
+
+NSObject 是所有类的基类，根据LSP原则，NSObject指针可以指向任意的OC对象，所以NSObject指针是一个万能指针。但是如果要调用指向的子类对象的独有的方法，就必须要做类型转换。
+
+### id指针
+
+是一个万能指针可以指向任意的OC对象，id 定义的时候已经加了*了，所以变量名不用加星号了。如果用NSObject调用对象方法的时候会做编译检查，但是用id指针的话就可以直接通过编译。
+
+注意：id指针只能调用方法，不能使用点语法，如果使用点语法会直接报编译错误
+
+### 动态类型检查
+
+我们希望可以写代码来先判断一下对象中是否有这个方法，如果有在去执行
+
+```objc
+Person *p1 = [Person new];
+// 这个方法只能判断对象方法
+if ([p1 respondsToSelector:@selector(sayHi)]) {
+  [p1 sayHi];
+} else {
+  NSLog(@"此对象中无此对象方法");
+}
+// 这个方法判断类中是否有类方法
+if ([Person instancesRespondToSelector:@selector(sayHi)]) {
+  [Person sayHi];
+}
+```
+
+判断某个对象是否属于一个类包括其子类
+
+```objc
+Person *s1 = [Student new];
+BOOL b1 = [s1 isKindOfClass:[NSObject class]];// YES
+BOOL b2 = [s1 isKindOfClass:[Student class]];// YES
+BOOL b3 = [s1 isKindOfClass:[Dog class]];// NO
+```
+
+判断某个对象是否属意一个类不包括其子类
+
+```objc
+BOOL b1 = [s1 isMemberOfClass:[Student class]];// YES
+BOOL b2 = [s1 isMemberOfClass:[NSObject class]];// NO
+```
+
+判断类是否为另外一个类的子类
+
+```objc
+BOOL b1 = [Student isSubClassOfClass:[Student class]];// NO
+BOOL b2 = [Student isSubClassOfClass:[NSObject class]];// YES
+```
+
+### 构造方法
+
+`[Person new];` 这个new内部其实是先调用alloc方法在内存中申请空间再调用init方法初始化对象。注意：有的时候未经初始化的对象也是可以用的，但是千万不能这样做，使用一个未经初始化的对象是极其危险的，以为危机初始化的指针是一个随机值，万一指向一个重要的地方就完了
+
+`[Person new]; ` 其实就是 `[[Person alloc] init];` 这个init方法我们就叫做构造方法，其实就是为对象的方法赋初值。我们可以重写init方法给对象的属性赋自定义值。
+
+重写init方法的规范，一点要写调用父类的init方法(有的别的语言的味道)，然后将方法的返回值赋值给self。但是调用init方法是有可能失败的，如果失败返回值就是nil，因此要进行判断
+
+```objc
+// 在类的实现中重写init方法
+- (instancetype)init{
+  // 这里没写错，是先赋值再判断
+  if (self = [super init]){
+    self.name = @"jack";
+  }
+  return self;
+}
+```
+
+自定义构造方法，即由初始值参数传入。自定义构造方法也是有规范的，返回值必须是instancetype，名称必须是以initWith开头，方法的实现和init重写是一样的因为编译器只能让self在init方法中赋值（initWith开头编译器就把它当作构造方法），其他地方是不允许的
+
+```objc
+// 先在类的声明中声明
+- (instancetype)initWith:(NSString *)name andAge:(ini)age;
+// 再在类的实现中实现
+- (instancetype)initWith:(NSString *)name andAge:(int)age {
+if (self = [super init]){
+    self.name = name;
+  	self.age = age;
+  }
+  return self;
+}
+// 创建对象
+Person *p = [[Person alloc] initWith:@"Leo" andAge:18];
+```
+
+## 内存管理
+
+内存的作用是管理数据的，内存的五大区域为栈、堆、BSS段、数据段、代码段。声明变量，然后数据就被存进去了内存，如果内存占用过多系统就会卡，因此内存空间的释放就变得喊重要
+
+### 内存空间的释放
+
+- 栈中的局部变量的作用与被执行完毕之后，局部变量就会被回收
+- BSS段中的为初始化的全局变量、静态变量一旦初始化就会被回收，并转存到数据段中
+- 数据段中已被初始化的全局变量、静态变量在程序结束后被回收
+- 代码段中的代码也是在程序接受后被回收
+
+上述四个区域的数据都是系统自动回收的
+
+- 堆：OC对象，C函数动态分配的空间，系统是不会自动回收的，默认程序结束的时候才会回收，所以OC对象当用完后就应该回收。
+  - 每一个对象都有一个属性叫做retainCount（引用计数器）类型是unsigned long 占八个字节。用来记录有多少人再使用它，创建对象后的默认值为1
+  - 当每多一个人使用我们就应该先给retainCount属性加一 代表这个对象多一个人实现，而每个人用完后都应给给retainCount减一 代表少一个人使用，当retainCount == 0时系统就会自动回收，当对象被回收后就会自动调用对象的dealloc方法
+
+操作引用计数器的方法：给对象发送一条retain消息`[p1 retain];`，引用计数器就会加一，给对象发送一条release消息`[p1 release];`，引用计数器就会减一。给对象发送一条retainCount消息就可以看到值`[p1 retainCount];`
+
+**内存管理的分类**
+
+MRC：Manual Reference Counting 手动引用计数，手动管理内存，就是程序员手动操作引用计数器。
+
+ARC：Automatic Reference Counting 自动引用计数，自动内存管理，就是系统自动的再合适的地方帮我们操作引用计数器。
+
+### MRC
+
+因为再ARC机制下是无法调用retain、release、dealloc这些方法的，又因为早就支持ARC了，所以我们要关闭ARC
+
+![](./2.png)
+
+当对象的引用计数器为0的时候，系统会自动回收对象，并自动调用对象的dealloc方法，因此我们可以重写dealloc方法，重写的规范：必须要调用父类的dealloc方法，并且要放在最后一句代码
+
+```objc
+- (void)dealloc{
+    NSLog(@"%@对象被回收",_name);
+    [super dealloc];
+}
+// 测试
+Person *p1 = [Person new];
+p1.name = @"Jack";
+NSUInteger count = [p1 retainCount];
+NSLog(@"retainCount is %lu", count);// 得 默认为 1
+[p1 retain];
+// 因为retainCount是一个属性所以用点语法调用也是可以的
+NSLog(@"retainCount is %lu", p1.retainCount);//2
+[p1 release];
+NSLog(@"retainCount is %lu", p1.retainCount);//1
+[p1 release];// 回收
+```
+
+**内存管理的原则：**创建对象就要匹配一个release；此外，加几个retain就要再加几个release；谁用谁retain，谁不用谁release；只有在对一个人用才retain，少一个人使用才release。
+
+- 野指针：C语言中的野指针就是定义一个指针变量不初始化，此时这个指针指向一块随机空间。OC中的野指针，指针指向的对象已经被回收了
+
+**内存回收的本质**：当申请一个变量，实际上就是申请一块空间，这块空间不能给别人用。回收的本质其实就是又可以分配给别人了，但是字节空间中存储的数据还在，这就是垃圾值的由来。
+
+因此当对象被回收后，如果这块空间没有被别的变量使用那么这个对象的数据其实还在的。
+
+- 僵尸对象：一个已经被释放的对象，但是这个对象所占的空还没有分配给别人，这样的对象叫做僵尸对象。因此我们通过野指针访问一个僵尸对象的时候有可能有问题也有可能没问题（薛定谔的猫？）
+
+只要对象是僵尸对象，那么无论如何都不能访问，因此我们希望，如果访问了就报错。我们可以将僵尸对象的实时监测机制打开，打开之后，无论空间是否被分配了只要访问了就会报错。打开方式:
+
+<img src="./4.png" style="zoom: 50%;" />
+
+![](./3.png)
+
+一旦打开了僵尸对象检查，每访问一个对象都会检查此对象是否为僵尸对象，这样及其消耗性能，因此这不是最优方案。因此每当一个指针称为野指针我们应该把这个指针赋值为nil这样就可以避免因僵尸对象而产生的错误。
+
+注意：当一个对象被回收是无法复活的，对僵尸对象调用retain方法也没用
+
+**内存泄漏**：指一个对象没有被及时回收，即该回收是没有被回收，一直留在内存中，直到程序结束才被系统自动回收。
+
+发生内存泄漏的原因：1. 不符合内存管理原则。2. 不适当的时候给对象指针赋值为nil。3. 在方法中为传入的对象进行不适当的retain（对象作为参数传给方法，方法体中对象调用了retain方法）
+
+避免上述原因的操作就可以完美的避免内存泄漏。
+
+### ARC
+
+iOS5开始，Xcode4.2就开始支持ARC了
+
+
+
+## Xcode技巧
+
+Xcode的OC编译器叫LLVM
+
+### 分组导航标记
 
 其实就是Xcode的一个小技巧在类声明前加上`#pragma mark xxx的声明`，类实现前加上`#pragma mark xxx的实现`。点击编辑区域导航条main后面的tab就可在导航条上分组如图
 
@@ -699,7 +922,7 @@ OC编译的时候语法检查没有那么严格，因此有优点也有缺点。
 
 `#pragma mark - x分类`则会加一条分割线，线后面紧接着加上一条分组
 
-## 多文件开发
+### 多文件开发
 
 通常我们把一个类写在一个模块之中，一个模块至少包含两个文件，一个是.h头文件，一个是.m实现文件，在头文件中写类的声明，在实现文件中写类的实现。因为头文件中要用到 Foundation 框架中的 NSObject 类，所以 .h 文件中要引入 Foundation 框架。因为.h文件引入过框架了，所以实现文件即使用到Foundation的类也可以不引入框架。
 
@@ -744,13 +967,7 @@ typedef enum {
 
 ```
 
-## OC异常处理
 
-什么是异常：当程序在执行的时候处于某种特定调价下，程序的执行会终止。
-
-OC有自己的异常机制@try{}@catch(NSException *ex){}，将有可能有异常的代码放入@try{}中，如果出现异常，程序不会崩溃，而会立即跳入@catch中执行catch代码，和别的语言的try...catch 是一样的。正如别的语言一样OC也可以在try...catch后加一个@finally，即无论成功失败都会执行的代码。
-
-**注**：不是所有的运行时异常try...catch都能捕获到的，如C语言的异常是无法处理的，比如除数为0，所以用的是比较少的，避免异常的方式还是用逻辑判断。
 
 
 
