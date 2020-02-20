@@ -13,12 +13,5 @@
         _age = 18;
     }
 }
-- (int)age {
-    return _age;
-}
-
-@synthesize name;
-@synthesize height;
-@synthesize weight;
 
 @end

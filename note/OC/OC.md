@@ -646,12 +646,48 @@ OC中也有点语法，OC中可以使用点语法访问对象的属性，但是O
 @implementation Person
   
 @synthesize age;
+/*
+	- (void)setAge:(int)age
+	{
+	// 这里的 age 是自动生成的私有属性，并不是自己定义的属性
+		self->age = age;
+	}
+	- (int)age{
+		返回自动生成的值
+		reutrn age;
+	}
+*/
 @synthesize name;
 
 @end
 ```
 
-追忆这个自动生成的代码赋值给的是@synthesize在implementation中自动生成的私有属性，而不是修改对象的属性，并且没有做任何的逻辑验证
+注意这个自动生成的代码赋值给的是@synthesize在implementation中自动生成的私有属性，而不是修改对象的属性，并且没有做任何的逻辑验证。
+
+如果根据默认的synthesize方法的话是自动生成的属性，无法根据需求设置访问权限，不好，我们希望@synthesize不去自动生成私有属性，操锁我们已经写好的属性
+
+```objc
+@synthesize age = _age;
+// 这样就不会自动生成私有属性，而是直接生成setter和getter的实现
+```
+
+注意：如果数据要进行逻辑验证那么还是老老实实自己写getter和setter的实现，如果多个property的类型是一致的可以批量声明 `@property float height, weight;`。如果是批量实现那么都可以写在一起 `@synthesize name = _name, weight = _weight, height = _height;`类型不一样也可以。
+
+## property增强
+
+上述的快速生成getter和setter的写法是Xcode4.4之前的写法，这之后Xcode对property做了一个增强，只用写一个property，**私有属性**、声明、实现全部帮你写好，属性的名称也自动帮你加了下划线。如果我们重写的setter方法，getter方法还是会自动生成的，如果同时重写getter和setter那么就不会自动生成私有属性了。
+
+注意：因为生成的是私有属性，所以如果父类使用@property生成的属性，子类访问只能用getter方法访问属性。比如子类的方法实现中用 self.age 调用继承自父类的属性
+
+## 动态类型和静态类型
+
+OC编译的时候语法检查没有那么严格，因此有优点也有缺点。
+
+静态类型：一个指针指向的对象是一个本类对象
+
+动态类型：一个指针指向的的对象不是本类对象（不只是父类对象）
+
+编译检查：编译器在编译指针调用对象的时候，如果指针所属的对象有这个方法则编译通过，没有则失败。因此如果强转指针类型调用对象不存在的方法是可以骗过编译检查的，但是程序运行时会报错。
 
 ## 分组导航标记
 
