@@ -51,8 +51,9 @@ OC是在C语言的基础上增加了一部分的面向对象的语法，将C语�
 - 数据类型，OC中支持所有的C数据类型，以下列举一些新增的类型
 
   - OC字符串：NSString *str = @"test";
-  - 布尔类型 BOOL： YES/NO （相对于别的语言中的 true/false）`BOOL b1 = 10 > 20;bool b2 = YES;`，定义时写 BOOL / bool 都可以
-    - 本质上 bool 就是语法糖 char 的 typedef，YES/NO 就是 1/0强转为 char 的 define
+  - 布尔类型 BOOL： YES/NO （相对于别的语言中的 true/false）`BOOL b1 = 10 > 20;bool b2 = true;`，定义时写 BOOL  bool 是不一样的
+    - 本质上 BOOL 就是语法糖 char 的 typedef，YES/NO 就是 1/0强转为 char 的 define
+    - bool true/false int型
   - 布尔类型 Boolean：true/false `Boolean b1 = 10>20;Boolean b2 = false;`
     - 本质上 Boolean 就是语法糖 unsigned char 的 typedef，YES/NO 就是 1/0 的 define
   - 类 class：[面向对象语法所用到的类型](#OC的面向对象)
