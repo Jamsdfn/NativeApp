@@ -23,8 +23,10 @@
 		B724AB5323FFB63300F95E48 /* Microblog.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5223FFB63300F95E48 /* Microblog.m */; };
 		B724AB5623FFB66900F95E48 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5523FFB66900F95E48 /* Account.m */; };
 		B724AB5923FFB68400F95E48 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5823FFB68400F95E48 /* User.m */; };
+		B724AB5C23FFD31C00F95E48 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5B23FFD31C00F95E48 /* Account.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B7338F2723FA757100C2AA85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7338F2623FA757100C2AA85 /* main.m */; };
 		B733A69823FBBF3F003ABC59 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B733A69723FBBF3F003ABC59 /* test.c */; };
+		B788459D23FFDBB700B1070E /* Person+test.m in Sources */ = {isa = PBXBuildFile; fileRef = B788459C23FFDBB700B1070E /* Person+test.m */; };
 		B7DA661323FEBFC2003E23B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA661223FEBFC2003E23B0 /* main.m */; };
 		B7DA661923FEC0E4003E23B0 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA661823FEC0E4003E23B0 /* Person.m */; };
 /* End PBXBuildFile section */
@@ -116,10 +118,14 @@
 		B724AB5523FFB66900F95E48 /* Account.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Account.m; sourceTree = "<group>"; };
 		B724AB5723FFB68400F95E48 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		B724AB5823FFB68400F95E48 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		B724AB5A23FFD31C00F95E48 /* Account.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Account.h; path = weibo/Account.h; sourceTree = SOURCE_ROOT; };
+		B724AB5B23FFD31C00F95E48 /* Account.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Account.m; path = weibo/Account.m; sourceTree = SOURCE_ROOT; };
 		B7338F2323FA757100C2AA85 /* ex1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ex1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7338F2623FA757100C2AA85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B733A69623FBBF3F003ABC59 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		B733A69723FBBF3F003ABC59 /* test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		B788459B23FFDBB700B1070E /* Person+test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+test.h"; sourceTree = "<group>"; };
+		B788459C23FFDBB700B1070E /* Person+test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Person+test.m"; sourceTree = "<group>"; };
 		B78F9A8C23FCD9BE0051E4AA /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		B78F9A8E23FCD9D30051E4AA /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		B78F9A8F23FCDDE50051E4AA /* Dog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
@@ -209,8 +215,12 @@
 			isa = PBXGroup;
 			children = (
 				B724AB3E23FFA3B600F95E48 /* main.m */,
+				B724AB5A23FFD31C00F95E48 /* Account.h */,
+				B724AB5B23FFD31C00F95E48 /* Account.m */,
 				B724AB4323FFA3CD00F95E48 /* Person.h */,
 				B724AB4423FFA3CD00F95E48 /* Person.m */,
+				B788459B23FFDBB700B1070E /* Person+test.h */,
+				B788459C23FFDBB700B1070E /* Person+test.m */,
 			);
 			path = ARC;
 			sourceTree = "<group>";
@@ -463,7 +473,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B724AB5C23FFD31C00F95E48 /* Account.m in Sources */,
 				B724AB4523FFA3CD00F95E48 /* Person.m in Sources */,
+				B788459D23FFDBB700B1070E /* Person+test.m in Sources */,
 				B724AB3F23FFA3B600F95E48 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
