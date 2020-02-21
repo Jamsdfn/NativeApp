@@ -487,7 +487,7 @@ nil只能作为指针变量的值代表这个指针不指向内存中的任何�
 
   ```objc
   int age=10;
-  NSSting *name=@"ming";
+  NSString *name=@"ming";
   NSString *s = [NSString stringWithFormat:@"大家好我叫%@,今年%d岁",name,age];
   ```
 
@@ -623,6 +623,34 @@ super关键字可以用在类方法和对象方法中。注意：super只能用�
 上述的快速生成getter和setter的写法是Xcode4.4之前的写法，这之后Xcode对property做了一个增强，只用写一个property，**私有属性**、声明、实现全部帮你写好，属性的名称也自动帮你加了下划线。如果我们重写的setter方法，getter方法还是会自动生成的，如果同时重写getter和setter那么就不会自动生成私有属性了。
 
 注意：因为生成的是私有属性，所以如果父类使用@property生成的属性，子类访问只能用getter方法访问属性。比如子类的方法实现中用 self.age 调用继承自父类的属性
+
+- @property参数
+
+  `@property(参数1,参数2,参数.....)数据类型 名称;`参数类型：
+
+  - 与多线程相关的两个参数：atomic、nonatiomic
+
+    - atomic默认值：如果写则生成的setter方法就会加上线程安全锁，安全但效率低
+    - nonatiomic：不会加上现场安全锁，不安全但效率高，如果没有多线程使用这个
+
+  - 与生成的setter方法相关的连个参数：assign、retain
+
+    - assign默认值：生成的setter方法实现就是直接复制
+    - **retain：生成的setter方法的实现就是标准的MRC内存管理代码，注意dealoloc的代码还有手动的release的**
+
+  - 与生成读写相关的参数：readonly、readwrite
+
+    - readwrite默认值：同时生成getter setter
+    - readonly：只会生成 getter 不会正常 setter
+
+  - 与生成的getter setter方法名字相关的参数：getter、setter
+
+    默认情况下生成的名字都是最标准的名字
+
+    - getter=xxx：把getter方法名改成xxx
+    - setter=yyy:（注意这里又个冒号）：把setter方法名改成yyy: 
+
+    改名后的点语法任然有效，只是本来是`.属性名`的，变成了`.修改后的名字`
 
 - instancetype关键字
 
@@ -842,7 +870,7 @@ Person *p = [[Person alloc] initWith:@"Leo" andAge:18];
   - 每一个对象都有一个属性叫做retainCount（引用计数器）类型是unsigned long 占八个字节。用来记录有多少人再使用它，创建对象后的默认值为1
   - 当每多一个人使用我们就应该先给retainCount属性加一 代表这个对象多一个人实现，而每个人用完后都应给给retainCount减一 代表少一个人使用，当retainCount == 0时系统就会自动回收，当对象被回收后就会自动调用对象的dealloc方法
 
-操作引用计数器的方法：给对象发送一条retain消息`[p1 retain];`，引用计数器就会加一，给对象发送一条release消息`[p1 release];`，引用计数器就会减一。给对象发送一条retainCount消息就可以看到值`[p1 retainCount];`
+操作引用计数器的方法：给对象发送一条retain消息`[p1 retain];`，引用计数器就会加一，给对象发送一条release消息`[p1 release];`，引用计数器就会减一。给对象发送一条retainCount消息就可以看到值`[p1 retainCount];`。因此在MRC模式下不要使用匿名对象。
 
 **内存管理的分类**
 
@@ -902,11 +930,107 @@ NSLog(@"retainCount is %lu", p1.retainCount);//1
 
 避免上述原因的操作就可以完美的避免内存泄漏。
 
+- setter方法的内存管理
+
+  - 当属性是一个OC对象的时候，setter方法的写法：将传进来的对象赋值给当前对象的属性，代表被传入的对象对一个人使用。因此赋值前要先发送一条retain消息；当当前对象被消耗的时候，代表属性就少一个人使用，因此在当前对象被回收前要先把属性release
+
+  ```objc
+  @implementation Person
+  // 如果车类是人类的关联属性，那么人拥有车的时候，车就多一个人使用所以retainCount要加一
+  - (void)setCar:(Car *)car {
+    _car = [car retain];
+  }
+  // 如果人被回收了，那么被对象正在使用的车就少一个人使用了，所以retainCount要减一
+  - (void)dealloc {
+    [_car release];
+    // NSLog(@"%@人类对象被回收了", _name);
+    [super dealloc];
+  }
+  @end
+  ```
+
+  上述代码还是有点问题的，因为如果Person对象中途换车（给car对象重新赋值），那么就的那台车就发生了内存泄漏
+
+  - 因此重新赋值前应该先把旧的属性对象给release了，因此要重写一下setter方法
+
+  ```objc
+  - (void)setCar:(Car *)car {
+    // 如果是重新赋值则代表旧对象少一个人使用，新对象代码对一个人使用
+    [_car release];
+    _car = [car retain];
+  }
+  ```
+
+  修改后的代码意识还是有点问题的，如果同一辆车给人对象赋值了两次就会有问题，（前提根据通常写法在重新赋值前应该先把老车对象release一次）因为在第二次赋值的时候先执行了 release 方法，那么此时这辆车已经被回收了，而执行完release后又要此被回收的僵尸对象执行一次retain，这是无效的，会报错。
+
+  - 因此setter完美写法是先做个判断，不是同一个对象才release
+
+  ```objc
+  - (void)setCar:(Car *)car {
+    if (car != car) {
+      [_car release];
+      _car = [car retain];
+    }
+  }
+  ```
+
+  注意：在MRC模式下连OC自带的 NSString 等类也要手动回收。如果不是OC对象则不用这样写。如果用ARC模式下也就是用默认参数的property参数写法是要自己重写setter方法的。或者用带参数的写法，参数改成retain
+
+
+**@class**
+
+如果两个类互相引用的时候会发生循环引用会发送无限递归从而报错，为了避免这个问题我们其中一个文件不要用import引入用 `@class 类名` 引入，这样就可以在不引入对方头文件的情况下告诉编译器这是一个类。
+
+#import是把文件内容拷贝到本文件中，如果相互调用就出现的无限的递归（A.h import B.h，B.h import A.h），而@class只是告诉编译器这是一个类，不会拷贝内容，因为知识告诉编译器这是个类，但是类的声明他都没有素以编译器无法出现自动提示(A.h import B.h, B.h @class A)。如果想出现提示，可以自写@class的头文件这个类的实现文件中用import引入，这样就有提示了(B.m import A.h)。
+
+**两个对象相互引用**
+
+即A类是B的属性，B类又是A的属性，如果两边都是用retain，则会发生内存泄漏。
+
+a = new A, b = new B, b = a.bclass ,a = b.aclass,那么retain中A变成了2，B也变成了2。 这样调用的时候安装正常的创建匹配一个release原则，这样A，Bretain都变成了1，并不是0 因此发生内存泄漏。
+
+解决方法：一边使用retain另外一边使用assign，在assign那边的dealloc中不用再release这个属性了。
+
+**自动释放池 @autoreleasepool{}**
+
+- 原理：存入到自动释放池中的对象，再自动释放池被销毁的时候会自动调用存储在该自动释放池中的所有对象的release方法。因此将创建的对象存入到自动释放池之中就不用手动的release这个对象了。
+- 将对象存入自动释放池中的方法：在@autoreleasepool{}中调用对象的 autorelease方法，就会将这个对象存入到当前自动释放池之中。这个方法返回值是对象本身。如果是在@autoreleasepool{}外调用autorelease是无效的
+
+```objc
+@autoreleasepool{
+  Person *p1 = [[Person new] autorelease];
+}
+```
+
+注意：这只是帮我们省略创建对象匹配的release，并不是所有release都省了。在@autoreleasepool{}中调用autorelease多少次，就会网自动释放池中存多少次，也就是说在@autoreleasepool{}结束后帮你发多少次release，这有可能出现僵尸对象错误
+
+- **@autoreleasepool 的嵌套**
+
+  在哪个@autoreleasepool代码块调用autorelease代码，就在哪个@autoreleasepool代码块的结束发送release消息
+
+  在写类方法时候有一个规范，就是写一个和initWith:属性一致的`classNameWith:`方法，自方法返回的对象要求已经调用过autorelease方法
+
 ### ARC
 
-iOS5开始，Xcode4.2就开始支持ARC了
+Automatic Reference Counting 自动引用计数，自动帮我们计算对象的引用计数器的值，自动内存管理，就是系统自动的再合适的地方帮我们操作引用计数器。iOS5开始，Xcode4.2就开始支持ARC了，自动帮我们做对象回收的时。
 
+正常写代码就可以了，永远不要写retain、release、autorelease这三个关键字就是ARC的最基本准则。ARC是一个编译机制，编译器编译代码的时候，会在何时的位置加入 retain、release、autorelease代码
 
+ARC机制何时释放：对象的引用计数器为零的时候，自动释放；表象，没有强指针指向这个对象，这个对象就会被立即回收
+
+- 强指针
+
+  默认情况下，我们声明一个指针，这个指针就是一个强指针。我们也可以使用 `__strong Person *p1` 来显示的声明这是一个强指针
+
+- 弱指针
+
+  `__weak` 修饰的指针这就是弱指针
+
+无论是强指针还是弱指针都是指针，都可以用来存放地址，这一点没有任何区别。都可以通过这个指针访问对象的成员。唯一的区别就是在ARC模式下用他们作为回收对象的基准。
+
+所以在ARC机制下当系统自动回收强指针（比如已经过了作用域来）或者把强指针赋值为nil，那么对象就会被立即回收
+
+**注**：在ARC下不能使用@property的retain参数
 
 ## Xcode技巧
 
@@ -966,6 +1090,8 @@ typedef enum {
 } Gender;
 
 ```
+
+注意：如果两个类互相引用的时候会发生循环引用会报错，为了避免这个问题我们其中一个类不要用import引入用@class 类名 引入
 
 
 

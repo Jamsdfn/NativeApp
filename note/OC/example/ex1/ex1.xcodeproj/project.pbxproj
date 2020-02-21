@@ -17,6 +17,12 @@
 		B71A205023FD0D7F002150C1 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204C23FD0D7E002150C1 /* Dog.m */; };
 		B71A205123FD0D7F002150C1 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A204D23FD0D7E002150C1 /* Person.m */; };
 		B71A205423FD4D36002150C1 /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = B71A205323FD4D36002150C1 /* Student.m */; };
+		B724AB3F23FFA3B600F95E48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB3E23FFA3B600F95E48 /* main.m */; };
+		B724AB4523FFA3CD00F95E48 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB4423FFA3CD00F95E48 /* Person.m */; };
+		B724AB4D23FFB56400F95E48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB4C23FFB56400F95E48 /* main.m */; };
+		B724AB5323FFB63300F95E48 /* Microblog.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5223FFB63300F95E48 /* Microblog.m */; };
+		B724AB5623FFB66900F95E48 /* Account.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5523FFB66900F95E48 /* Account.m */; };
+		B724AB5923FFB68400F95E48 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = B724AB5823FFB68400F95E48 /* User.m */; };
 		B7338F2723FA757100C2AA85 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7338F2623FA757100C2AA85 /* main.m */; };
 		B733A69823FBBF3F003ABC59 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = B733A69723FBBF3F003ABC59 /* test.c */; };
 		B7DA661323FEBFC2003E23B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7DA661223FEBFC2003E23B0 /* main.m */; };
@@ -34,6 +40,24 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		B71A204123FD0C68002150C1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B724AB3A23FFA3B600F95E48 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B724AB4823FFB56400F95E48 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -80,6 +104,18 @@
 		B71A204F23FD0D7F002150C1 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Person.h; path = package/Person.h; sourceTree = SOURCE_ROOT; };
 		B71A205223FD4D36002150C1 /* Student.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
 		B71A205323FD4D36002150C1 /* Student.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
+		B724AB3C23FFA3B600F95E48 /* ARC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ARC; sourceTree = BUILT_PRODUCTS_DIR; };
+		B724AB3E23FFA3B600F95E48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B724AB4323FFA3CD00F95E48 /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		B724AB4423FFA3CD00F95E48 /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		B724AB4A23FFB56400F95E48 /* weibo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = weibo; sourceTree = BUILT_PRODUCTS_DIR; };
+		B724AB4C23FFB56400F95E48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B724AB5123FFB63300F95E48 /* Microblog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Microblog.h; sourceTree = "<group>"; };
+		B724AB5223FFB63300F95E48 /* Microblog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Microblog.m; sourceTree = "<group>"; };
+		B724AB5423FFB66900F95E48 /* Account.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Account.h; sourceTree = "<group>"; };
+		B724AB5523FFB66900F95E48 /* Account.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Account.m; sourceTree = "<group>"; };
+		B724AB5723FFB68400F95E48 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		B724AB5823FFB68400F95E48 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		B7338F2323FA757100C2AA85 /* ex1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ex1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7338F2623FA757100C2AA85 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B733A69623FBBF3F003ABC59 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
@@ -103,6 +139,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B71A204023FD0C68002150C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B724AB3923FFA3B600F95E48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B724AB4723FFB56400F95E48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -155,6 +205,30 @@
 			path = package;
 			sourceTree = "<group>";
 		};
+		B724AB3D23FFA3B600F95E48 /* ARC */ = {
+			isa = PBXGroup;
+			children = (
+				B724AB3E23FFA3B600F95E48 /* main.m */,
+				B724AB4323FFA3CD00F95E48 /* Person.h */,
+				B724AB4423FFA3CD00F95E48 /* Person.m */,
+			);
+			path = ARC;
+			sourceTree = "<group>";
+		};
+		B724AB4B23FFB56400F95E48 /* weibo */ = {
+			isa = PBXGroup;
+			children = (
+				B724AB4C23FFB56400F95E48 /* main.m */,
+				B724AB5123FFB63300F95E48 /* Microblog.h */,
+				B724AB5223FFB63300F95E48 /* Microblog.m */,
+				B724AB5423FFB66900F95E48 /* Account.h */,
+				B724AB5523FFB66900F95E48 /* Account.m */,
+				B724AB5723FFB68400F95E48 /* User.h */,
+				B724AB5823FFB68400F95E48 /* User.m */,
+			);
+			path = weibo;
+			sourceTree = "<group>";
+		};
 		B7338F1A23FA757100C2AA85 = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +236,8 @@
 				B71A202F23FCFA9D002150C1 /* game */,
 				B71A204423FD0C69002150C1 /* package */,
 				B7DA661123FEBFC2003E23B0 /* MRC */,
+				B724AB3D23FFA3B600F95E48 /* ARC */,
+				B724AB4B23FFB56400F95E48 /* weibo */,
 				B7338F2423FA757100C2AA85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -173,6 +249,8 @@
 				B71A202E23FCFA9D002150C1 /* game */,
 				B71A204323FD0C68002150C1 /* package */,
 				B7DA661023FEBFC2003E23B0 /* MRC */,
+				B724AB3C23FFA3B600F95E48 /* ARC */,
+				B724AB4A23FFB56400F95E48 /* weibo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -238,6 +316,40 @@
 			productReference = B71A204323FD0C68002150C1 /* package */;
 			productType = "com.apple.product-type.tool";
 		};
+		B724AB3B23FFA3B600F95E48 /* ARC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B724AB4223FFA3B600F95E48 /* Build configuration list for PBXNativeTarget "ARC" */;
+			buildPhases = (
+				B724AB3823FFA3B600F95E48 /* Sources */,
+				B724AB3923FFA3B600F95E48 /* Frameworks */,
+				B724AB3A23FFA3B600F95E48 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ARC;
+			productName = ARC;
+			productReference = B724AB3C23FFA3B600F95E48 /* ARC */;
+			productType = "com.apple.product-type.tool";
+		};
+		B724AB4923FFB56400F95E48 /* weibo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B724AB4E23FFB56400F95E48 /* Build configuration list for PBXNativeTarget "weibo" */;
+			buildPhases = (
+				B724AB4623FFB56400F95E48 /* Sources */,
+				B724AB4723FFB56400F95E48 /* Frameworks */,
+				B724AB4823FFB56400F95E48 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = weibo;
+			productName = weibo;
+			productReference = B724AB4A23FFB56400F95E48 /* weibo */;
+			productType = "com.apple.product-type.tool";
+		};
 		B7338F2223FA757100C2AA85 /* ex1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B7338F2A23FA757100C2AA85 /* Build configuration list for PBXNativeTarget "ex1" */;
@@ -287,6 +399,12 @@
 					B71A204223FD0C68002150C1 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
+					B724AB3B23FFA3B600F95E48 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					B724AB4923FFB56400F95E48 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
 					B7338F2223FA757100C2AA85 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -312,6 +430,8 @@
 				B71A202D23FCFA9D002150C1 /* game */,
 				B71A204223FD0C68002150C1 /* package */,
 				B7DA660F23FEBFC2003E23B0 /* MRC */,
+				B724AB3B23FFA3B600F95E48 /* ARC */,
+				B724AB4923FFB56400F95E48 /* weibo */,
 			);
 		};
 /* End PBXProject section */
@@ -336,6 +456,26 @@
 				B71A204A23FD0D4D002150C1 /* Dog.m in Sources */,
 				B71A204623FD0C69002150C1 /* main.m in Sources */,
 				B71A205423FD4D36002150C1 /* Student.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B724AB3823FFA3B600F95E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B724AB4523FFA3CD00F95E48 /* Person.m in Sources */,
+				B724AB3F23FFA3B600F95E48 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B724AB4623FFB56400F95E48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B724AB5923FFB68400F95E48 /* User.m in Sources */,
+				B724AB5623FFB66900F95E48 /* Account.m in Sources */,
+				B724AB5323FFB63300F95E48 /* Microblog.m in Sources */,
+				B724AB4D23FFB56400F95E48 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +529,40 @@
 		B71A204923FD0C69002150C1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B724AB4023FFA3B600F95E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B724AB4123FFA3B600F95E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B724AB4F23FFB56400F95E48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B724AB5023FFB56400F95E48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -554,6 +728,24 @@
 			buildConfigurations = (
 				B71A204823FD0C69002150C1 /* Debug */,
 				B71A204923FD0C69002150C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B724AB4223FFA3B600F95E48 /* Build configuration list for PBXNativeTarget "ARC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B724AB4023FFA3B600F95E48 /* Debug */,
+				B724AB4123FFA3B600F95E48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B724AB4E23FFB56400F95E48 /* Build configuration list for PBXNativeTarget "weibo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B724AB4F23FFB56400F95E48 /* Debug */,
+				B724AB5023FFB56400F95E48 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -5,7 +5,8 @@
     NSLog(@"Hi");
 }
 - (void)dealloc{
-    NSLog(@"%@对象被回收",_name);
+    NSLog(@"%@对象被回收", _name);
+    [_name release];
     [super dealloc];
 }
 @end
