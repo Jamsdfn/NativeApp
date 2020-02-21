@@ -126,6 +126,7 @@
 		B733A69723FBBF3F003ABC59 /* test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		B788459B23FFDBB700B1070E /* Person+test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+test.h"; sourceTree = "<group>"; };
 		B788459C23FFDBB700B1070E /* Person+test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Person+test.m"; sourceTree = "<group>"; };
+		B788459E23FFF35200B1070E /* Person+ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Person+ext.h"; sourceTree = "<group>"; };
 		B78F9A8C23FCD9BE0051E4AA /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		B78F9A8E23FCD9D30051E4AA /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		B78F9A8F23FCDDE50051E4AA /* Dog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
@@ -221,6 +222,7 @@
 				B724AB4423FFA3CD00F95E48 /* Person.m */,
 				B788459B23FFDBB700B1070E /* Person+test.h */,
 				B788459C23FFDBB700B1070E /* Person+test.m */,
+				B788459E23FFF35200B1070E /* Person+ext.h */,
 			);
 			path = ARC;
 			sourceTree = "<group>";
