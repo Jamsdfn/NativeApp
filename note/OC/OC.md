@@ -471,62 +471,6 @@ nil只能作为指针变量的值代表这个指针不指向内存中的任何�
 
 虽然两者完全等价，还是要建议一下，nil只用于OC的类指针，NULL用于C指针，如果类指针指向nil如 `Person *p1 = nil; ` 那么如果访问对象属性则会报错，但是掉用对象方法不会报错，而是不会执行任何操作，跳过这条语句了
 
-### NSString 常用类方法
-
-- `+ (instancetype)stringWithUTF8String:(const char *)nullTerminatedCString;`
-
-  - instancetype 作为返回值表示返回当前这个类的对象，作用：把C语言字符串转化为OC字符串对象
-
-  ```objc
-  char *s0 = "rose";
-  NSString *s1 = [NSString stringWithUTF8String:s0];
-  ```
-
-- `+ (instancetype)stringWithFormat:(NSString *)format,... `
-
-  - 作用：拼接字符串，使用变量或者其他数据拼接成OC字符串
-
-  ```objc
-  int age=10;
-  NSString *name=@"ming";
-  NSString *s = [NSString stringWithFormat:@"大家好我叫%@,今年%d岁",name,age];
-  ```
-
-- [str length] 对象方法
-
-  - 得到字符串长度
-
-  ```objc
-  NSString *str = @"test";
-  NSUInteger len = [str length];
-  NSLog(@"%lu",len); // 4
-  // NSUInteger 其实就是 typedef unsigned long NSUInteger;
-  ```
-
-- [str characterAtIndex:2]
-
-  - 得到对应位置的字符
-
-  ```objc
-  NSString *str = @"你好啊";
-  unichar ch = [str characterAtIndex:2]; // 啊
-  NSLog(@"第三个字符是 %C", ch);// 啊，注意这里时大写的C
-  // unichar 就是一个官方定义 typedef unsigned short unichar;
-  ```
-
-- `- (BOOL)isEqualToString:(NSString *)aString;`
-
-  - 判断两个字符串是否相等
-
-  ```objc
-  NSString *str1 = @"jack";
-  NSString *str2 = [NSString stringWithFormat:@"jack"];
-  if([str1 isEqualToString:str2]){
-    NSLog(@"==");
-  }
-  // 判断不能直接用 == 判断，== 只对都是用str1的方式创建的OC字符串有效
-  ```
-
 ### OC异常处理
 
 什么是异常：当程序在执行的时候处于某种特定调价下，程序的执行会终止。
@@ -773,16 +717,6 @@ OC编译的时候语法检查没有那么严格，因此有优点也有缺点。
 动态类型：一个指针指向的的对象不是本类对象（不只是父类对象）
 
 编译检查：编译器在编译指针调用对象的时候，如果指针所属的对象有这个方法则编译通过，没有则失败。因此如果强转指针类型调用对象不存在的方法是可以骗过编译检查的，但是程序运行时会报错。
-
-### NSObject
-
-NSObject 是所有类的基类，根据LSP原则，NSObject指针可以指向任意的OC对象，所以NSObject指针是一个万能指针。但是如果要调用指向的子类对象的独有的方法，就必须要做类型转换。
-
-### id指针
-
-是一个万能指针可以指向任意的OC对象，id 定义的时候已经加了*了，所以变量名不用加星号了。如果用NSObject调用对象方法的时候会做编译检查，但是用id指针的话就可以直接通过编译。
-
-注意：id指针只能调用方法，不能使用点语法，如果使用点语法会直接报编译错误
 
 ### 动态类型检查
 
@@ -1139,7 +1073,7 @@ block是一个数据类型，既然是一个数据类型我们就可以声明这
   // 声明一个block变量，返回值是void 参数是int
   // 语法 返回值类型 (^block变量的名称)(参数列表);
   void (^myBlock)(int num1, int num2);
-  void (^myBlock1)();
+  void (^myBlock1)(void);
   ```
 
 - 初始化block变量
@@ -1229,7 +1163,587 @@ test(^{NSLog(@"test");});
 
 他可以讲调用者自己写的代码放进函数中执行
 
-## 协议
+**block作为函数的返回值**
+
+```objc
+typedef void (^NewTest)(void);
+// 如果要想block作为返回值定义函数的时候，不能 void (^)() ttt(){} 因为编译器识不来，用typedef 后就没问题了
+NewTest ttt() {
+  void (^block1)(void) = ^{
+    NSLog(@"----------");
+    NSLog(@"00000");
+    NSLog(@"----------");
+  };
+  return block1;
+}
+int main(){
+	NewTest dd = ttt();
+	dd();
+  return 0;
+}
+// 虽然可以这样用但是，应用场景少之又少
+```
+
+### block与函数的异同
+
+相同点：都是封装一段代码。
+
+不同点：
+
+- block是一个数据类型，函数就是函数
+- 我们可以声明block类型的变量
+- block可以作为直接函数的参数，也可以作为函数的返回值，而函数只能用指向函数的指针才能作为函数的参数
+
+## 协议 protocol
+
+专门用来声明一大堆方法，（不能声明属性，也不能实现方法，只能用来写方法的声明）。只要类遵守了这个协议，就相当于拥有了协议中的所有方法的声明。
+
+类的继承是单根性的，但是遵守协议可以遵守多个，协议名可以和类名重名，所有的协议都必须直接的或者间接的从NSObject基协议中继承
+
+```objc
+@protocol 协议名称 <NSObject>
+  // 方法声明
+  - (void)hi;
+@end
+  
+//在要遵守协议的类的中 interface的最后加一个 <protocolName1,protocolName2> 就好了
+#import "协议文件1"
+#import "协议文件2"
+@interface 类名 : 父类名 <需要遵守的协议名称,协议名称>
+```
+
+注意：实现还是要类自己写的
+
+**@required 与 @optional**
+
+这两个修饰符，是专门用来修饰协议中的方法的
+
+- 被@required修饰的方法：如若没有被实现，编译器则会报警告
+- 被@optional修饰的方法：如果没有实现，编译器也不会报警告
+
+```objc
+@protocol myProtocol <NSObject>
+// 语法
+@required
+- (void)run;
+
+@optional
+- (void)sleep;
+
+@end
+// 不管用什么修饰 其实都不会报错，只是有无警告而已
+```
+
+这两个关键字的作用：在于程序员的沟通，告诉协议的类那些方法必须实现，那些可以选择实现
+
+**协议的继承**：协议可以从另外一个协议继承，且可以多继承：子协议可以继承所有父协议所有方法的声明
+
+```objc
+@protocol 协议名称 <父协议1名称,父协议2名称>
+  
+@end
+```
+
+**协议的类型限制**：
+
+- 声明的指针指向的对象必须遵守某个协议`NSObject<协议名字> *obj;`/`id<协议名字> obj ;` 否则会报一个警告。也可遵守多个协议，即尖括号内写进多个协议
+
+## Foundation框架
+
+### NSString 
+
+NSString是一个类，用来存储字符串的
+
+```objc
+NSString *s1 = [NSString new]; // s1 == @""
+// 因为 NSString 是OC中最常用的类，这样创建太麻烦了，因此就出现了一个更快速创建字符串的方式
+NSString *s2 = @"jack";//@"jack"本质上是一个字符串对象，他创建了对象后把指针返回给s1
+```
+
+NSString的恒定性
+
+- 当我们用简要方法创建的NSString对象时存放在数据段常量区中的，而不是对象的堆内存中。如果是类方法创建的字符串是在堆内存中的
+- 当在内存中创建一个字符串对象以后，这个字符串对象的内容就无法更改。当我们重新给字符串初始化值得时候，而是重新创建了一个字符串对象
+- 当系统准备要在内存中创建字符串对象的时候，会先检查内存中有无相同内容的字符串对象，如果有直接指向，没有才创建。（简要方法创建和类方法创建都是如此）但是不能夸内存区域指向，就是即使堆内存中有常量区准备创建的字符串也不会直接指向，而是重新创建
+- 常量区的字符串不会被回收，知道程序结束菜回收
+
+**常用的类方法**
+
+- `+ (instancetype)stringWithUTF8String:(const char *)nullTerminatedCString;`
+
+  - instancetype 作为返回值表示返回当前这个类的对象，作用：把C语言字符串转化为OC字符串对象
+
+  ```objc
+  char *s0 = "rose";
+  NSString *s1 = [NSString stringWithUTF8String:s0];
+  ```
+
+- `+ (instancetype)stringWithFormat:(NSString *)format,... `
+
+  - 作用：拼接字符串，使用变量或者其他数据拼接成OC字符串
+
+  ```objc
+  int age=10;
+  NSString *name=@"ming";
+  NSString *s = [NSString stringWithFormat:@"大家好我叫%@,今年%d岁",name,age];
+  ```
+
+- [str length] 对象方法
+
+  - 得到字符串长度
+
+  ```objc
+  NSString *str = @"test";
+  NSUInteger len = [str length];
+  NSLog(@"%lu",len); // 4
+  // NSUInteger 其实就是 typedef unsigned long NSUInteger;
+  ```
+
+- [str characterAtIndex:2]
+
+  - 得到对应位置的字符
+
+  ```objc
+  NSString *str = @"你好啊";
+  unichar ch = [str characterAtIndex:2]; // 啊
+  NSLog(@"第三个字符是 %C", ch);// 啊，注意这里时大写的C
+  // unichar 就是一个官方定义 typedef unsigned short unichar;
+  ```
+
+- `- (BOOL)isEqualToString:(NSString *)aString;`
+
+  - 判断两个字符串是否相等
+
+  ```objc
+  NSString *str1 = @"jack";
+  NSString *str2 = [NSString stringWithFormat:@"jack"];
+  if([str1 isEqualToString:str2]){
+    NSLog(@"==");
+  }
+  // 判断不能直接用 == 判断，== 本质是比较值，如果是指针则是指针的地址，如果一个是简要方法创建一个是类方法创建，那么即使内容一样也不相等，因为存放区域不同地址肯定不同
+  ```
+
+- 将OC字符串转化为C语言字符串
+
+  ```objc
+  NSString *s = @"jack";
+  const char *s1 = s.UTF8String;
+  NSLog(@"%s",s1);
+  ```
+
+**字符串的读写**
+
+- 将字符串写入到磁盘上某一个文件之中
+
+  `- (BOOL)writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile encoding:(NSStringEncoding)enc error:(NSError **)error;`
+
+  - 参数一：文件路径
+  - 参数二：YES: 先把内容写在一个临时文件中，如果写入成功才在文件放入。NO：无论成功失败，直接写进路径的文件中
+  - 参数三：指定写入时候的编码
+  - 参数四：二级指针，要传递一个NSError指针的地址
+    - 如果成功这个指针就是nil
+    - 如果失败这个指针的错误对象就是失败的信息
+  - 返回值BOOL：是否成功
+
+  ```objc
+  NSString *str = @"testing,testing";
+  NSError *err;
+  BOOL res = [str writeToFile:@"/Users/duzuhua/Desktop/abc.txt" atomically:YES encoding:NSUTF8StringEncoding error:&err];
+  if (err) {
+    NSLog(@"%@",err);
+  } else {
+    NSLog(@"写入成功");
+  }
+  // 没有路径的文件则创建，有则覆盖重写
+  ```
+
+- 从磁盘上的文件中读取内容
+
+  `+ (nullable instancetype)stringWithContentsOfFile:(NSString *)path encoding:(NSStringEncoding)enc error:(NSError **)error;`
+
+  - 参数一：路径
+  - 参数二：编码
+  - 参数三：接收错误信息的错误对象
+
+  ```objc
+  NSError *err;
+  NSString *str = [NSString stringWithContentsOfFile:@"/Users/duzuhua/Desktop/abc.txt" encoding:NSUTF8StringEncoding error:&err];
+  if (err) {
+    NSLog(@"%@",err);
+  } else {
+    NSLog(@"%@",str);
+  }
+  ```
+
+**使用NSURL读写文件**
+
+- 既可以度本地磁盘文件，也可以读取服务器文件，网页源码
+
+  `+ (nullable instancetype)stringWithContentsOfURL:(NSURL *)url usedEncoding:(nullable NSStringEncoding *)enc error:(NSError **)error;`
+
+  ```objc
+  // 现将URL地址包装在NSURL对象中
+  // 服务器是node写的一个小页面
+  NSError *err;
+  NSURL *u1 = [NSURL URLWithString:@"http://127.0.0.1:3000/login"];
+  NSString *s1 = [NSString stringWithContentsOfURL:u1 encoding:NSUTF8StringEncoding error:&err];
+  if (err) {
+    NSLog(@"%@",err);
+  } else {
+    NSLog(@"%@",s1);
+  }
+  
+  // 读取文件
+  NSURL *u2 = [NSURL URLWithString:@"file:///Users/xxx/Desktop/abc.txt"];
+  str = [NSString stringWithContentsOfURL:u2 encoding:NSUTF8StringEncoding error:&err];
+  
+  if (err) {
+    NSLog(@"%@",err);
+  } else {
+    NSLog(@"%@",str);
+  }
+  // 写文件，如果往服务器写注意权限
+  [s1 writeToURL:u2 atomically:YES encoding:NSUTF8StringEncoding error:&err];
+  ```
+
+- 字符串是否以指定字符串开始/结束
+
+```objc
+NSString *str = @"http://127.0.0.1";
+// 判断字符串以指定的字符串开头
+BOOL res = [str hasPrefix:@"http://"];
+NSLog(@"%d", res);
+// 结尾
+NSString *str1 = @"http://127.0.0.1/music/1.mp3";
+BOOL res2 = [str1 hasSuffix:@"mp3"];
+NSLog(@"%d", res2);
+```
+
+- 字符串搜索
+  - 返回值是一个NSRange的结构体{NSUInteger location;NSUInterger length;}
+  - NSRange的结构体，一般用来表示一段范围的 [location,length)
+    - NSUInteger location 位置
+    - NSUInterger length 长度
+    - 对于这个结构体的创建可以正常创建结构体那样创建，也可以用NSMakeRange(location,length);这个方法。这个方法返回值就是NSRange结构体
+    - 打印的时候有一个方法：NSStringFromRange(NSRange);返回值是一个字符串@"{range.location, range.length}"
+
+```objc
+NSRange res = [str rangeOfString:@"tp"];
+NSLog(@"%lu",res.location);// 自然数为出现位置的下标，如果没有则是unsigned long的最大值9223372036854775807。这个最大值OC有一个定义NSNotFound
+NSLog(@"%lu",res.length);//0为不存在，正数的话就是参数字符串的长度
+
+// [str rangeOfString:@"t1" options:(NSStringCompareOptions)]
+// 这个方法其实可以传参，其实就是看你像怎么找如从后往前找，因为返回值是第一个找到的位置，因此有可能从后往前搜的返回值会不一样
+```
+
+- 字符串的截取
+
+  ```objc
+  // substringFromIndex 从指定位置开始截取，一直到最后
+  NSString *str = @"我爱北京天安门";
+  [str substringFromIndex:3];// 京天安门
+  // substringToIndex 从头开始截取，一直到指定位置，也可以理解为，从头开始，参数就是要截几个字
+  [str substringToIndex:3];// 我爱北
+  // 截取一段范围，参数是NSRange结构体
+  [str substringWithRange:NSMakeRange(2,2)];// 北京
+  ```
+
+- 字符串替换
+
+  ```objc
+  // stringByReplacingOccurrencesOfString: withString: 
+  // 把str中第一个参数的字符串转为第二个参数的字符串
+  // 如果第一个参数中的字符串在str中不存在则返回str本身
+  NSString *s = [str stringByReplacingOccurrencesOfString:@"北京天安门" withString:@"你"];
+  NSLog(@"%@",s);
+  ```
+
+- 字符串数据转为其他类型
+
+  @property (readonly) double doubleValue;
+
+  @property (readonly) float floatValue;
+
+  @property (readonly) int intValue;
+
+  @property (readonly) NSInteger integerValue;
+
+  @property (readonly) long long longLongValue;
+
+  @property (readonly) BOOL boolValue;
+
+  ```objc
+  str = @"12.91asdf123"
+  // 注意从字符串第一个数字开始转，转到不能转的地方就停止转换了,如果第一个为字母则直接为0
+  int num = str.intValue;// 12
+  float num = str.floatValue;// 12.910000
+  ```
+
+- 去掉字符串前后空格, trim
+
+  ```objc
+  // [str stringByTrimmingCharactersInSet:<#(nonnull NSCharacterSet *)#>];
+  [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  ```
+
+- 去掉字符串前后小写字母
+
+- 去掉字符串前后大写字母
+
+- 字符串转为大写
+
+- 字符串转为小写
+
+### NSMutableString
+
+根据字符串的恒定性，如果每一次修改字符串都创建一个对象，那么如果进行大批量字符串操作的时候回变得很慢。而这个NSMutableString对象就是可以修改的字符串对象。
+
+- 他是Foundation框架的一个类，从NSString继承，所以在使用NSString的地方完全可以使用NSMutableString
+- 存储在NSMutableString对象的字符串具有可变性
+
+```objc
+// 创建的对象
+NSMutableString *str = [NSMutableString string];
+// 往可变字符串中追加字符串
+[str appendString:@"Jack"];// @"Jack"
+[str appendString:@"Rose"];// @"JackRose"
+// 以拼接的方式往可变字符串中追加内容
+[str appendFormat:@"我今年%d岁了",12];//JackRose我今年12岁了
+```
+
+注意：`NSMutableString *str = @"JS";`这样创建对象是不行的，因为@“”是父类对象，一个子类指针指向父类对象是有问题的，如果调用子类独有的方法，编译器不会报错但是运行时回报错。
+
+使用建议：平时使用的时候我们还是使用NSString，因为效率高，除非用到大批量的字符串拼接（建议5次以上）才用NSMutableString
+
+### NSArray
+
+是Foundation框架中的一个类，这个类的对象是用来存储多个数据的，具备数组的功能。所以，NSArray是OC中的对象。
+
+特点：只能存储OC对象，任意的OC对象；长度固定，一旦创建完毕之后元素的长度固定，无法删除元素。每一个元素都是紧密相连的，每个元素仍然有自己的下标；元素的类型是id类型
+
+```objc
+NSArray *arr = [NSArray new];
+NSArray *arr = [NSArray array];
+NSArray *arr = [[NSArray alloc] init];
+```
+
+上述三种创建方式是没有意义的，因为这样创建出来元素的个数是0个，又因为一旦创建完毕之后元素的长度固定，无法删除元素。所以没有任何意义
+
+```objc
+NSArray *arr = [NSArray arrayWithObject:@"Jack"];
+// 上面代码只存一个对象也没什么意义
+NSArray *arr = [NSArray arrayWithObjects:@"Jack",@"Rose",@"Lily",@"Mike",@"Tom",nil];
+// 写完后记得加上一个nil表示参数到此结束，如果放在前面的话，后面再传参数也没有因为结束了
+```
+
+创建NSArray数组的简要方式
+
+```objc
+NSArray *arr = @[@"Jack",@"Rose",@"Lily",@"Mike",@"Tom"];
+NSLog(@"%@",arr);// 在NSLog函数中使用%@可以直接输出NSArray对象中的所有元素
+```
+
+**注意**：不能存基本数据类型
+
+**使用**
+
+```objc
+NSLog(@"%@",arr[2]);
+// - (ObjectType)objectAtIndex:(NSUInteger)index;
+// 下面那样匿名创建也不会被ARC回收
+NSArray *arr = @[@"Jack",@"Rose",[Person new],@"Mike",@"Tom"];
+NSLog(@"%@",arr[2]);
+Person *p1 = [arr objectAtIndex:2];
+[p1 sayHi];
+Person *p2 = arr[2];// 这样更方便
+[p2 sayHi];
+```
+
+- 得到NSArray元素个数
+
+  - @property (readonly) NSUInteger count;
+
+  ```objc
+  // 两种方式都可以取到值
+  NSLog(@"%lu",[arr count]);
+  NSLog(@"%lu",arr.count);
+  ```
+
+- 判断NSArray中是否有某个元素
+
+  - ` - (BOOL)containsObject:(ObjectType)anObject;`
+
+  ```objc
+  NSLog(@"%d",[arr containsObject: @"Jack"]);
+  ```
+
+- 取第一个元素和最后一个元素
+
+  ```objc
+  arr[0];
+  arr.firstObject;
+  // 除非arr=@[];不然上述两代码是没有区别的，此时arr[0]报错 arr.firstObject==null
+  arr.lastObject;
+  ```
+
+- 查找指定元素在NSArray中第一次出现时的下标
+
+  - `- (NSUInteger)indexOfObject:(ObjectType)anObject;`
+
+  ```objc
+  NSLog(@"%lu",[arr indexOfObject:p1]);
+  // 如果没找到返回的是NSUinteger的最大值即 NSNotFound
+  ```
+
+**NSArray数组遍历**
+
+```objc
+// for循环，普通for循环就不写了，写一下OC的增强for循环
+for(id item in arr){
+  NSLog(@"%@",item);
+}
+// 声明在for括号内的变量叫迭代变量，和别的语言的for增强都差不多
+```
+
+`- (void)enumerateObjectsUsingBlock:(void (NS_NOESCAPE ^)(ObjectType obj, NSUInteger idx, BOOL *stop))block;`
+
+```objc
+// block 自定义遍历要做的是,block第一个参数对象、idx下标、stop一个停止循环的指针，如果改为YES就停止循环了
+[arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+  NSLog(@"obj:%@ index: %lu ",obj,idx);
+  if (idx == 2) {// 讯号到下标为2 就停止
+    *stop = YES;
+  }
+}];
+```
+
+- NSArray与字符串的两个方法
+
+  ```objc
+  // 第一个元素除外，每一个元素之间以一个字符串隔开形成一个新的字符串
+  NSArray *arr = @[@"Jack",@"Rose",@"Mike",@"Tom"];
+  NSString *s = [arr componentsJoinedByString:@"."];
+  NSLog(@"%@",s);//Jack.Rose.Mike.Tom
+  // 把一段字符串以某个字符串为标识拆分成OC字符串NSArray对象
+  NSArray *stringArr = [s componentsSeparatedByString:@"."];
+  NSLog(@"%@",stringArr);
+  ```
+
+### NSMutableArray
+
+NSMutableArray 是 NSArray 的子类。它的特点：他的元素可以动态的新增和删除
+
+```objc
+NSMutableArray *arr = [NSMutableArray new];// 因为可以动态增删，所以是有意义的
+NSMutableArray *arr1 = [NSMutableArray arrayWithObjects:@"Jack",@"Rose",@"Lily",@"Mike",@"Tom",nil];
+// 和NSMutableString一样，不能这样创建NSMutableArray *arr = @[@"Mike",@"Tom"];
+
+[arr addObject:p];// 在OC数组末尾加上一个OC对象
+
+NSArray *arr1 = @[@"Jack",@"Rose",@"Mike",@"Tom"];
+[arr addObjectsFromArray:arr1];// 在数组末尾接加上另一个数组（可以是NSArray也可以是NSMutableArray）
+```
+
+- 添加元素
+
+  ```objc
+  // 在OC数组末尾加上一个OC对象
+  [arr addObject:p];
+  
+  
+  // 在数组末尾接加上另一个数组（可以是NSArray也可以是NSMutableArray）
+  NSArray *arr1 = @[@"Jack",@"Rose",@"Mike",@"Tom"];
+  [arr addObjectsFromArray:arr1];
+  
+  // 在指定下标处插入元素(其余元素后移)
+  [arr insertObject:p atIndex:1];
+  ```
+
+- 删除
+
+  ```objc
+  // 删除指定的元素
+  [arr removeObject:@"Mike"];
+  
+  // 删除对应下标元素
+  [arr removeObjectAtIndex:1];
+  
+  // 删除指定范围内的元素,参数是NSRange
+  [arr removeObjectsInRange:NSMakeRange(1, 3)];//从第二个开始删三个
+  
+  // 删除指定范围内的指定元素
+  // 因为可能有很多相同的元素，我们可以指定范围删掉想删的那个
+  [arr removeObject:p inRange:NSMakeRange(1, 3)];//删除[1,4)内的那个p对象
+  
+  // 删除最后一个元素
+  [arr removeLastObject];
+  
+  // 删除所有元素
+  [arr removeAllObjects];
+  ```
+
+### NSNumber
+
+无论是NSArray和NSMutableArray里都不可以存储基本数类型，要想存基本数据类型就要用到NSNumber封装或者自定义封装一下基本数据就可以存进NSArray了
+
+NSNumber是Foundation框架的一个类，专门用于包装基本数据类型的
+
+\+ (NSNumber *)numberWithChar:(char)value;
+
+\+ (NSNumber *)numberWithUnsignedChar:(unsigned char)value;
+
+\+ (NSNumber *)numberWithShort:(short)value;
+
+\+ (NSNumber *)numberWithUnsignedShort:(unsigned short)value;
+
+\+ (NSNumber *)numberWithInt:(int)value;
+
+\+ (NSNumber *)numberWithUnsignedInt:(unsigned int)value;
+
+\+ (NSNumber *)numberWithLong:(long)value;
+
+\+ (NSNumber *)numberWithUnsignedLong:(unsigned long)value;
+
+\+ (NSNumber *)numberWithLongLong:(long long)value;
+
+\+ (NSNumber *)numberWithUnsignedLongLong:(unsigned long long)value;
+
+\+ (NSNumber *)numberWithFloat:(float)value;
+
+\+ (NSNumber *)numberWithDouble:(double)value;
+
+\+ (NSNumber *)numberWithBool:(BOOL)value;
+
+\+ (NSNumber *)numberWithInteger:(NSInteger)value;
+
+\+ (NSNumber *)numberWithUnsignedInteger:(NSUInteger)value;
+
+```objc
+NSNumber *num = [NSNumber numberWithInt:12];
+// 简写方式
+NSNumber *num = @10；
+NSArray *arr = @[@10,@20,@30];
+for(NSNumber *num in arr){
+  NSLog(@"%d", num.intValue);
+}
+
+int a = 10
+NSNumber *num = @(a);
+```
+
+
+
+### NSObject
+
+在Foundation框架中，有一个类叫 NSObject 是所有类的基类，根据LSP原则，NSObject指针可以指向任意的OC对象，所以NSObject指针是一个万能指针。但是如果要调用指向的子类对象的独有的方法，就必须要做类型转换。
+
+有一个协议也叫 NSObject（基协议），这个协议被NSObject这个类遵守，因此这个协议所有的OC类都遵守了。
+
+### id指针
+
+是一个万能指针可以指向任意的OC对象，id 定义的时候已经加了*了，所以变量名不用加星号了。如果用NSObject调用对象方法的时候会做编译检查，但是用id指针的话就可以直接通过编译。
+
+注意：id指针只能调用方法，不能使用点语法，如果使用点语法会直接报编译错误
 
 
 

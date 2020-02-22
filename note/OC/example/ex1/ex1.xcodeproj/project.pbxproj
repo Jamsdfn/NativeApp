@@ -89,6 +89,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B718D2372400CD9A00BED2C0 /* pro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pro.h; sourceTree = "<group>"; };
 		B71A202E23FCFA9D002150C1 /* game */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = game; sourceTree = BUILT_PRODUCTS_DIR; };
 		B71A203023FCFA9D002150C1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B71A203523FCFBCD002150C1 /* Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
@@ -223,6 +224,7 @@
 				B788459B23FFDBB700B1070E /* Person+test.h */,
 				B788459C23FFDBB700B1070E /* Person+test.m */,
 				B788459E23FFF35200B1070E /* Person+ext.h */,
+				B718D2372400CD9A00BED2C0 /* pro.h */,
 			);
 			path = ARC;
 			sourceTree = "<group>";
