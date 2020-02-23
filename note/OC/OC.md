@@ -603,6 +603,12 @@ super关键字可以用在类方法和对象方法中。注意：super只能用�
     - weak：弱类型
 
     注意：不是OC对象不能使用这两个参数
+    
+  - 与拷贝相关的参数：copy
+
+    - 在setter中先将对象拷贝一份在赋值给属性
+
+    无论是MRC下还是ARC下NSString的属性都夹copy参数，因为不能因为外界传来的对象是mutable就通过mutable相关的操作来修改属性的值
 
 - instancetype关键字
 
@@ -636,7 +642,6 @@ int main(){
   Student *s = [Student createSelf];
   return 0;
 }
-  
 ```
 
 ### 访问修饰符
@@ -1521,6 +1526,14 @@ NSMutableString *str = [NSMutableString string];
 
 使用建议：平时使用的时候我们还是使用NSString，因为效率高，除非用到大批量的字符串拼接（建议5次以上）才用NSMutableString
 
+**字符串的拷贝特点**
+
+copy是一个方法，定义在NSObject类之中，作用是拷贝对象，NSString使用copy方法并没有创建新的对象而是直接把地址返回去了，这种拷贝是**浅拷贝**。NSMutableString使用copy方法是创建了一个新的对象的，这是**深拷贝**。但是NSMutableString 使用copy出来的对象是NSString
+
+mutableCopy也是一个定义在NSObject之中的方法。NSString调用它是深拷贝，深拷贝出来的是NSMutableString。NSMutableString调用它也是深拷贝，深拷贝出来的也是NSMutableString
+
+拷贝后引用计数器的问题：在常量区的字符串对象是不允许被回收的，因此引用计数器的值超大且retain和release无效。如果是在堆区中的字符串和普通对象是一样的，默认值是1。当copy后（浅拷贝）引用计数器加一，如果是深拷贝引用计数器则两个都是1
+
 ### NSArray
 
 是Foundation框架中的一个类，这个类的对象是用来存储多个数据的，具备数组的功能。所以，NSArray是OC中的对象。
@@ -1957,6 +1970,11 @@ NSData *data = [s dataUsingEncoding:NSUTF8StringEncoding];
 
 有一个协议也叫 NSObject（基协议），这个协议被NSObject这个类遵守，因此这个协议所有的OC类都遵守了。
 
+这个类中有一个copy方法，但是这个方法内部又调用了copyWithZone方法，这个方法是NSCoping协议的内容，因此如果想自定义类实现对象的拷贝的方法，那么这个类就要遵守NSCoping协议并且有copyWithZone的实现
+
+- 如果想自定义类的copy方法是深拷贝就重新创建一个对象，把对象的属性、值赋值到新对象中，然后将新对象返回
+- 如果想浅拷贝，那直接把self返回就好了
+
 ### id指针
 
 是一个万能指针可以指向任意的OC对象，id 定义的时候已经加了*了，所以变量名不用加星号了。如果用NSObject调用对象方法的时候会做编译检查，但是用id指针的话就可以直接通过编译。
@@ -2086,7 +2104,7 @@ NSLog(@"%lf",time);
 ```objc
 // 和上面格式化时间的代码差不多用NSDateFomatter可以直接操作。这里不写了
 
-// 用日历对象来操作
+// 用日历对象来操作，把这段代码写在NSDate的分类中，给NSDate加year、month、day。。。等属性，我们就可以直接用了
 NSDate *date = [NSDate date];
 NSCalendar *calendar = [NSCalendar currentCalendar];
 // 第一个参数有很多可以选的，用|隔开就好了
@@ -2098,7 +2116,40 @@ NSLog(@"%lu %lu %lu",year,month,day);
 
 ```
 
+## 单例模式
 
+一个类的对象，无论是在何时无论在何地创建也无论创建多少次对象，都是同一个对象
+
+无论如何创建对象最终都会调用alloc方法创建对象。其实alloc方法什么都没做，只是调用了allocWithZone方法，因此allocWithZone才是真正申请空间创建对象的方法。因此想实现单例模式就应该在allocWithZone入手，重写此方法
+
+```objc
+@interface Singel : NSObject
++ (instancetype)sharedSingle;
++ (instancetype)defaultSingle;
+@end 
+  
+@implementation Single
++ (instancetype)allocWithZone:(struct _NSZone *)zone {
+  static id instance = nil;
+  if (!instance) {
+    instance = [super allocWithZone:zone];
+  }
+  return instance;
+}
++ (instancetype)sharedSingle {
+  return [self new];
+}
++ (instacetype)defaultSingle {
+  return [self new];
+}
+@end
+```
+
+规范：如果类是一个单例模式。要求为类提供一个类方法，来返回这个单例对象。这个类方法名必须是以 sharedClassName 或者是 defaultClassName。
+
+单例对象特点：单例对象的数据可以被共享，无论在哪里创建都是同一个对象。无论哪里使用都是同一个对象。因为OC中不要使用全局变量，所以这个单例对象就可以代替C中的全局对象。
+
+如果一个数据需要被整个程序共享，那么这个数据可以以属性的方式存放在单例对象中。
 
 ## Xcode技巧
 

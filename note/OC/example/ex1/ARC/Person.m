@@ -2,6 +2,14 @@
 
 @implementation Person
 
+//+ (instancetype)allocWithZone:(struct _NSZone *)zone {
+//  static id instance = nil;
+//  if (!instance) {
+//    instance = [super allocWithZone:zone];
+//  }
+//  return instance;
+//}
+
 - (void)run{
     NSLog(@"running....");
 }
