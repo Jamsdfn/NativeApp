@@ -1348,7 +1348,7 @@ NSString的恒定性
   ```objc
   NSString *str = @"testing,testing";
   NSError *err;
-  BOOL res = [str writeToFile:@"/Users/duzuhua/Desktop/abc.txt" atomically:YES encoding:NSUTF8StringEncoding error:&err];
+  BOOL res = [str writeToFile:@"/Users/xxx/Desktop/abc.txt" atomically:YES encoding:NSUTF8StringEncoding error:&err];
   if (err) {
     NSLog(@"%@",err);
   } else {
@@ -1367,7 +1367,7 @@ NSString的恒定性
 
   ```objc
   NSError *err;
-  NSString *str = [NSString stringWithContentsOfFile:@"/Users/duzuhua/Desktop/abc.txt" encoding:NSUTF8StringEncoding error:&err];
+  NSString *str = [NSString stringWithContentsOfFile:@"/Users/xxx/Desktop/abc.txt" encoding:NSUTF8StringEncoding error:&err];
   if (err) {
     NSLog(@"%@",err);
   } else {
@@ -1419,13 +1419,19 @@ BOOL res2 = [str1 hasSuffix:@"mp3"];
 NSLog(@"%d", res2);
 ```
 
-- 字符串搜索
-  - 返回值是一个NSRange的结构体{NSUInteger location;NSUInterger length;}
-  - NSRange的结构体，一般用来表示一段范围的 [location,length)
-    - NSUInteger location 位置
-    - NSUInterger length 长度
-    - 对于这个结构体的创建可以正常创建结构体那样创建，也可以用NSMakeRange(location,length);这个方法。这个方法返回值就是NSRange结构体
-    - 打印的时候有一个方法：NSStringFromRange(NSRange);返回值是一个字符串@"{range.location, range.length}"
+#### NSRange
+
+NSRange的结构体，一般用来表示一段范围的 [location,length)
+
+- NSUInteger location 位置
+- NSUInterger length 长度
+- 对于这个结构体的创建可以正常创建结构体那样创建，也可以用NSMakeRange(location,length);这个方法。这个方法返回值就是NSRange结构体
+- 打印的时候有一个方法：NSStringFromRange(NSRange);返回值是一个字符串@"{range.location, range.length}"
+
+**字符串搜索**
+
+- 返回值是一个NSRange的结构体{NSUInteger location;NSUInterger length;}
+- NSRange的结构体
 
 ```objc
 NSRange res = [str rangeOfString:@"tp"];
@@ -1494,7 +1500,7 @@ NSLog(@"%lu",res.length);//0为不存在，正数的话就是参数字符串的�
 
 - 字符串转为小写
 
-### NSMutableString
+#### NSMutableString
 
 根据字符串的恒定性，如果每一次修改字符串都创建一个对象，那么如果进行大批量字符串操作的时候回变得很慢。而这个NSMutableString对象就是可以修改的字符串对象。
 
@@ -1629,7 +1635,15 @@ for(id item in arr){
   NSLog(@"%@",stringArr);
   ```
 
-### NSMutableArray
+**数据的持久化**
+
+```objc
+// 把数组保存在文件中 plist 文件叫属性列表文件，可以用来保存数组
+[arr writeToFile:@"/User/xxx/Desktop/abc.plist" atomically:YES ];
+NSArray *arr = [NSArray arrayWithContentsOfFile:@"/User/xxx/Desktop/abc.plist"];
+```
+
+#### NSMutableArray
 
 NSMutableArray 是 NSArray 的子类。它的特点：他的元素可以动态的新增和删除
 
@@ -1731,7 +1745,211 @@ int a = 10
 NSNumber *num = @(a);
 ```
 
+### NSDictionary
 
+用NSMutableArray有一个缺点，就是下标不固定。无法通过下标唯一确定一个元素，所以我们只能通过遍历找到元素，如果一个数组很大，要找一个数组就很浪费性能。用 键值对 的方式存储数据就能解决这个问题。（基本数据结构 字典）
+
+OC中是用数组存储字典结构的，用NSDictionary和NSMutableDictionary来存，NSDictionary一点创建就不可以增加或减少其的长度
+
+字典数组对象键值对的key只能是遵守了NSCoping协议的对象，NSString就遵守了这个协议。Value只能是OC对象
+
+```objc
+// 参数 值,键,值,键...,nil 得方式一直写下去
+NSDictionary *dict1 = [NSDictionary dictionaryWithObjectsAndKeys:@"jack",@"name",@"广东",@"location", nil];
+NSDictionary *dict2 = @{
+  @"name": @"Rose", 
+  @"address": @"Guangdong"
+};// 有JS那味儿了
+```
+
+使用：
+
+```objc
+NSLog(@"%@",dict1);
+//取值，通过key去取，如果没有此key则返回nil
+dict1[@"name"];// 取key为name的value
+[dict1 objectForKey:@"name"]// 取key为name的value
+
+// 返回键值对数目
+NSUInteger sum = [dict1 count];// dict.count
+NSArray *arr = [dict1 allKeys];// dict.allKeys
+NSArray *arr1 = [dict1 allValues];// dict.allValues
+```
+
+遍历
+
+```objc
+// 使用 for...in 循环的道德是所有的key
+for(id item in dict1) {
+  NSLog(@"%@: %@",item, dict1[item]);
+}
+// 使用block stop用法和array那个一样
+[dict2 enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+  NSLog(@"%@: %@",key, obj);
+}];
+```
+
+**字典存储数据的原理**：
+
+- 当往字典数组中存储一个键值对的时候，根据这个key的哈希算法，用键和数组的长度计算得出的结果作为数组的下标中
+- 取值的时候也是根据键的哈希算法，算出下标直接取值，不用遍历数组
+
+因此数组的存值得速度比字典数组快，但是如果实在一个含大量数据的数组中只取几个值，那字典数组取值快。但是如果要遍历一个数组做操作的话，还是数组快一些。
+
+#### NSMutableDictionary
+
+NSMutableDictionary是NSDictionary子类，可以动态增删字典数组内的数据。
+
+```objc
+NSMutableDictionary *d1 = [NSMutableDictionary new];
+
+NSMutableDictionary *d2 = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"jack",@"name",@"guangdong",@"location", nil];
+```
+
+- 新增键值对
+
+```objc
+[d1 setObject:@"Rose" forKey:@"name"];// 如果键重复的话就会覆盖原值
+```
+
+- 删除键值对
+
+```objc
+// 根据key删除key的键值对
+[d2 removeObjectForKey:@"location"];
+// 删除所有键值对
+[d2 removeAllObjects];
+// 根据key数组删除一组键值对
+[d2 removeObjectsForKeys:@[@"name",@"location"]];
+```
+
+**字典数组持久化**
+
+```objc
+// 存
+[d2 writeToFile:@"/Users/xxx/Desktop/aaa.plist" atomically:YES];
+// 取
+NSMutableDictionary *d3 = [NSMutableDictionary dictionaryWithContentsOfFile:@"/Users/xxx/Desktop/aaa.plist"];
+
+NSictionary *d3 = [NSDictionary dictionaryWithContentsOfFile:@"/Users/xxx/Desktop/aaa.plist"];
+```
+
+**集合的内存管理**：NSArray其实叫集合，NSDictionary叫字典集合；
+
+在MRC模式下，当一个对象放入集合中，此时retainCount会加一，当集合销毁的时候，会给集合内的每一个对象都发送一条release消息。使用简要方式创建的集合或者字典集合都是被autorelease过了。直接调用和类同名的类方法，那也是被autorelease过了
+
+在ARC模式下，集合的元素是一个强类型的指针
+
+### NSFileManager
+
+这个类的作用正如其名，是用来操作磁盘上的文件、文件夹的，对他们进行创建、删除、复制、拷贝、移动等操作
+
+NSFileManager是一个单例模式创建的类，创建这个类的对象就要调用这个类的defaultManager类方法就可以，这个类方法会返回一个单例对象
+
+```objc
+NSFileManager *manager = [NSFileManager defaultManager];
+```
+
+**判断相关的方法**
+
+```objc
+// 判断指定的文件或者文件夹是否在磁盘上真是存在
+// - (BOOL)fileExistsAtPath:(NSString *)path;
+NSLog(@"%d",[manager fileExistsAtPath: @"/Users/xxx/Desktop/abc.plist"]);
+
+// 判断指定的路径是否真是存储在我们的磁盘之上，并且判断这个路径是一个文件夹路径还是文件路径
+// - (BOOL)fileExistsAtPath:(NSString *)path isDirectory:(nullable BOOL *)isDirectory;
+// 他的返回值是BOOL类型，判断的是路径是否存在，而第二个参数是填一个BOOL类型变量的地址，用于修改这个变量的值
+// 即一个方法判断了两个内容，两个判断的结果放入不同的BOOL变量中
+BOOL flag;
+BOOL res =[manager fileExistsAtPath:@"/Users/xxx/Desktop/document" isDirectory:&flag];//如果调用方法后flag变量的值是NO则不是一个文件夹,为YES则是一个文件夹
+
+// 判断是否有权限读取文件或是否有权限打开文件夹
+[manager isReadableFileAtPath: @"/Users/xxx/Desktop/abc.plist"];
+
+// 判断指定文件夹或者文件是否可以写入
+[manager isWritableFileAtPath: @"/Users/xxx/Desktop/abc.plist"];
+
+// 判断是否有权限删除文件或者文件夹
+[manager isDeletableFileAtPath: @"/Users/xxx/Desktop/abc.plist"];
+```
+
+通常读写文件前先判断文件存不存在，再判断有无权限读写文件，最后才读写或者删除
+
+**获取文件或者文件夹信息**
+
+```objc
+// 获取指定文件或者文件夹的属性信息
+// - (nullable NSDictionary<NSFileAttributeKey, id> *)attributesOfItemAtPath:(NSString *)path error:(NSError **)error
+NSError *err;
+NSDictionary *d1 = [manager attributesOfItemAtPath:@"/Users/xxx/Desktop/abc.plist" error:&err];
+
+// 获取指定目录下的所有文件和目录(包括后代目录和文件) 返回值集合内的元素都是字符串
+// - (nullable NSArray<NSString *> *)subpathsAtPath:(NSString *)path;
+NSArray *arr = [manager subpathsAtPath:@"/Users/xxx/Desktop/"];
+
+//获取指定目录下的所有文件和目录（不包括后代目录和文件）
+// - (nullable NSArray<NSString *> *)contentsOfDirectoryAtPath:(NSString *)path error:(NSError **)error
+NSArray *arr = [manager contentsOfDirectoryAtPath:@"/Users/xxx/Desktop/document" error:&err];
+```
+
+**文件目录的创建**
+
+- 在指定的目录创建一个文件
+  - `- (BOOL)createFileAtPath:(NSString *)path contents:(nullable NSData *)data attributes:(nullable NSDictionary<NSFileAttributeKey, id> *)attr;`
+  - 参数一：路径
+  - 参数二：文件内容（二进制数据）需要传入NSData对象如果传入nil则创建空文件
+    - 字符串的一个对象方法：`- (nullable NSData *)dataUsingEncoding:(NSStringEncoding)encoding; `
+    - NSData类：专门用来保存二进制数据的
+  - 参数三：文件的属性（如果使用系统默认值就用nil）
+
+```objc
+NSFileManager *manager = [NSFileManager defaultManager];
+NSString *s = @"test";
+// 这个方法专门把字符串转为二进制数据。返回值为NSData *
+// - (nullable NSData *)dataUsingEncoding:(NSStringEncoding)encoding; 
+NSData *data = [s dataUsingEncoding:NSUTF8StringEncoding];
+[manager createFileAtPath:@"/Users/xxx/Desktop/test.txt" contents:data attributes:nil];
+```
+
+- 在指定目录创建文件夹
+  - 参数一：路径
+  - 参数二：YES则做一路创建，NO则不会
+    - 一路创建即如果遇到不存在的路径就帮我们生成一个文件夹
+    - 如果是NO那除了要创建的文件夹名外的路径必须正确
+  - 参数三：文件属性
+  - 参数四：错误信息
+
+```objc
+[manager createDirectoryAtPath:@"/Users/xxx/Desktop/test" withIntermediateDirectories:NO attributes:nil error:&err];
+```
+
+**拷贝文件**
+
+`- (BOOL)copyItemAtPath:(NSString *)srcPath toPath:(NSString *)dstPath error:(NSError **)error`
+
+```objc
+// 拷贝可以改名字，路径名的文件的名字改一下就好了
+[manager copyItemAtPath:@"/Users/xxx/Desktop/abc.plist" toPath:@"/Users/xxx/Desktop/document/asd.plist" error:&err];
+```
+
+**移动(剪切)文件**
+
+`- (BOOL)moveItemAtPath:(NSString *)srcPath toPath:(NSString *)dstPath error:(NSError **)error`
+
+```objc
+// 剪切也可以改名
+[manager moveItemAtPath:@"/Users/xxx/Desktop/abc.plist" toPath:@"/Users/xxx/Desktop/document/p.plist" error:&err];
+```
+
+**删除文件**
+
+`- (BOOL)removeItemAtPath:(NSString *)path error:(NSError **)error`
+
+```objc
+[manager removeItemAtPath:@"/Users/xxx/Desktop/document/p.plist" error:&err];
+// 注意删除不是放入垃圾篓，而是直接删除
+```
 
 ### NSObject
 
@@ -1744,6 +1962,141 @@ NSNumber *num = @(a);
 是一个万能指针可以指向任意的OC对象，id 定义的时候已经加了*了，所以变量名不用加星号了。如果用NSObject调用对象方法的时候会做编译检查，但是用id指针的话就可以直接通过编译。
 
 注意：id指针只能调用方法，不能使用点语法，如果使用点语法会直接报编译错误
+
+### CGPoint
+
+是Foundation框架用来存放坐标的一个结构体。属性就是double类型的x和double类型的y。通常用来表示控件在内存中的位置。CGPoint又定义了一个名字叫NSPoint
+
+```objc
+CGPoint p1; p1.x = 20; p1.y = 30;
+CGPoint p1 = {20, 30};
+CGPoint p1 = {.x = 20, .y = 30};
+CGPoint p1 = CGPointMake(20, 30);
+CGPoint p1 = NSMakePoint(20, 30);
+```
+
+### CGSize
+
+是Foundation框架用来存放空间大小的结构体。double类型的width，double类型的height。CGSize又定义了一个名字叫NSSize
+
+```objc
+CGSize p1; p1.width = 20; p1.height = 30;
+CGSize p1 = {20, 30};
+CGSize p1 = {.width = 20, .height = 30};
+CGSize p1 = CGSizeMake(20, 30);
+CGSize p1 = NSMakeSize(20, 30);
+```
+
+### CGReact
+
+同名定义NSRect，用来存储一个控件的位置和大小。属性一个是CGPoint origin一个是CGSize size。
+
+```objc
+CGRect rect;
+react.origin.x=20;
+react.origin.y=30;
+react.size.width=100;
+react.size.height=200;
+
+react.origin = (CGPoint){20,30};
+react.size = (CGSize){100,200};
+// CGRectMake(CGFloat x, CGFloat y, CGFloat width, CGFloat height)
+// CGFloat 其实就是double类型
+react = CGRectMake(20,30,100,200);
+react = NSMakeRect(20,30,100,200);
+```
+
+### NSValue
+
+用于存放前面学习的结构体（NSRange、CGPoint、CGSize、CGRect）都是无法直接存到集合中的，因此要现将这些结构体存入一个OC对象中，再存入集合中。这个NSValue就是用来包装这些结构体变量的
+
+```objc
+CGPoint p1 = CGPointMake(10,20);
+CGPoint p2 = CGPointMake(10,20);
+CGPoint p3 = CGPointMake(10,20);
+CGPoint p4 = CGPointMake(10,20);
+
+NSValue *v1 = [NSValue valueWithPoint:p1];
+NSValue *v2 = [NSValue valueWithPoint:p2];
+NSValue *v3 = [NSValue valueWithPoint:p3];
+NSValue *v4 = [NSValue valueWithPoint:p4];
+
+NSArray *arr = @[v1,v2,v3,v4];
+
+for(NSValue *v in arr){
+  NSLog(@"%@",NSStringFromPoint(v.pointValue));
+}
+```
+
+同理 CGSIze CGReact
+
+### NSDate
+
+专门用于处理时间日期的一个类
+
+```objc
+NSDate *date = [NSDate new];
+NSLog(@"%@",date);// Sun Feb 23 17:11:57 2020
+// 创建一个日期格式化对象，
+NSDateFormatter *fomatter = [NSDateFormatter new];
+// 指定这个对象的转换格式
+// yyyy 4位年份
+// MM   2位月份
+// dd   天
+// HH   小时 24小时制
+// hh   小时 12小时制
+// mm   分钟
+// ss   秒
+fomatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+// 让格式化对象将日期对象格式转换
+NSLog(@"%@",[fomatter stringFromDate:date]);// 2020-02-23 17:11:57
+
+NSString *strDate = @"2000-01-01 00:00:00";
+date = [fomatter dateFromString:strDate];
+NSLog(@"%@",date);
+// 时间戳
+double stamp = [date timeIntervalSince1970];// 秒级时间戳
+NSLog(@"%lf",stamp);
+```
+
+- 在当前时间的基础上，新增一段时间后的时间对象
+  - 参数是正数就是过了多久后的时间，为负数则是多久之前的时间
+
+```objc
+NSDate *date = [NSDate dateWithTimeIntervalSinceNow:3600];
+NSLog(@"%@",date);// 一个小时后的时间
+```
+
+- 两个时间之差
+
+```objc
+NSDate *date = [NSDate new];
+NSDateFormatter *fomatter = [NSDateFormatter new];
+fomatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+
+NSString *strDate = @"2020-02-23 17:35:00";
+NSDate *date = [fomatter dateFromString:strDate];
+NSDate *now = [NSDate new];
+double time = [now timeIntervalSinceDate:date];// 返回值是单位是秒
+NSLog(@"%lf",time);
+```
+
+- 得到日期中的各个部分
+
+```objc
+// 和上面格式化时间的代码差不多用NSDateFomatter可以直接操作。这里不写了
+
+// 用日历对象来操作
+NSDate *date = [NSDate date];
+NSCalendar *calendar = [NSCalendar currentCalendar];
+// 第一个参数有很多可以选的，用|隔开就好了
+NSDateComponents *components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
+NSInteger year = components.year;
+NSInteger month = components.month;
+NSInteger day = components.day;
+NSLog(@"%lu %lu %lu",year,month,day);
+
+```
 
 
 
