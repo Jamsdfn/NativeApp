@@ -196,3 +196,84 @@ transform可以进行平移、缩放、旋转
 
 **销毁一个控件**：`[txt removeFromSuperview]`调用方法就销毁了
 
+#### UIImageView
+
+帧动画相关的属性和方法
+
+@property(nonatomic,copy) NSArray *animationImages;
+
+需要播放的序列帧图片数组（里面全是UIImage对象，会按顺序显示里面的图片）
+
+@property(nonatomic) NSTimeInterval animationDuration;
+
+帧动画的持续时间
+
+@property(nonatomic) NSInteger animationRepeatCount;
+
+帧动画的执行次数，默认是无限循环
+
+`- (void)startAnimating;`开始执行帧动画
+
+`- (void)stopAnimating;`停止执行帧动画
+
+`- (BOOL)isAnimation;`是否正在执行帧动画
+
+```objc
+- (IBAction)drink {
+    // 如果前一个动画没执行完就不执行下一个动画
+    if (self.imgViewCat.isAnimating){
+        return;
+    }
+    // 动态加载一个图片到一个NSArray中
+    NSMutableArray *arrM = [NSMutableArray new];
+    for (int i = 0; i < 81; i++) {
+      // 通过[UIImage imageNamed:]这种方式加载图片h，加载好的图片会一直存放在内存中，不会释放，如果多图的话就很占内存，因此不要用这种方式
+        // %02d 表示保留两位，如果不足两位则补零
+        NSString *path = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"drink_%02d.jpg",i] ofType:nil];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        [arrM addObject:img];
+    }
+    // 设置UIImageView 的animationImages属性
+    self.imgViewCat.animationImages = arrM;
+    // 设置动画持续时间
+    self.imgViewCat.animationDuration = (self.imgViewCat.animationImages.count / 24);
+    // 重复播放多少次
+    self.imgViewCat.animationRepeatCount = 1;
+    // 开始
+    [self.imgViewCat startAnimating];
+    // 清空图片，释放内存
+  //注意要等到动画执行完才清空
+  	[self.imgViewCat performSelector:@selector(setAnimationImages:) withObject:nil afterDelay:(self.imgViewCat.animationImages.count / 24)];
+}
+```
+
+注意：做帧动画的话就不要用imageNamed方法了，这样很占内存
+
+**UIButton与UIImageView的异同**
+
+- 相同点：都能显示图片
+
+- 不同点
+
+  - UIButton默认情况就能监听点击事件，而UIImageView默认情况下不能
+
+  - UIButton可以在不同状态下显示不同的图片
+
+  - UIButton既能显示文字，又能显示图片(能显示2张图片，backgroundImage和Image)
+
+- 如何选择
+  - UIImageView：仅仅需要显示图片，点击图片后不需要做任何事情
+  - UIButton：需要显示图片，点击图片后需要做一些特定的操作
+
+## iOS 小技巧
+
+**快速得到app路径**：
+
+```objc
+// [NSBundle mainBundle]得到的是app根路径；pathForResource： ofType: 方法是快速查找到某文件的路径。
+NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil];
+```
+
+**创建plist存放数据**：plist文件本质上其实是XML文件（可扩展标记语言），那么为什么后缀是plist呢，其实只是为了方便xcode显示
+
+**占位符**：%02d 占位符表示保留两位整形数据，不足两位则前面补零
