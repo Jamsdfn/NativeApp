@@ -265,6 +265,116 @@ transform可以进行平移、缩放、旋转
   - UIImageView：仅仅需要显示图片，点击图片后不需要做任何事情
   - UIButton：需要显示图片，点击图片后需要做一些特定的操作
 
+### 字典转模型
+
+模型其实就是类，就是把字典装变为类对象来保存。好处：第一，在打代码的时候有智能提示，第二，如果是字典的话key写错了，不会报错，程序运行运行才会出问题，可能好找好久的bug，而用模型存在输错了马上报错。第三，可以使用面向对象的特征，让程序变得更灵活
+
+注意：模型的属性和字典的键的数量和名字完全一致，并且一定要封装`-(instancetype)initWithDictionary:(NSDictionary *)dict; `这个初始化的对象方法和 `+ (instancetype)XxxWithDictionary:(NSDictionary *)dict; `这个返回本类的类方法。这是必备的
+
+```objc
+#import <Foundation/Foundation.h>
+@interface App : NSObject
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *icon;
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
++ (instancetype)appWithDictionary:(NSDictionary *)dict;
+
+@end
+ #import "App.h"
+@implementation App
+- (instancetype)initWithDictionary:(NSDictionary *)dict{
+    if (self = [super init]) {
+        self.name = dict[@"name"];
+        self.icon = dict[@"icon"];
+    }
+    return self;
+}
++ (instancetype)appWithDictionary:(NSDictionary *)dict{
+    return [[self alloc] initWithDictionary:dict];;
+}
+@end
+```
+
+### xib封装
+
+新建文件 User Interface -> Empty 选择后创建的就是xib。然后想storyboard那样吧组件拉出来，组成想要的形状，之后创建一个与xib同名的类，把xib的继承对象修改给这个新创建的类，再像storyboard那样往新类中连线。然后UIViewController中创建新类的对象就好了，通过此对象的属性也能访问到xib的属性。
+
+![](2.png)
+
+```objc
+// 创建AppView对象 用于连线 AppView.h
+#import <UIKit/UIKit.h>
+@class App;
+@interface AppView : UIView
+@property (nonatomic, strong) App *model;
++ (instancetype)appView;
+@end
+// AppView.m
+#import "AppView.h"
+#import "App.h"
+@interface AppView ()
+@property (weak, nonatomic) IBOutlet UIImageView *imgViewIcon;
+@property (weak, nonatomic) IBOutlet UILabel *lblName;
+@property (weak, nonatomic) IBOutlet UIButton *btn;
+@end
+
+@implementation AppView
+- (void)setModel:(App *)model{
+    _model = model;
+    
+    self.imgViewIcon.image = [UIImage imageNamed:model.icon];
+    self.lblName.text = model.name;
+    
+}
+
++ (instancetype)appView{
+  // 因为xib安装到App上手变成了加密方式的nil，所以方法名是loadNibNamed,并且这个方法返回的是数组，因此再调用一个lastObject来选择最后一个view（创建的时候只创建了一个）
+    // 注意loadNibNamed参数不要加后缀
+    return [[[NSBundle mainBundle] loadNibNamed:@"AppView" owner:nil options:nil] lastObject];
+}
+@end
+  
+// viewController中的使用
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [self apps];
+    int colmuns = 3;
+    CGFloat viewWidth = self.view.frame.size.width;
+    CGFloat marginTop = 30;
+    
+    for (int i = 0; i < self.apps.count; i++) {
+        App *item = self.apps[i];
+        int col = i % 3;
+        int row = i / 3;
+      // 创建容器的对象
+        AppView *appView = [AppView appView];
+      // 计算坐标
+        CGFloat marginX = (viewWidth - colmuns * appView.frame.size.width)/(colmuns + 1);
+        CGFloat marginY = marginX;
+        CGFloat appX = marginX + col * (appView.frame.size.width + marginX);
+        CGFloat appY = marginTop + row * (appView.frame.size.height  + marginY);
+        appView.frame = CGRectMake(appX, appY, appView.frame.size.width, appView.frame.size.height);
+        [self.view addSubview:appView];
+      // 给view容器的自控键赋值
+        appView.model = item;
+        
+    }
+    
+}
+```
+
+**xib文件的加载过程**：
+
+- 根据路径, 搜索对应的xib文件(nib文件)
+-  加载xib文件的时候, 会按顺序加载xib文件中的每个控件。
+- 对于每个控件, 创建的时候都会查找对应的Class属性中配置的是那个类, 那么就创建对应的类的对象。
+-  创建好某个控件以后, 按照在xib中配置的属性的值, 依次为对象的属性赋值。
+- 创建该控件下的子控件, 并设置属性值。然后把该控件加到父控件中。
+-  最后返回一个数组, 这个数组中包含创建的根元素对象。
+
 ## iOS 小技巧
 
 **快速得到app路径**：
