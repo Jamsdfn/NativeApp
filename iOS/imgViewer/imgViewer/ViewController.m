@@ -12,6 +12,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnIcon;
 @property (weak, nonatomic) IBOutlet UIButton *btnNext;
+@property (weak, nonatomic) IBOutlet UIView *optionsView;
+@property (weak, nonatomic) IBOutlet UIView *answerView;
+
+
 - (IBAction)btnNextClick;
 - (IBAction)bigImg:(id)sender;
 - (IBAction)btnIconClick;
@@ -98,14 +102,79 @@
     }];
     
 }
+-  (void)loadImgWithModel:(Question *)model andIndex:(int)index{
+    self.lblIndex.text = [NSString stringWithFormat:@"%d / %ld", index + 1, self.questions.count];
+    self.lblTitle.text = model.title;
+    [self.btnIcon setImage:[UIImage imageNamed:model.icon] forState:UIControlStateNormal];
+    self.btnNext.enabled = (index != self.questions.count - 1);
+}
 
+- (void)loadAnswerBtnWithModel:(Question *)model{
+    NSUInteger len = model.answer.length;
+    // 按钮frame的一些定值
+    CGFloat answerW = 35;
+    CGFloat answerH = 35;
+    CGFloat answerY = 0;
+    CGFloat margin = 10;
+    CGFloat baseX = (self.answerView.frame.size.width - (len * (answerW + margin) - margin)) / 2;
+    for (int i = 0; i < len; i++) {
+        UIButton *btnAnswer = [UIButton new];
+        // 设置按钮背景图
+        [btnAnswer setBackgroundImage:[UIImage imageNamed:@"btn_answer"] forState:UIControlStateNormal];
+        [btnAnswer setBackgroundImage:[UIImage imageNamed:@"btn_answer_highlighted"] forState:UIControlStateHighlighted];
+        // 设置frame
+        CGFloat answerX = baseX + (margin + answerW) * i;
+        btnAnswer.frame = CGRectMake(answerX, answerY, answerW, answerH);
+        self.answerView.backgroundColor = [UIColor clearColor];
+        // 添加到指定区域
+        [self.answerView addSubview:btnAnswer];
+    }
+}
 
+- (void)loadOptionsBtnWithModel:(Question *)model{
+    // 清除上一次按钮
+    [self.optionsView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    // 获取待选文字数组
+    NSArray *words = model.options;
+    // 生成按钮
+    // 按钮frame的定值
+    int colmus = 7;
+    CGFloat optionW = 35;
+    CGFloat optionH = 35;
+    CGFloat baseY = 0;
+    CGFloat margin = 10;
+    CGFloat baseX = (self.answerView.frame.size.width - (colmus * (optionW + margin) - margin)) / 2;
+    for (int i = 0; i < words.count; i++) {
+        int col = i % colmus;
+        int row = i / colmus;
+        UIButton *btnOption= [UIButton new];
+        
+        [btnOption setBackgroundImage:[UIImage imageNamed:@"btn_option"] forState:UIControlStateNormal];
+        [btnOption setBackgroundImage:[UIImage imageNamed:@"btn_option_hignlighted"] forState:UIControlStateHighlighted];
+        [btnOption setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btnOption setTitle:words[i] forState:UIControlStateNormal];
+        CGFloat optionX = baseX + col * (margin + optionW);
+        CGFloat optionY = baseY + row * (margin + optionH);
+        btnOption.frame = CGRectMake(optionX, optionY, optionW, optionH);
+        self.optionsView.backgroundColor = [UIColor clearColor];
+        [self.optionsView addSubview:btnOption];
+        
+        
+    }
+}
+    
 - (void)next{
     self.index++;
     Question *model = self.questions[self.index];
-    self.lblIndex.text = [NSString stringWithFormat:@"%d / %ld", self.index + 1, self.questions.count];
-    self.lblTitle.text = model.title;
-    [self.btnIcon setImage:[UIImage imageNamed:model.icon] forState:UIControlStateNormal];
-    self.btnNext.enabled = (self.index != self.questions.count - 1);
+    [self loadImgWithModel:model andIndex:self.index];
+    // 清除之前的答案按钮
+//    while (self.answerView.subviews.firstObject) {
+//        [self.answerView.subviews.firstObject removeFromSuperview];
+//    }
+    [self.answerView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    // 动态创建答案按钮
+    [self loadAnswerBtnWithModel:model];
+    // 动态创建选项按钮
+    [self loadOptionsBtnWithModel:model];
 }
 @end
