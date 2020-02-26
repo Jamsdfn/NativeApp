@@ -265,6 +265,115 @@ transform可以进行平移、缩放、旋转
   - UIImageView：仅仅需要显示图片，点击图片后不需要做任何事情
   - UIButton：需要显示图片，点击图片后需要做一些特定的操作
 
+#### UIScrollView
+
+是用来实现滚动和缩放的控件。UIScrollView的内容进行滚动和缩放。先创建UIScrollView，再在UIScrollView中加入子控件，最后设置UIScrollVIew的contentSize（内容大小）
+
+- UIScrollView的常见属性
+
+  - contentOffset CGPoint 设置或者得到当前滚动偏移
+
+  - contentSize CGSize 设置scrollView内容区域的大小（可滚动的大小）
+
+  - showsVerticalScrollIndicator BOOL 设置是否可以看到垂直滚动条
+
+  - showsHorizontalScrollIndicator BOOL 设置是否可以看到水平滚动条
+
+  - contentInset UIEdgeInstes 设置内容的内边距，原本的contentSize加了一层外边框
+
+  - bounces BOOL 是否设置弹簧效果
+
+  - scrollEnabled BOOL 设置能否滚动 取值 xxx.isScrollEnabled
+
+  - delegate id<UIScrollViewDelegate> 指向一个代理对象，通过代理对象实现协议的方法，来进行滚动事件的监听（只要实现了代理的方法，就会自动触发代理事件）
+
+    - scrollViewWillBeginDragging: (UIScrollView *)scrollView用户开始拖拽的时候执行
+    - scrollViewDidScroll: (UIScrollView *)scrollView滚到你到具体位置执行
+    - scrollViewDidEndDragging:  (UIScrollView *)scrollView willDecelerate:(BOOL) decelerate 停止拖拽执行
+    - ....
+
+    ```objc
+    // 滚动的时候输出offset
+    #import "ViewController.h"
+    #import "Question.h"
+    // 遵守协议
+    @interface ViewController () <UIScrollViewDelegate>
+    @property (weak, nonatomic) IBOutlet UIImageView *imgView;
+    @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+    @end
+    
+    @implementation ViewController
+    
+    - (void)viewDidLoad {
+        [super viewDidLoad];
+        self.scrollView.contentSize = self.imgView.frame.size;
+      // 代理对象执行本viewController
+        self.scrollView.delegate = self;
+    }
+    // 开始拖拽触发
+    - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+        NSLog(@"beginDrag");
+    }
+    // 拖动时触发
+    - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+        NSLog(@"%@",NSStringFromCGPoint(scrollView.contentOffset));
+    }
+    @end
+    ```
+
+- UIScrollView 实现缩放
+
+  - 设置代理对象
+  - 设置可放大缩小的最值
+  - 实现代理对象的\- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView方法，返回值就是要实现缩放的控件
+
+  ```objc
+  #import "ViewController.h"
+  #import "Question.h"
+  // 遵守协议
+  @interface ViewController () <UIScrollViewDelegate>
+  @property (weak, nonatomic) IBOutlet UIImageView *imgView;
+  @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+  
+  @end
+  @implementation ViewController
+  
+  - (void)viewDidLoad {
+      [super viewDidLoad];
+      self.scrollView.contentSize = self.imgView.frame.size;
+      // 设置代理对象
+      self.scrollView.delegate = self;
+      // 设置缩放的最值
+      self.scrollView.maximumZoomScale = 3.5;
+      self.scrollView.minimumZoomScale = .1;
+      
+  }
+  // 将能缩放的控件返回
+  - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+      return self.imgView;
+  }
+  @end
+  ```
+
+- UIScrollView的常用代理方法
+
+  - scrollViewWillBeginDragging: (UIScrollView *)scrollView 用户开始拖拽的时候执行
+  - scrollViewDidScroll: (UIScrollView *)scrollView 正在滚动
+  - scrollViewDidEndDragging:  (UIScrollView *)scrollView willDecelerate:(BOOL) decelerate 停止拖拽执行
+  - \- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView方法，返回值就是要实现缩放的控件
+  - \- (void)scrollViewDidZoom:(UIScrollView *)scrollView 正在缩放
+  - \- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view  开始缩放
+  - \- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(nullable UIView *)view atScale:(CGFloat)scale; 停止缩放
+
+- UIScrollView和UIPageControl的分页
+
+  - UIPageCotrol 是一个现成的控件，是用于索引轮播图的
+  - 想要关联 UIPageCotrol 和UIScrollView 
+    - 设置总页数 numberOfPages
+    - 设置当前页 currentPage
+
+- NSTimer的使用, 计时器控件
+
 ### 字典转模型
 
 模型其实就是类，就是把字典装变为类对象来保存。好处：第一，在打代码的时候有智能提示，第二，如果是字典的话key写错了，不会报错，程序运行运行才会出问题，可能好找好久的bug，而用模型存在输错了马上报错。第三，可以使用面向对象的特征，让程序变得更灵活
