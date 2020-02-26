@@ -371,8 +371,17 @@ transform可以进行平移、缩放、旋转
   - 想要关联 UIPageCotrol 和UIScrollView 
     - 设置总页数 numberOfPages
     - 设置当前页 currentPage
+  - 轮播图
 
-- NSTimer的使用, 计时器控件
+  ```objc
+  
+  ```
+
+- NSTimer的使用, 计时器控件: 上面轮播图例子就用到了
+
+  - 在 viewDidLoad 中启动定时器
+    - 调用timerWithXxx创建的timer，把这个timer对象手动加到”消息循环”中才能启动
+    - 调用scheduledTimerWithXxx创建的timer，自动启动（创建完毕后自动启动）。
 
 ### 字典转模型
 
