@@ -15,10 +15,10 @@
 @property (weak, nonatomic) IBOutlet UIView *optionsView;
 @property (weak, nonatomic) IBOutlet UIView *answerView;
 
-
 - (IBAction)btnNextClick;
 - (IBAction)bigImg:(id)sender;
 - (IBAction)btnIconClick;
+- (IBAction)btnTipClick;
 
 @end
 
@@ -90,6 +90,24 @@
     }
 }
 
+- (IBAction)btnTipClick {
+    // 减分
+    [self addScore:-1000];
+    // 清空答案按钮，即每个答案按钮点击一下
+    for(UIButton *answer in self.answerView.subviews) {
+        [self answerBtnClick:answer];
+    }
+    // 根据所有从数据中找到答案的第一个字，匹配到option按钮，模拟按键点击
+    Question *model = self.questions[self.index];
+    NSString *tipChar = [model.answer substringWithRange:NSMakeRange(0, 1)];
+    for(UIButton *option in self.optionsView.subviews) {
+        if ([option.currentTitle isEqualToString:tipChar]) {
+            [self optionBtnClick:option];
+        }
+    }
+    
+}
+
 - (void)smallImg{
     [UIView animateWithDuration:.5 animations:^{
         self.btnIcon.frame = self.originalFrame;
@@ -126,9 +144,28 @@
         CGFloat answerX = baseX + (margin + answerW) * i;
         btnAnswer.frame = CGRectMake(answerX, answerY, answerW, answerH);
         self.answerView.backgroundColor = [UIColor clearColor];
+        [btnAnswer setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         // 添加到指定区域
         [self.answerView addSubview:btnAnswer];
+        [btnAnswer addTarget:self action:@selector(answerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void)answerBtnClick:(UIButton *)sender {
+    self.optionsView.userInteractionEnabled = YES;
+    [self setAnswerBtnColor:[UIColor blackColor]];
+    for (UIButton *option in self.optionsView.subviews) {
+        // 不能用相同的字判段，如果选项中有相同的字的话就会有bug
+        if (sender.tag == option.tag) {
+            option.hidden = NO;
+            break;
+        }
+    }
+    
+    [sender setTitle:nil forState:UIControlStateNormal];
+    
+    
+    
 }
 
 - (void)loadOptionsBtnWithModel:(Question *)model{
@@ -157,14 +194,88 @@
         CGFloat optionY = baseY + row * (margin + optionH);
         btnOption.frame = CGRectMake(optionX, optionY, optionW, optionH);
         self.optionsView.backgroundColor = [UIColor clearColor];
+        // 床架唯一标识，用于答案按钮相对
+        btnOption.tag = i;
         [self.optionsView addSubview:btnOption];
-        
+        // 给单选按钮注册单机事件
+        // 写个带sender参数的方法
+        [btnOption addTarget:self action:@selector(optionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         
     }
 }
+// 这个sender参数的意思是，谁触发的事件，sender就是谁，有点像js的event参数
+- (void)optionBtnClick:(UIButton *)sender{
+    sender.hidden = YES;
+    // 获取指定状态下的文字
+//    NSString *text = [sender titleForState:UIControlStateNormal];
+    // 获取当前状态下的文字
+    NSString *text = sender.currentTitle;
+    // 遍历答案按钮，在第一个不为空的地方天上选项
+    BOOL isFull = YES;
+    for (UIButton *answer in self.answerView.subviews){
+        if (!answer.currentTitle) {
+            [answer setTitle:text forState:UIControlStateNormal];
+            // 答案与选项按钮相对于
+            answer.tag = sender.tag;
+            break;
+        }
+    }
+    // 为了防止点填满后选项按钮还能点，做两个for循环，也尝试过最后在隐藏，但是按钮按下的效果还有
+    // 判断答案按钮是否已满，满了optionsView直接停止交互
+    NSMutableString *answerStr = [NSMutableString new];
+    for (UIButton *answer in self.answerView.subviews){
+        if (!answer.currentTitle) {
+            isFull = NO;
+            break;
+        } else {
+            [answerStr appendString:answer.currentTitle];
+        }
+    }
+    if (isFull) {
+        self.optionsView.userInteractionEnabled = NO;
+        Question *model = self.questions[self.index];
+        // 如果答案填满就判断答案
+        if ([answerStr isEqualToString:model.answer]){
+            // 1. 正确，文字变蓝等.5秒后跳转到下一题，加分
+            [self setAnswerBtnColor:[UIColor blueColor]];
+            [self addScore:100];
+            [self performSelector:@selector(next) withObject:nil afterDelay:.5];
+            
+        } else {
+            // 2. 错误，文字变红
+            [self setAnswerBtnColor:[UIColor redColor]];
+        }
+        
+    }
+}
+
+
+
+- (void) addScore:(int)score {
+    int currentScore = self.btnScore.currentTitle.intValue;
+    currentScore = currentScore + score;
+    [self.btnScore setTitle:[NSString stringWithFormat:@"%d",currentScore] forState:UIControlStateNormal];
+}
     
+- (void)setAnswerBtnColor:(UIColor *)color{
+    for (UIButton *answer in self.answerView.subviews) {
+        [answer setTitleColor:color forState:UIControlStateNormal];
+    }
+}
+
 - (void)next{
+    self.optionsView.userInteractionEnabled = YES;
     self.index++;
+    if (self.index == self.questions.count){
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"已没有下一题，请等待更新" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            self.index = -1;
+            [self next];
+        }];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
     Question *model = self.questions[self.index];
     [self loadImgWithModel:model andIndex:self.index];
     // 清除之前的答案按钮
