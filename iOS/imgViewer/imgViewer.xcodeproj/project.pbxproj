@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B7766ED52407666D00E05042 /* cars_simple.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED32407666D00E05042 /* cars_simple.plist */; };
-		B7766ED62407666D00E05042 /* cars_total.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED42407666D00E05042 /* cars_total.plist */; };
-		B7766ED924076F1D00E05042 /* CarGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766ED824076F1D00E05042 /* CarGroup.m */; };
-		B7766EDB24077DF500E05042 /* heros.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766EDA24077DF500E05042 /* heros.plist */; };
-		B7766EDE240794F500E05042 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766EDD240794F500E05042 /* Car.m */; };
+		B7766EE02407AC8900E05042 /* tgs.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766EDF2407AC8900E05042 /* tgs.plist */; };
+		B7766EE32407AE4200E05042 /* Goods.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766EE22407AE4200E05042 /* Goods.m */; };
+		B7766EE52407B3C000E05042 /* GoodsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7766EE42407B3C000E05042 /* GoodsCell.xib */; };
+		B7766EEB2407B69400E05042 /* GoodsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766EEA2407B69400E05042 /* GoodsCell.m */; };
+		B7766EEF2407C25700E05042 /* FooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7766EEE2407C25700E05042 /* FooterView.xib */; };
+		B7766EF22407C66300E05042 /* FooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766EF12407C66300E05042 /* FooterView.m */; };
 		B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E542403E34B00D31B8F /* AppDelegate.m */; };
 		B7EE9E582403E34B00D31B8F /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E572403E34B00D31B8F /* SceneDelegate.m */; };
 		B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E5A2403E34B00D31B8F /* ViewController.m */; };
@@ -41,13 +42,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B7766ED32407666D00E05042 /* cars_simple.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cars_simple.plist; sourceTree = "<group>"; };
-		B7766ED42407666D00E05042 /* cars_total.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cars_total.plist; sourceTree = "<group>"; };
-		B7766ED724076F1D00E05042 /* CarGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarGroup.h; sourceTree = "<group>"; };
-		B7766ED824076F1D00E05042 /* CarGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarGroup.m; sourceTree = "<group>"; };
-		B7766EDA24077DF500E05042 /* heros.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = heros.plist; sourceTree = "<group>"; };
-		B7766EDC240794F500E05042 /* Car.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
-		B7766EDD240794F500E05042 /* Car.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Car.m; sourceTree = "<group>"; };
+		B7766EDF2407AC8900E05042 /* tgs.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = tgs.plist; sourceTree = "<group>"; };
+		B7766EE12407AE4200E05042 /* Goods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Goods.h; sourceTree = "<group>"; };
+		B7766EE22407AE4200E05042 /* Goods.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Goods.m; sourceTree = "<group>"; };
+		B7766EE42407B3C000E05042 /* GoodsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GoodsCell.xib; sourceTree = "<group>"; };
+		B7766EE92407B69400E05042 /* GoodsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsCell.h; sourceTree = "<group>"; };
+		B7766EEA2407B69400E05042 /* GoodsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsCell.m; sourceTree = "<group>"; };
+		B7766EEE2407C25700E05042 /* FooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FooterView.xib; sourceTree = "<group>"; };
+		B7766EF02407C66300E05042 /* FooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FooterView.h; sourceTree = "<group>"; };
+		B7766EF12407C66300E05042 /* FooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FooterView.m; sourceTree = "<group>"; };
 		B7EE9E502403E34B00D31B8F /* imgViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imgViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7EE9E532403E34B00D31B8F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7EE9E542403E34B00D31B8F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -93,13 +96,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B7CA5F792404C3600045089C /* img */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = img;
-			sourceTree = "<group>";
-		};
 		B7EE9E472403E34B00D31B8F = {
 			isa = PBXGroup;
 			children = (
@@ -156,10 +152,7 @@
 		B7EE9E882403E6EA00D31B8F /* infomation */ = {
 			isa = PBXGroup;
 			children = (
-				B7766EDA24077DF500E05042 /* heros.plist */,
-				B7766ED32407666D00E05042 /* cars_simple.plist */,
-				B7766ED42407666D00E05042 /* cars_total.plist */,
-				B7CA5F792404C3600045089C /* img */,
+				B7766EDF2407AC8900E05042 /* tgs.plist */,
 			);
 			path = infomation;
 			sourceTree = "<group>";
@@ -167,10 +160,8 @@
 		B7FCD0012405061500497D53 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B7766ED724076F1D00E05042 /* CarGroup.h */,
-				B7766ED824076F1D00E05042 /* CarGroup.m */,
-				B7766EDC240794F500E05042 /* Car.h */,
-				B7766EDD240794F500E05042 /* Car.m */,
+				B7766EE12407AE4200E05042 /* Goods.h */,
+				B7766EE22407AE4200E05042 /* Goods.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -180,6 +171,12 @@
 			children = (
 				B7EE9E612403E34C00D31B8F /* LaunchScreen.storyboard */,
 				B7EE9E5C2403E34B00D31B8F /* Main.storyboard */,
+				B7766EE42407B3C000E05042 /* GoodsCell.xib */,
+				B7766EE92407B69400E05042 /* GoodsCell.h */,
+				B7766EEA2407B69400E05042 /* GoodsCell.m */,
+				B7766EEE2407C25700E05042 /* FooterView.xib */,
+				B7766EF02407C66300E05042 /* FooterView.h */,
+				B7766EF12407C66300E05042 /* FooterView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -307,10 +304,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7766ED62407666D00E05042 /* cars_total.plist in Resources */,
 				B7EE9E632403E34C00D31B8F /* LaunchScreen.storyboard in Resources */,
-				B7766EDB24077DF500E05042 /* heros.plist in Resources */,
-				B7766ED52407666D00E05042 /* cars_simple.plist in Resources */,
+				B7766EEF2407C25700E05042 /* FooterView.xib in Resources */,
+				B7766EE02407AC8900E05042 /* tgs.plist in Resources */,
+				B7766EE52407B3C000E05042 /* GoodsCell.xib in Resources */,
 				B7EE9E602403E34C00D31B8F /* Assets.xcassets in Resources */,
 				B7EE9E5E2403E34B00D31B8F /* Main.storyboard in Resources */,
 			);
@@ -337,11 +334,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7766EDE240794F500E05042 /* Car.m in Sources */,
 				B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */,
+				B7766EF22407C66300E05042 /* FooterView.m in Sources */,
 				B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */,
-				B7766ED924076F1D00E05042 /* CarGroup.m in Sources */,
+				B7766EE32407AE4200E05042 /* Goods.m in Sources */,
 				B7EE9E662403E34C00D31B8F /* main.m in Sources */,
+				B7766EEB2407B69400E05042 /* GoodsCell.m in Sources */,
 				B7EE9E582403E34B00D31B8F /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

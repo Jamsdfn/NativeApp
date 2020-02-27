@@ -375,7 +375,82 @@ transform可以进行平移、缩放、旋转
   - 轮播图
 
   ```objc
+  #import "ViewController.h"
+  #import "Question.h"
+  // 遵守协议
+  @interface ViewController () <UIScrollViewDelegate>
   
+  @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+  @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
+  @property (nonatomic, strong) NSTimer *timer;
+  
+  @end
+  
+  @implementation ViewController
+  
+  - (void)viewDidLoad {
+      [super viewDidLoad];
+      // 设置轮播图
+      self.scrollView.delegate = self;
+      CGFloat imgH = 162.5;
+      CGFloat imgW = 375;
+      CGFloat imgY = 0;
+      for (int i = 0; i < 5; i++) {
+          UIImageView *imgView = [UIImageView new];
+          CGFloat imgX = i * imgW;
+          imgView.frame = CGRectMake(imgX, imgY, imgW, imgH);
+          imgView.image = [UIImage imageNamed:[NSString stringWithFormat:@"img_%02d",i + 1]];
+          [self.scrollView addSubview:imgView];
+      }
+      self.scrollView.contentSize = CGSizeMake(imgW * 5, 0);
+      self.scrollView.showsHorizontalScrollIndicator = NO;
+      self.scrollView.pagingEnabled = YES;
+      // 设置轮播图的点
+      self.pageControl.numberOfPages = 5;
+      self.pageControl.currentPage = 0;
+      // 创建定时器控件, 1秒执行一次，可重复执行
+      self.timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollImage) userInfo:nil repeats:YES];
+      // 为了防止因为某些控件的操作影响滚动操作的线程(比如UITextView)，因此要把timer的优先级设置的和控件一样高
+      // 先获取当前的消息循环对象
+      NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+      [runLoop addTimer:self.timer forMode:NSRunLoopCommonModes];
+  }
+  
+  - (void)scrollImage{
+      NSInteger page = self.pageControl.currentPage;
+      if (page == self.pageControl.numberOfPages - 1) {
+          page = 0;
+          self.scrollView.contentOffset = CGPointMake(0, 0);
+          self.pageControl.currentPage = page;
+          return;
+      } else {
+          page++;
+      }
+      self.pageControl.currentPage = page;
+      CGFloat offsetX = page * self.scrollView.frame.size.width;
+      [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
+  }
+  - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+      // 清除计数器
+      [self.timer invalidate];
+      self.timer = nil;
+  }
+  
+  - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+      // 重新设置计数器
+      self.timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollImage) userInfo:nil repeats:YES];
+      NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+      [runLoop addTimer:self.timer forMode:NSRunLoopCommonModes];
+      
+  }
+  
+  - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+      CGFloat offsetX = scrollView.contentOffset.x;
+    // 滚动过2/3就显示下一页
+      offsetX = offsetX + scrollView.frame.size.width / 3;
+      self.pageControl.currentPage = (int)(offsetX / scrollView.frame.size.width);
+  }
+  @end
   ```
 
 - NSTimer的使用, 计时器控件: 上面轮播图例子就用到了
@@ -412,7 +487,7 @@ transform可以进行平移、缩放、旋转
   - separatorColor 分割线的颜色
   - separatorStyle 分割线的样式 ，可以设置取消分割线
   - tableHeaderView 一般可以放广告
-  - tableFooterView 一般可以放加载更多
+  - tableFooterView 一般可以放加载更多，只能修改其frame的X和height，Y和width是不能改的
 
 - UITableViewCell 属性
   - accessoryView 可以给cell的最右端设置想要的组件，自定义
@@ -427,9 +502,13 @@ transform可以进行平移、缩放、旋转
 **方法**：
 
 - [self.tableView reloadData]; 重新刷新数据
+
 - [self.tableView reloadRowsAtIndexPaths:(NSArray *) withRowAnimation:(UITableViewRowAnimation)] 局部刷新，可以刷新多条数据
+
   - NSIndexPath *idxPath = [NSIndexPath indexPathForRow: 0 inSection:0]; 0行0组
   - 然后把idxPath放入NSArray中传给第一个参数
+
+  注意，如果总行数发生变化则不能使用局部刷新，因为tableView是基于scrollView的，数据增删了，滚动的height就变了，如果用局部更新则height更新不了，因此会直接报错
 
 ```objc
 #import "ViewController.h"
@@ -646,6 +725,12 @@ transform可以进行平移、缩放、旋转
 -  创建好某个控件以后, 按照在xib中配置的属性的值, 依次为对象的属性赋值。
 - 创建该控件下的子控件, 并设置属性值。然后把该控件加到父控件中。
 -  最后返回一个数组, 这个数组中包含创建的根元素对象。
+
+**xib类什么时候加载完成**
+
+如果想在xib的类中调用自身的控件可以实现 \- (void)awakeFromNib; 在这个方法中就可以调用自身的控件了，相当于 UIViewController 的viewDidLoad方法。比如xib创建的子控件有轮播图，那个想要设置scrollView的contentSize，就要在awakeFromNib中设置。
+
+只有在这个方法中才能操作控件。
 
 ## iOS 小技巧
 

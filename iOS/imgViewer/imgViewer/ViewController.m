@@ -1,11 +1,12 @@
 #import "ViewController.h"
-#import "CarGroup.h"
-#import "Car.h"
+#import "Goods.h"
+#import "GoodsCell.h"
+#import "FooterView.h"
 // 遵守协议
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, FooterViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) NSArray *groups;
+@property (nonatomic, strong) NSMutableArray *goods;
 
 @end
 
@@ -19,87 +20,59 @@
 //-(BOOL)prefersStatusBarHidden{
 //    return YES;
 //}
-- (NSArray *)groups{
-    if (!_groups) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"cars_total.plist" ofType:nil];
-        NSArray *arrDict = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *arrM = [NSMutableArray new];
-        for (NSDictionary *item in arrDict) {
-            CarGroup *model = [CarGroup carGroupWithDictionary:item];
-            [arrM addObject:model];
-        }
-        _groups = arrM;
-    }
-    return _groups;
-}
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self groups];
     self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-//    self.tableView.rowHeight = 60;
-    
+    self.tableView.rowHeight = 64;
+    // 设置footerview,tableFooterView 的特点：只能修改X和height，Y和width是不能改的
+//    self.tableView.tableFooterView
+    FooterView *footerView = [FooterView footerView];
+//    footerView.tableView = self.tableView;
+    self.tableView.tableFooterView = footerView;
+//    NSLog(@"%@", self.tableView);
+    footerView.delegate = self;
     
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    CarGroup *group = self.groups[indexPath.section];
-    Car *car = group.cars[indexPath.row];
-    
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"修改车品牌名" message:car.name preferredStyle:UIAlertControllerStyleAlert];
-        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.text = car.name;
-        }];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-           handler:^(UIAlertAction * action) {
-            car.name = alert.textFields[0].text;
-            NSIndexPath *idx = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section];
-            [tableView reloadRowsAtIndexPaths:@[idx] withRowAnimation:UITableViewRowAnimationNone];
-        }];
-         
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
+- (void)footerViewUpdateData:(FooterView *)footerView{
+    // 实现加载更多方法
+    Goods *model = [Goods new];
+    model.title = @"驴肉火烧";
+    model.price = @"6";
+    model.buyCount = @"3000";
+    model.icon = @"37e4761e6ecf56a2d78685df7157f097.png";
+    [self.goods addObject:model];
+    [self.tableView reloadData];
+    NSIndexPath *idx = [NSIndexPath indexPathForRow:self.goods.count -1 inSection:0];
+    [self.tableView scrollToRowAtIndexPath:idx atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    //option 这个方法如果不实现则默认为一组
-    return self.groups.count;
+- (NSMutableArray *)goods{
+    if (!_goods) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"tgs.plist" ofType:nil];
+        NSArray *arr = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *arrM = [NSMutableArray new];
+        for (NSDictionary *item in arr) {
+            Goods *model = [Goods goodsWithDictionary:item];
+            [arrM addObject:model];
+        }
+        _goods = arrM;
+    }
+    return _goods;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    // required 每一组显示几条数据
-    CarGroup *group = self.groups[section];
-    return group.cars.count;
+    return self.goods.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    // 在创建单元格的时候指定一个重用ID
-    NSString *ID = @"car_cell";
-    // 当需要一个新的单元格的时候，先去观察池中根据重用ID,查找是否有可用的单元格
-    // 有则使用
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (cell == nil) {
-        // 无则新创建
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
-    }
-    CarGroup *groupModel = self.groups[indexPath.section];
-    Car *car = groupModel.cars[indexPath.row];
-    cell.textLabel.text = car.name;
-    cell.imageView.image = [UIImage imageNamed:car.icon];
+    Goods *model = self.goods[indexPath.row];
+    NSString *ID = @"good_cell";
+    GoodsCell *cell = [GoodsCell goodsCellWithidentifier:ID andTableView:tableView];
+    cell.good = model;
     return cell;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-    CarGroup *header = self.groups[section];
-    return header.title;
-}
-
-- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView{
-    return [self.groups valueForKeyPath:@"title"];
 }
 
 @end
