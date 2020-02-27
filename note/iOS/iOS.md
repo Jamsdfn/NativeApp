@@ -391,7 +391,7 @@ transform可以进行平移、缩放、旋转
 **使用UITableView步骤：**
 
 1. 创建UITableView
-2. 设置数据源对象（数据源对象必须遵守代理对象协议）通常都是当前控制器对象
+2. 设置数据源对象（数据源对象必须遵守代理对象协议<UITableViewDataSource>）通常都是当前控制器对象
 3. 实现协议的方法
    - \- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;        
      - required返回每组显示几条数据
@@ -407,9 +407,118 @@ transform可以进行平移、缩放、旋转
 
 **属性**：
 
+- UITableView 本身属性
+  - rowHight 设置全部cell的行高。但是想每一个行高都不一样那就只能通过代理<UITableViewDelegate>方法实现
+  - separatorColor 分割线的颜色
+  - separatorStyle 分割线的样式 ，可以设置取消分割线
+  - tableHeaderView 一般可以放广告
+  - tableFooterView 一般可以放加载更多
 
+- UITableViewCell 属性
+  - accessoryView 可以给cell的最右端设置想要的组件，自定义
+  - accessoryType 给cell最右端设置几种样式的组件
+  - imageView 图片框
+  - textLabel 大label 在imageView右边（中间位置）
+  - detailTextLabel 小label 在textlabel下面
+  - backgroundColor 设置cell颜色，注意没有selectedBackgroundColor
+  - backgroundView 设置背景，自定义
+  - selectedBackgroundView 设置选中时候的背景，自定义
 
 **方法**：
+
+- [self.tableView reloadData]; 重新刷新数据
+- [self.tableView reloadRowsAtIndexPaths:(NSArray *) withRowAnimation:(UITableViewRowAnimation)] 局部刷新，可以刷新多条数据
+  - NSIndexPath *idxPath = [NSIndexPath indexPathForRow: 0 inSection:0]; 0行0组
+  - 然后把idxPath放入NSArray中传给第一个参数
+
+```objc
+#import "ViewController.h"
+#import "CarGroup.h"
+// 遵守协议
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSArray *groups;
+@end
+
+@implementation ViewController
+- (NSArray *)groups{
+    if (!_groups) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"heros.plist" ofType:nil];
+        NSArray *arrDict = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *arrM = [NSMutableArray new];
+        for (NSDictionary *item in arrDict) {
+            CarGroup *model = [CarGroup carGroupWithDictionary:item];
+            [arrM addObject:model];
+        }
+        _groups = arrM;
+    }
+    return _groups;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self groups];
+  // 设置代理对象和数据源对象
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+//    self.tableView.rowHeight = 60;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    // 自定义设置每一行的行高 协议UITableViewDelegate
+    if (indexPath.row % 2 == 1){
+        return 60;
+    } else {
+        return 100;
+    }
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    //option 这个方法如果不实现则默认为一组
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    // required 每一组显示几条数据
+    return self.groups.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    // 参数indexPath 属性 indexPath.section 表示当前是第几组 indexPath.row 表示是第几行
+    // required 每一组的每一条实现怎样的单元格数据
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    CarGroup *model = self.groups[indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:model.icon];
+    cell.textLabel.text = model.name;
+    cell.detailTextLabel.text = model.intro;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+    return cell;
+}
+@end
+```
+
+如果每一行都创建一个UITableViewCell那会很浪费性能，因此为了一稿性能，我们要Cell重用。创建比屏幕能显示的cell多一个，多出来那一个放入缓存池(队列)中，用于修改重用的。这个队列数据结构不用自己创建了，框架已经帮我们写好了
+
+```objc
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    // 在创建单元格的时候指定一个重用ID
+    NSString *ID = @"hero_cell";
+    // 当需要一个新的单元格的时候，先去观察池中根据重用ID,查找是否有可用的单元格
+    // 有则使用
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (cell == nil) {
+        // 无则新创建，注意这里创将建和上面列子那部分创建reuseIdentifier是有指定的，这个参数就是用来指定重用ID的
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+    }
+    CarGroup *model = self.groups[indexPath.row];
+    cell.imageView.image = [UIImage imageNamed:model.icon];
+    cell.textLabel.text = model.name;
+    cell.detailTextLabel.text = model.intro;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+    return cell;
+}
+```
+
+
 
 ### 字典转模型
 
@@ -443,6 +552,21 @@ transform可以进行平移、缩放、旋转
     return [[self alloc] initWithDictionary:dict];;
 }
 @end
+```
+
+**给tableView夹索引条**
+
+类似于通信录旁边那种，这个索引条是根据分组的顺序对应的，不是根据索引条的名字
+
+\- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView;
+
+返回一个字符串数组
+
+```objc
+- (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView{
+      // 这个模型有一个索引title，所以可以这样，这个方法是把字典数组中的value提到一个数组中返回出去
+    return [self.groups valueForKeyPath:@"title"];
+}
 ```
 
 ### xib封装

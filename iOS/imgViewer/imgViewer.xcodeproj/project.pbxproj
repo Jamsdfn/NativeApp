@@ -10,6 +10,8 @@
 		B7766ED52407666D00E05042 /* cars_simple.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED32407666D00E05042 /* cars_simple.plist */; };
 		B7766ED62407666D00E05042 /* cars_total.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED42407666D00E05042 /* cars_total.plist */; };
 		B7766ED924076F1D00E05042 /* CarGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766ED824076F1D00E05042 /* CarGroup.m */; };
+		B7766EDB24077DF500E05042 /* heros.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766EDA24077DF500E05042 /* heros.plist */; };
+		B7766EDE240794F500E05042 /* Car.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766EDD240794F500E05042 /* Car.m */; };
 		B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E542403E34B00D31B8F /* AppDelegate.m */; };
 		B7EE9E582403E34B00D31B8F /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E572403E34B00D31B8F /* SceneDelegate.m */; };
 		B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E5A2403E34B00D31B8F /* ViewController.m */; };
@@ -43,6 +45,9 @@
 		B7766ED42407666D00E05042 /* cars_total.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cars_total.plist; sourceTree = "<group>"; };
 		B7766ED724076F1D00E05042 /* CarGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarGroup.h; sourceTree = "<group>"; };
 		B7766ED824076F1D00E05042 /* CarGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarGroup.m; sourceTree = "<group>"; };
+		B7766EDA24077DF500E05042 /* heros.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = heros.plist; sourceTree = "<group>"; };
+		B7766EDC240794F500E05042 /* Car.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Car.h; sourceTree = "<group>"; };
+		B7766EDD240794F500E05042 /* Car.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Car.m; sourceTree = "<group>"; };
 		B7EE9E502403E34B00D31B8F /* imgViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imgViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7EE9E532403E34B00D31B8F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7EE9E542403E34B00D31B8F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -151,6 +156,7 @@
 		B7EE9E882403E6EA00D31B8F /* infomation */ = {
 			isa = PBXGroup;
 			children = (
+				B7766EDA24077DF500E05042 /* heros.plist */,
 				B7766ED32407666D00E05042 /* cars_simple.plist */,
 				B7766ED42407666D00E05042 /* cars_total.plist */,
 				B7CA5F792404C3600045089C /* img */,
@@ -163,6 +169,8 @@
 			children = (
 				B7766ED724076F1D00E05042 /* CarGroup.h */,
 				B7766ED824076F1D00E05042 /* CarGroup.m */,
+				B7766EDC240794F500E05042 /* Car.h */,
+				B7766EDD240794F500E05042 /* Car.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -301,6 +309,7 @@
 			files = (
 				B7766ED62407666D00E05042 /* cars_total.plist in Resources */,
 				B7EE9E632403E34C00D31B8F /* LaunchScreen.storyboard in Resources */,
+				B7766EDB24077DF500E05042 /* heros.plist in Resources */,
 				B7766ED52407666D00E05042 /* cars_simple.plist in Resources */,
 				B7EE9E602403E34C00D31B8F /* Assets.xcassets in Resources */,
 				B7EE9E5E2403E34B00D31B8F /* Main.storyboard in Resources */,
@@ -328,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7766EDE240794F500E05042 /* Car.m in Sources */,
 				B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */,
 				B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */,
 				B7766ED924076F1D00E05042 /* CarGroup.m in Sources */,
