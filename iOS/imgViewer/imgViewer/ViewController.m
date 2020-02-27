@@ -1,11 +1,10 @@
 #import "ViewController.h"
-#import "Question.h"
+#import "CarGroup.h"
 // 遵守协议
-@interface ViewController () <UIScrollViewDelegate>
+@interface ViewController () <UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, strong) NSTimer *timer;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSArray *groups;
 
 
 @end
@@ -20,69 +19,57 @@
 //-(BOOL)prefersStatusBarHidden{
 //    return YES;
 //}
+- (NSArray *)groups{
+    if (!_groups) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"cars_simple.plist" ofType:nil];
+        NSArray *arrDict = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *arrM = [NSMutableArray new];
+        for (NSDictionary *item in arrDict) {
+            CarGroup *model = [CarGroup carGroupWithDictionary:item];
+            [arrM addObject:model];
+        }
+        _groups = arrM;
+    }
+    return _groups;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // 设置轮播图
-    self.scrollView.delegate = self;
-    CGFloat imgH = 162.5;
-    CGFloat imgW = 375;
-    CGFloat imgY = 0;
-    for (int i = 0; i < 5; i++) {
-        UIImageView *imgView = [UIImageView new];
-        CGFloat imgX = i * imgW;
-        imgView.frame = CGRectMake(imgX, imgY, imgW, imgH);
-        imgView.image = [UIImage imageNamed:[NSString stringWithFormat:@"img_%02d",i + 1]];
-        [self.scrollView addSubview:imgView];
-    }
-    self.scrollView.contentSize = CGSizeMake(imgW * 5, 0);
-    self.scrollView.showsHorizontalScrollIndicator = NO;
-    self.scrollView.pagingEnabled = YES;
-    // 设置轮播图的点
-    self.pageControl.numberOfPages = 5;
-    self.pageControl.currentPage = 0;
-    // 创建定时器控件, 1秒执行一次，可重复执行
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollImage) userInfo:nil repeats:YES];
-    // 为了防止因为某些控件的操作影响滚动操作的线程(比如UITextView)，因此要把timer的优先级设置的和控件一样高
-    // 先获取当前的消息循环对象
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:self.timer forMode:NSRunLoopCommonModes];
-}
-
-- (void)scrollImage{
-    NSInteger page = self.pageControl.currentPage;
-    if (page == self.pageControl.numberOfPages - 1) {
-        page = 0;
-        self.scrollView.contentOffset = CGPointMake(0, 0);
-        self.pageControl.currentPage = page;
-        return;
-    } else {
-        page++;
-    }
-    self.pageControl.currentPage = page;
-    CGFloat offsetX = page * self.scrollView.frame.size.width;
-    [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
-}
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    // 清除计数器
-    [self.timer invalidate];
-    self.timer = nil;
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    // 重新设置计数器
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(scrollImage) userInfo:nil repeats:YES];
-    NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
-    [runLoop addTimer:self.timer forMode:NSRunLoopCommonModes];
+    [self groups];
+    self.tableView.dataSource = self;
     
 }
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    CGFloat offsetX = scrollView.contentOffset.x;
-    offsetX = offsetX + scrollView.frame.size.width / 3;
-    // 滚动过半就显示下一页
-    self.pageControl.currentPage = (int)(offsetX / scrollView.frame.size.width);
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    //option 这个方法如果不实现则默认为一组
+    return self.groups.count;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    // required 每一组显示几条数据
+    CarGroup *group = self.groups[section];
+    return group.cars.count;
+}
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    // 参数indexPath 属性 indexPath.section 表示当前是第几组 indexPath.row 表示是第几行
+    // required 每一组的每一条实现怎样的单元格数据
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    CarGroup *group = self.groups[indexPath.section];
+    NSString *car = group.cars[indexPath.row];
+    cell.textLabel.text = car;
+    return cell;
+}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    // 组标题显示内容
+    CarGroup *group = self.groups[section];
+    return group.title;
+}
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section{
+    // 组尾显示的内容
+    CarGroup *group = self.groups[section];
+    return group.desc;
+}
 
 @end

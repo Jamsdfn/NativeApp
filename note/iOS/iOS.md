@@ -1,4 +1,4 @@
-# iOS
+iOS
 
 什么是iOS这里就不介绍了，都要接触开发了，应该对系统的基本信息都挺清楚了。本篇笔记重点将记下iOS 开发过程中所涉及到的知识点。
 
@@ -293,6 +293,7 @@ transform可以进行平移、缩放、旋转
     - ....
 
     ```objc
+    // 记得第一步现在storyboard中吧UIScrollView和UIPageControl放好，然后关联代码
     // 滚动的时候输出offset
     #import "ViewController.h"
     #import "Question.h"
@@ -383,6 +384,33 @@ transform可以进行平移、缩放、旋转
     - 调用timerWithXxx创建的timer，把这个timer对象手动加到”消息循环”中才能启动
     - 调用scheduledTimerWithXxx创建的timer，自动启动（创建完毕后自动启动）。
 
+#### UITableView
+
+广泛用于界面布局的一个控件，必须要DataSource属性，是指定一个数据源对象。
+
+**使用UITableView步骤：**
+
+1. 创建UITableView
+2. 设置数据源对象（数据源对象必须遵守代理对象协议）通常都是当前控制器对象
+3. 实现协议的方法
+   - \- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;        
+     - required返回每组显示几条数据
+     - tableView 就是当前tableView
+     - section 就是当前在哪一组
+   - \- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;     
+     -  required 返回每组显示怎样的数据
+     - tableView 同上
+     - indexPath indexPath.section第几组 indexPath.row第几个
+   - \- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableVie; optional 返回要显示几组数据，如果不实现本方法则默认值为1
+   - \- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section; 设置组标题类似于Word文档页眉的感觉
+   - \- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section; 设置组尾的描述类似于Word文档的页脚
+
+**属性**：
+
+
+
+**方法**：
+
 ### 字典转模型
 
 模型其实就是类，就是把字典装变为类对象来保存。好处：第一，在打代码的时候有智能提示，第二，如果是字典的话key写错了，不会报错，程序运行运行才会出问题，可能好找好久的bug，而用模型存在输错了马上报错。第三，可以使用面向对象的特征，让程序变得更灵活
@@ -404,8 +432,10 @@ transform可以进行平移、缩放、旋转
 @implementation App
 - (instancetype)initWithDictionary:(NSDictionary *)dict{
     if (self = [super init]) {
-        self.name = dict[@"name"];
-        self.icon = dict[@"icon"];
+        // self.name = dict[@"name"];
+        // self.icon = dict[@"icon"];
+      	// 如果属性名和字典key一模一样的话执行一句代码就可以了
+      	[self setValuesForKeysWithDictionary:dict];
     }
     return self;
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7766ED52407666D00E05042 /* cars_simple.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED32407666D00E05042 /* cars_simple.plist */; };
+		B7766ED62407666D00E05042 /* cars_total.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7766ED42407666D00E05042 /* cars_total.plist */; };
+		B7766ED924076F1D00E05042 /* CarGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B7766ED824076F1D00E05042 /* CarGroup.m */; };
 		B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E542403E34B00D31B8F /* AppDelegate.m */; };
 		B7EE9E582403E34B00D31B8F /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E572403E34B00D31B8F /* SceneDelegate.m */; };
 		B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E5A2403E34B00D31B8F /* ViewController.m */; };
@@ -16,8 +19,6 @@
 		B7EE9E662403E34C00D31B8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E652403E34C00D31B8F /* main.m */; };
 		B7EE9E702403E34C00D31B8F /* imgViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E6F2403E34C00D31B8F /* imgViewerTests.m */; };
 		B7EE9E7B2403E34C00D31B8F /* imgViewerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B7EE9E7A2403E34C00D31B8F /* imgViewerUITests.m */; };
-		B7FCD0092405157800497D53 /* questions.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7FCD0082405157800497D53 /* questions.plist */; };
-		B7FCD00C24051D2900497D53 /* Question.m in Sources */ = {isa = PBXBuildFile; fileRef = B7FCD00B24051D2900497D53 /* Question.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B7766ED32407666D00E05042 /* cars_simple.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cars_simple.plist; sourceTree = "<group>"; };
+		B7766ED42407666D00E05042 /* cars_total.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = cars_total.plist; sourceTree = "<group>"; };
+		B7766ED724076F1D00E05042 /* CarGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarGroup.h; sourceTree = "<group>"; };
+		B7766ED824076F1D00E05042 /* CarGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarGroup.m; sourceTree = "<group>"; };
 		B7EE9E502403E34B00D31B8F /* imgViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imgViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7EE9E532403E34B00D31B8F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7EE9E542403E34B00D31B8F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -56,9 +61,6 @@
 		B7EE9E762403E34C00D31B8F /* imgViewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = imgViewerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7EE9E7A2403E34C00D31B8F /* imgViewerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = imgViewerUITests.m; sourceTree = "<group>"; };
 		B7EE9E7C2403E34C00D31B8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B7FCD0082405157800497D53 /* questions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = questions.plist; sourceTree = "<group>"; };
-		B7FCD00A24051D2900497D53 /* Question.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Question.h; sourceTree = "<group>"; };
-		B7FCD00B24051D2900497D53 /* Question.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Question.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,7 +151,8 @@
 		B7EE9E882403E6EA00D31B8F /* infomation */ = {
 			isa = PBXGroup;
 			children = (
-				B7FCD0082405157800497D53 /* questions.plist */,
+				B7766ED32407666D00E05042 /* cars_simple.plist */,
+				B7766ED42407666D00E05042 /* cars_total.plist */,
 				B7CA5F792404C3600045089C /* img */,
 			);
 			path = infomation;
@@ -158,8 +161,8 @@
 		B7FCD0012405061500497D53 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B7FCD00A24051D2900497D53 /* Question.h */,
-				B7FCD00B24051D2900497D53 /* Question.m */,
+				B7766ED724076F1D00E05042 /* CarGroup.h */,
+				B7766ED824076F1D00E05042 /* CarGroup.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -296,8 +299,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B7FCD0092405157800497D53 /* questions.plist in Resources */,
+				B7766ED62407666D00E05042 /* cars_total.plist in Resources */,
 				B7EE9E632403E34C00D31B8F /* LaunchScreen.storyboard in Resources */,
+				B7766ED52407666D00E05042 /* cars_simple.plist in Resources */,
 				B7EE9E602403E34C00D31B8F /* Assets.xcassets in Resources */,
 				B7EE9E5E2403E34B00D31B8F /* Main.storyboard in Resources */,
 			);
@@ -326,7 +330,7 @@
 			files = (
 				B7EE9E5B2403E34B00D31B8F /* ViewController.m in Sources */,
 				B7EE9E552403E34B00D31B8F /* AppDelegate.m in Sources */,
-				B7FCD00C24051D2900497D53 /* Question.m in Sources */,
+				B7766ED924076F1D00E05042 /* CarGroup.m in Sources */,
 				B7EE9E662403E34C00D31B8F /* main.m in Sources */,
 				B7EE9E582403E34B00D31B8F /* SceneDelegate.m in Sources */,
 			);
