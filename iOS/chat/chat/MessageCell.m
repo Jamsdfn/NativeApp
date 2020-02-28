@@ -45,9 +45,12 @@
         
         UIButton *btnText = [UIButton new];
         btnText.titleLabel.font = textFont;
-//        btnText.userInteractionEnabled = NO;
-        [btnText setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        btnText.userInteractionEnabled = NO;
+        
         btnText.titleLabel.numberOfLines = 0;
+        
+        btnText.contentEdgeInsets = UIEdgeInsetsMake(15, 20, 15, 20);
+        
         [self.contentView addSubview:btnText];
         self.btnText = btnText;
     }
@@ -63,7 +66,13 @@
     self.lblTime.text = message.time;
     self.lblTime.frame = messageFrame.timeFrame;
     self.lblTime.hidden = message.hideTime;
-    
+    UIColor *textColor;
+    if (message.type == MessageTypeMe) {
+        textColor = [UIColor whiteColor];
+    } else {
+        textColor = [UIColor blackColor];
+    }
+    [self.btnText setTitleColor:textColor forState:UIControlStateNormal];
     [self.btnText setTitle:message.text forState:UIControlStateNormal];
     self.btnText.frame = messageFrame.textFrame;
     NSString *imgNormal, *imgHighlighted;

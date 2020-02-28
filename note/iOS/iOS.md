@@ -753,7 +753,7 @@ transform可以进行平移、缩放、旋转
   
 @interface A : NSObjec
 // B 必须遵守ADelegate 协议，通常情况下必须用weak
-@property (weak) id<ADelegate> B;
+@property (nonatomic, weak) id<ADelegate> B;
   
 - (void)test;
 
@@ -769,6 +769,128 @@ transform可以进行平移、缩放、旋转
 ```
 
 UI控件的代理属性必须使用weak，因为控制器本身就有一个强指针指向控件，并且通常情况下控制器都是作为代理对象的，如果控件代理属性还用强指针只会控制器本身的话，这就造成循环引用了，会导致内存泄漏。
+
+## 通知
+
+iOS 大部分原生的事件都是以通知发送的，一个通知可以由多个对象监听。
+
+![](./3.png)
+
+**通知的发布**
+
+通知中心(NSNotificationCenter)提供了相应的方法来帮助发布通知
+
+\- (void)postNotification:(NSNotification *)notification;
+
+- 发布一个notification通知，可在notification对象中设置通知的名称、通知发布者、额外信息等
+
+\- (void)postNotificationName:(NSString *)aName object:(id)anObject;
+
+- 发布一个名称为aName的通知，anObject为这个通知的发布者
+
+\- (void)postNotificationName:(NSString *)aName object:(id)anObject userInfo:(NSDictionary *)aUserInfo;
+
+- 发布一个名称为aName的通知，anObject为这个通知的发布者，aUserInfo为额外信息
+
+**通知的监听**
+
+
+通知中心(NSNotificationCenter)提供了方法来注册一个监听通知的监听器(Observer)
+
+\- (void)addObserver:(id)observer selector:(SEL)aSelector name:(NSString *)aName object:(id)anObject;
+
+- **observer**：监听器，即谁要接收这个通知的对象
+
+- **aSelector**：收到通知后，回调监听器的这个方法，并且把通知对象当做参数传入
+
+- **aName**：通知的名称。如果为nil，那么无论通知的名称是什么，监听器都能收到这个通知
+
+- **anObject**：通知发布者。如果为anObject和aName都为nil，监听器都收到所有的通知。
+
+即后两个参数如果为nil，即能监听到本参数的全集
+
+```objc
+@interface NotificationLister : NSObject
+@property (nonatomic, copy) NSString *name;
+ - (void)m1:(NSNotification *)noteInfo;
+@end
+  
+@implementation NotificationLister
+-(void)m1:(NSNotification *)noteInfo{
+  // noteInfo 就是监听到的通知内容
+  
+}
+@end
+// main
+NotificationSender *sender = [NotificationSender new];
+NotificationLister *listener = [NotificationLister new];
+NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+// 监听通知
+[center addObserver:listener selector:@selector(m1:) name:notification1 object:sender];
+// 发布通知
+[center postNotificationName:@"notification1" object:sender userInfo@{@"title":@"hello world"}];
+```
+
+事件监听到的内容noteInfo {name = 通知名字；object = 发布通知的对象；userInfo = 发布消息是传入的字典}。**注意要先监听通知再发布通知**
+
+**通知的移除**
+
+一定要在**监听对象被回收前把通知也一起移除**，不然会发生野指针错误
+
+```objc
+@interface NotificationLister : NSObject
+@property (nonatomic, copy) NSString *name;
+ - (void)m1:(NSNotification *)noteInfo;
+@end
+  
+@implementation NotificationLister
+-(void)m1:(NSNotification *)noteInfo{
+  // noteInfo 就是监听到的通知内容
+}
+// *************!!!!!!!!***********
+- (void)dealloc {
+  // 监听对象移除前移除通知
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+// *************!!!!!!!!***********
+@end
+// main
+NotificationSender *sender = [NotificationSender new];
+NotificationLister *listener = [NotificationLister new];
+NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+// 监听通知
+[center addObserver:listener selector:@selector(m1:) name:notification1 object:sender];
+// 发布通知
+[center postNotificationName:@"notification1" object:sender userInfo@{@"title":@"hello world"}];
+```
+
+### 原生通知事件
+
+键盘状态改变的时候,系统会发出一些特定的通知
+
+- UIKeyboardWillShowNotification // 键盘即将显示
+
+- UIKeyboardDidShowNotification // 键盘显示完毕
+
+- UIKeyboardWillHideNotification // 键盘即将隐藏
+
+- UIKeyboardDidHideNotification // 键盘隐藏完毕
+
+- UIKeyboardWillChangeFrameNotification // 键盘的位置尺寸即将发生改变
+
+- UIKeyboardDidChangeFrameNotification // 键盘的位置尺寸改变完毕
+
+系统发出键盘通知时,会附带一下跟键盘有关的额外信息(字典),字典常见的key如下:
+
+- UIKeyboardFrameBeginUserInfoKey // 键盘刚开始的frame
+
+- UIKeyboardFrameEndUserInfoKey // 键盘最终的frame(动画执行完毕后)
+
+- UIKeyboardAnimationDurationUserInfoKey // 键盘动画的时间
+
+- UIKeyboardAnimationCurveUserInfoKey // 键盘动画的执行节奏(快慢)
+
+上述字典key对应的value的类型都是NSString
 
 ## iOS 小技巧
 
@@ -799,4 +921,6 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 ```
 
 **label自动换行**：属性设置为0就好了 lbl.numberOfLines = 0;
+
+**可以通过代理textField监听键盘按下事件触**：<UITextFieldDelegate>
 

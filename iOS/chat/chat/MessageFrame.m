@@ -26,9 +26,12 @@
     _iconFrame = CGRectMake(iconX, iconY, iconW, iconH);
     
     CGSize textSize = [message.text sizeOfTextWithMaxSize:CGSizeMake(234, MAXFLOAT) font:textFont];
+    CGFloat textW = textSize.width + 40;
+    CGFloat textH = textSize.height + 30;
     CGFloat textY = iconY;
-    CGFloat textX = message.type == MessageTypeOther ? CGRectGetMaxX(_iconFrame) : iconX - textSize.width;
-    _textFrame = CGRectMake(textX, textY, textSize.width, textSize.height);
+    CGFloat textX = message.type == MessageTypeOther ? CGRectGetMaxX(_iconFrame) : iconX - textW;
+    
+    _textFrame = CGRectMake(textX, textY, textW, textH);
     
     CGFloat maxY = MAX(CGRectGetMaxY(_textFrame), CGRectGetMaxY(_iconFrame));
     _rowHeight = maxY + margin;
