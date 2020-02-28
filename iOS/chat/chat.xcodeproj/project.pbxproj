@@ -16,6 +16,11 @@
 		B72FF6E12408BEF500AC29FF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FF6E02408BEF500AC29FF /* main.m */; };
 		B72FF6EB2408BEF500AC29FF /* chatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FF6EA2408BEF500AC29FF /* chatTests.m */; };
 		B72FF6F62408BEF500AC29FF /* chatUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B72FF6F52408BEF500AC29FF /* chatUITests.m */; };
+		B7BCDEF52408FA8600D1272C /* messages.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7BCDEF42408FA8600D1272C /* messages.plist */; };
+		B7BCDEF82408FAB100D1272C /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BCDEF72408FAB100D1272C /* Message.m */; };
+		B7BCDEFB2408FC4D00D1272C /* MessageFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BCDEFA2408FC4D00D1272C /* MessageFrame.m */; };
+		B7BCDEFE240905BB00D1272C /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BCDEFD240905BB00D1272C /* MessageCell.m */; };
+		B7BCDF0224090E7700D1272C /* NSString+NSStringExt.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BCDF0124090E7700D1272C /* NSString+NSStringExt.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +59,15 @@
 		B72FF6F12408BEF500AC29FF /* chatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B72FF6F52408BEF500AC29FF /* chatUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = chatUITests.m; sourceTree = "<group>"; };
 		B72FF6F72408BEF500AC29FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B7BCDEF42408FA8600D1272C /* messages.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = messages.plist; sourceTree = "<group>"; };
+		B7BCDEF62408FAB100D1272C /* Message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		B7BCDEF72408FAB100D1272C /* Message.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		B7BCDEF92408FC4D00D1272C /* MessageFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageFrame.h; sourceTree = "<group>"; };
+		B7BCDEFA2408FC4D00D1272C /* MessageFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageFrame.m; sourceTree = "<group>"; };
+		B7BCDEFC240905BB00D1272C /* MessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageCell.h; sourceTree = "<group>"; };
+		B7BCDEFD240905BB00D1272C /* MessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageCell.m; sourceTree = "<group>"; };
+		B7BCDF0024090E7700D1272C /* NSString+NSStringExt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+NSStringExt.h"; sourceTree = "<group>"; };
+		B7BCDF0124090E7700D1272C /* NSString+NSStringExt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSStringExt.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,15 +118,12 @@
 		B72FF6CD2408BEF300AC29FF /* chat */ = {
 			isa = PBXGroup;
 			children = (
-				B72FF6CE2408BEF300AC29FF /* AppDelegate.h */,
-				B72FF6CF2408BEF300AC29FF /* AppDelegate.m */,
-				B72FF6D12408BEF300AC29FF /* SceneDelegate.h */,
-				B72FF6D22408BEF300AC29FF /* SceneDelegate.m */,
-				B72FF6D42408BEF300AC29FF /* ViewController.h */,
-				B72FF6D52408BEF300AC29FF /* ViewController.m */,
-				B72FF6D72408BEF300AC29FF /* Main.storyboard */,
+				B7BCDEF32408F69E00D1272C /* infomation */,
+				B7BCDEF22408F5F700D1272C /* Controllers */,
+				B7BCDEF12408F5EB00D1272C /* Models */,
+				B7BCDEF02408F5E300D1272C /* VIews */,
+				B7BCDEEF2408F5D200D1272C /* Others */,
 				B72FF6DA2408BEF500AC29FF /* Assets.xcassets */,
-				B72FF6DC2408BEF500AC29FF /* LaunchScreen.storyboard */,
 				B72FF6DF2408BEF500AC29FF /* Info.plist */,
 				B72FF6E02408BEF500AC29FF /* main.m */,
 			);
@@ -135,6 +146,66 @@
 				B72FF6F72408BEF500AC29FF /* Info.plist */,
 			);
 			path = chatUITests;
+			sourceTree = "<group>";
+		};
+		B7BCDEEF2408F5D200D1272C /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				B7BCDEFF24090E4800D1272C /* Categories */,
+				B72FF6CE2408BEF300AC29FF /* AppDelegate.h */,
+				B72FF6CF2408BEF300AC29FF /* AppDelegate.m */,
+				B72FF6D12408BEF300AC29FF /* SceneDelegate.h */,
+				B72FF6D22408BEF300AC29FF /* SceneDelegate.m */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
+		B7BCDEF02408F5E300D1272C /* VIews */ = {
+			isa = PBXGroup;
+			children = (
+				B72FF6D72408BEF300AC29FF /* Main.storyboard */,
+				B72FF6DC2408BEF500AC29FF /* LaunchScreen.storyboard */,
+				B7BCDEFC240905BB00D1272C /* MessageCell.h */,
+				B7BCDEFD240905BB00D1272C /* MessageCell.m */,
+			);
+			name = VIews;
+			sourceTree = "<group>";
+		};
+		B7BCDEF12408F5EB00D1272C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B7BCDEF62408FAB100D1272C /* Message.h */,
+				B7BCDEF72408FAB100D1272C /* Message.m */,
+				B7BCDEF92408FC4D00D1272C /* MessageFrame.h */,
+				B7BCDEFA2408FC4D00D1272C /* MessageFrame.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		B7BCDEF22408F5F700D1272C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B72FF6D42408BEF300AC29FF /* ViewController.h */,
+				B72FF6D52408BEF300AC29FF /* ViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		B7BCDEF32408F69E00D1272C /* infomation */ = {
+			isa = PBXGroup;
+			children = (
+				B7BCDEF42408FA8600D1272C /* messages.plist */,
+			);
+			name = infomation;
+			sourceTree = "<group>";
+		};
+		B7BCDEFF24090E4800D1272C /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				B7BCDF0024090E7700D1272C /* NSString+NSStringExt.h */,
+				B7BCDF0124090E7700D1272C /* NSString+NSStringExt.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +311,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7BCDEF52408FA8600D1272C /* messages.plist in Resources */,
 				B72FF6DE2408BEF500AC29FF /* LaunchScreen.storyboard in Resources */,
 				B72FF6DB2408BEF500AC29FF /* Assets.xcassets in Resources */,
 				B72FF6D92408BEF300AC29FF /* Main.storyboard in Resources */,
@@ -269,8 +341,12 @@
 			files = (
 				B72FF6D62408BEF300AC29FF /* ViewController.m in Sources */,
 				B72FF6D02408BEF300AC29FF /* AppDelegate.m in Sources */,
+				B7BCDEF82408FAB100D1272C /* Message.m in Sources */,
 				B72FF6E12408BEF500AC29FF /* main.m in Sources */,
 				B72FF6D32408BEF300AC29FF /* SceneDelegate.m in Sources */,
+				B7BCDF0224090E7700D1272C /* NSString+NSStringExt.m in Sources */,
+				B7BCDEFE240905BB00D1272C /* MessageCell.m in Sources */,
+				B7BCDEFB2408FC4D00D1272C /* MessageFrame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -488,7 +488,8 @@ transform可以进行平移、缩放、旋转
   - separatorStyle 分割线的样式 ，可以设置取消分割线
   - tableHeaderView 一般可以放广告
   - tableFooterView 一般可以放加载更多，只能修改其frame的X和height，Y和width是不能改的
-
+- allowsSelection BOOL 是否允许被选中
+  
 - UITableViewCell 属性
   - accessoryView 可以给cell的最右端设置想要的组件，自定义
   - accessoryType 给cell最右端设置几种样式的组件
@@ -601,11 +602,11 @@ transform可以进行平移、缩放、旋转
 
 如果类继承自UITableViewController 中 self.view == self.tableView。这两者完全等价。
 
-**动态常见行高**：
+##### 动态创建行高：
 
 **注意：如果每一行的行高是动态创建的，那么就要新建一个带fram的模型，在字典转模型的时候就要把每一行的行高算出来**，因为动态创建行高的方法是要比新建cell先执行的，如果在cell创建是再设行高是没办法给tableview的行高赋值的。
 
-详细例子可参考weibo实例。
+详细例子可参考weibo[实例](https://github.com/Jamsdfn/NativeApp/tree/master/iOS/weibo/imgViewer)。
 
 ### 字典转模型
 
@@ -739,6 +740,35 @@ transform可以进行平移、缩放、旋转
 如果想在xib的类中调用自身的控件可以实现 \- (void)awakeFromNib; 在这个方法中就可以调用自身的控件了，相当于 UIViewController 的viewDidLoad方法。比如xib创建的子控件有轮播图，那个想要设置scrollView的contentSize，就要在awakeFromNib中设置。
 
 只有在这个方法中才能操作控件。
+
+### 自定义代理
+
+```objc
+// A.h
+// 如果方法不多通常不用再，协议定义不用再开一个文件，写在A.h就好了
+@protocol ADelegate <NSObject>
+@required
+- (void)delegateFuncton;
+@end
+  
+@interface A : NSObjec
+// B 必须遵守ADelegate 协议，通常情况下必须用weak
+@property (weak) id<ADelegate> B;
+  
+- (void)test;
+
+@end
+ // B.h
+@implementation A
+  
+- (void)test{
+  [self.B delegateFuncton];
+}
+  
+@end
+```
+
+UI控件的代理属性必须使用weak，因为控制器本身就有一个强指针指向控件，并且通常情况下控制器都是作为代理对象的，如果控件代理属性还用强指针只会控制器本身的话，这就造成循环引用了，会导致内存泄漏。
 
 ## iOS 小技巧
 
