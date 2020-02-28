@@ -1,6 +1,6 @@
-#import "Goods.h"
+#import "Weibo.h"
 
-@implementation Goods
+@implementation Weibo
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict{
     if (self = [super init]) {
@@ -9,8 +9,8 @@
     return self;
 }
 
-+ (instancetype)goodsWithDictionary:(NSDictionary *)dict{
-    return [[Goods alloc] initWithDictionary:dict];
++ (instancetype)weiboWithDictionary:(NSDictionary *)dict{
+    return [[self alloc] initWithDictionary:dict];
 }
 
 @end

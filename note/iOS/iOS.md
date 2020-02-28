@@ -597,7 +597,15 @@ transform可以进行平移、缩放、旋转
 }
 ```
 
+可以直接在Main.storyboard中把原来的Controller删掉，再拖出一个UITableViewController，这个直接帮我们放好了TableView，不过记得在UITableViewController的属性中**勾上Is Initial View Controller**，即设置为默认窗口，并且**控制器的class也要改成ViewController**，记得先给ViewController.h 中继承的类改成UITableViewController或者自己新建一个继承自UITableViewController的类，不然是设置不上的。
 
+如果类继承自UITableViewController 中 self.view == self.tableView。这两者完全等价。
+
+**动态常见行高**：
+
+**注意：如果每一行的行高是动态创建的，那么就要新建一个带fram的模型，在字典转模型的时候就要把每一行的行高算出来**，因为动态创建行高的方法是要比新建cell先执行的，如果在cell创建是再设行高是没办法给tableview的行高赋值的。
+
+详细例子可参考weibo实例。
 
 ### 字典转模型
 
@@ -744,3 +752,21 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil]
 **创建plist存放数据**：plist文件本质上其实是XML文件（可扩展标记语言），那么为什么后缀是plist呢，其实只是为了方便xcode显示
 
 **占位符**：%02d 占位符表示保留两位整形数据，不足两位则前面补零
+
+**根据label内容算出label高宽**：
+
+\- (CGRect)boundingRectWithSize:(CGSize)size options:(NSStringDrawingOptions)options attributes:(nullable NSDictionary<NSAttributedStringKey, id> *)attributes context:(nullable NSStringDrawingContext *)context
+
+- 一个在UIKit框架内的字符串对象的方法，返回值为CGRect
+- 参数一：限制label的高宽，不限制可以写CGSizeMake(MAXFLOAT, MAXFLOAT)
+- 参数二：options：计算的方式
+- 参数三：使用的是什么字体，参数要是一个字典
+- 参数四：填个nil
+
+```objc
+// 例子是按照默认字体12号字来计算大小，因此在设置frame前要先发label的字体大小设置为12
+CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} context:nil].size;
+```
+
+**label自动换行**：属性设置为0就好了 lbl.numberOfLines = 0;
+
