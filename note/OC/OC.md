@@ -2151,6 +2151,33 @@ NSLog(@"%lu %lu %lu",year,month,day);
 
 如果一个数据需要被整个程序共享，那么这个数据可以以属性的方式存放在单例对象中。
 
+## KVC
+
+Key-value coding 常用方法
+
+- \- (void)setValuesForKeysWithDictionary:(NSDictionary<NSString *, id> *)keyedValues;
+
+  - 字典转模型常用的方法，就是把字典每一个key取出来，value赋值给调用它的对象的与key同名属性
+  - 参数就是一个字典集合
+
+- \- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;
+
+  - 给对象key同名的属性赋值，值就是value
+  - 参数一：OC对象
+  - 参数二：对象的同名属性(这个属性可以写类属性的一个子属性比如@"dog.name"，就是给父对象的dog属性的name属性赋值)
+
+  这样给属性赋值的好处就是可以要给哪个属性赋值可以通过程序动态生成，十分灵活
+
+- \- (nullable id)valueForKeyPath:(NSString *)keyPath;
+
+  - 根源keyPath取对应属性的值
+  - 这个方法也可以用于字典取值
+
+- \- (NSDictionary<NSString *, id> *)dictionaryWithValuesForKeys:(NSArray<NSString *> *)keys;
+
+  - 把对象转成字典
+  - 参数是一个数组，想把对象哪个属性转为字典就在数组内加上属性名
+
 ## Xcode技巧
 
 Xcode的OC编译器叫LLVM
