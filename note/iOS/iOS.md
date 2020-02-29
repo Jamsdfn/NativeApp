@@ -510,6 +510,11 @@ transform可以进行平移、缩放、旋转
   - 然后把idxPath放入NSArray中传给第一个参数
 
   注意，如果总行数发生变化则不能使用局部刷新，因为tableView是基于scrollView的，数据增删了，滚动的height就变了，如果用局部更新则height更新不了，因此会直接报错
+  
+- \- (void)reloadSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation 局部刷新，刷新一组
+
+  - 参数一：一个组的类，创建方法和NSIndexPath差不多
+  - 参数二：动画方法枚举
 
 ```objc
 #import "ViewController.h"
@@ -601,6 +606,8 @@ transform可以进行平移、缩放、旋转
 可以直接在Main.storyboard中把原来的Controller删掉，再拖出一个UITableViewController，这个直接帮我们放好了TableView，不过记得在UITableViewController的属性中**勾上Is Initial View Controller**，即设置为默认窗口，并且**控制器的class也要改成ViewController**，记得先给ViewController.h 中继承的类改成UITableViewController或者自己新建一个继承自UITableViewController的类，不然是设置不上的。
 
 如果类继承自UITableViewController 中 self.view == self.tableView。这两者完全等价。
+
+**静态单元格只能通过UITableViewController实现(纯使用Stroyboard就可以了，因为是代码实现所以不用关联代码的controller也行)**
 
 ##### 动态创建行高：
 
@@ -748,7 +755,8 @@ transform可以进行平移、缩放、旋转
 // 如果方法不多通常不用再，协议定义不用再开一个文件，写在A.h就好了
 @protocol ADelegate <NSObject>
 @required
-- (void)delegateFuncton;
+  // 根据规范要把自身给传进去
+- (void)delegateFuncton:(A *)a;
 @end
   
 @interface A : NSObjec
@@ -762,7 +770,7 @@ transform可以进行平移、缩放、旋转
 @implementation A
   
 - (void)test{
-  [self.B delegateFuncton];
+  [self.B delegateFuncton:self];
 }
   
 @end
@@ -892,7 +900,40 @@ NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 
 上述字典key对应的value的类型都是NSString
 
+
+
+UIDevice类提供了一个单例对象，它代表着设备，通过它可以获得一些设备相关的信息，比如电池电量值(batteryLevel)、电池状态(batteryState)、设备的类型(model，比如iPod、iPhone等)、设备的系统(systemVersion)
+
+通过[UIDevice currentDevice]可以获取这个单例对象
+
+
+
+UIDevice对象会不间断地发布一些通知，下列是UIDevice对象所发布通知的名称常量：
+
+UIDeviceOrientationDidChangeNotification // 设备旋转
+
+UIDeviceBatteryStateDidChangeNotification // 电池状态改变
+
+UIDeviceBatteryLevelDidChangeNotification // 电池电量改变
+
+UIDeviceProximityStateDidChangeNotification // 近距离传感器(比如设备贴近了使用者的脸部)
+
 ## iOS 小技巧
+
+**状态栏状态设置**：
+
+```objc
+- (UIStatusBarStyle)preferredStatusBarStyle{
+  // 设置状态栏样式（默认，dark，light）
+		return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden{
+  // 是否隐藏状态栏
+    return YES;
+}
+
+```
 
 **快速得到app路径**：
 
@@ -923,4 +964,31 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 **label自动换行**：属性设置为0就好了 lbl.numberOfLines = 0;
 
 **可以通过代理textField监听键盘按下事件触**：<UITextFieldDelegate>
+
+**UITableViewHeaderFooterView**:注意，如果自定义一个类继承自此类用于自定义header或者footer的view，那么设置其子控件的frame放在layoutSubviews中设置，因为只有此时的self.frame/self.bounds 才是有值的。
+
+```objc
+// 当header真正创建的时候，即系统给header加frame的时候
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    self.btnGroupTitle.frame = self.bounds;
+    CGFloat lblW = 100;
+    CGFloat lblH = self.bounds.size.height;
+    CGFloat lblY = 0;
+    CGFloat lblX = self.bounds.size.width - 10 - lblW;
+    self.lblCount.frame = CGRectMake(lblX, lblY, lblW, lblH);
+}
+
+// 在一个新的header已经完成加载到某个父控件中的时候执行这个方法。
+- (void)didMoveToSuperview {
+    if (self.group.isVisible) {
+        self.btnGroupTitle.imageView.transform = CGAffineTransformMakeRotation(M_PI/2);
+        
+    } else {
+        self.btnGroupTitle.imageView.transform = CGAffineTransformMakeRotation(0);
+    
+}
+```
+
+**控件设置圆角**：先设置圆角半径，在裁剪圆角`lblMsg.layer.cornerRadius = 20;lblMsg.layer.masksToBounds = YES;`
 
