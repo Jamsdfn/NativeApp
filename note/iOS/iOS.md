@@ -918,6 +918,90 @@ UIDeviceBatteryLevelDidChangeNotification // 电池电量改变
 
 UIDeviceProximityStateDidChangeNotification // 近距离传感器(比如设备贴近了使用者的脸部)
 
+## 自动适配
+
+autoresizeing 十分不推荐使用，因此这里就略过
+
+### autolayout
+
+- 参照
+
+  通过参照其他空间或者父控件来设置当前控件的位置和大小
+
+- 约束
+
+  通过添加约束限制控件的位置和大小
+
+- Storyboard 的方式就不在这个介绍了，就是找到地方改就好了
+
+- 代码的方式添加约束
+
+  - 一个约束就是一个约束对象，然后把约束对象添加到控件上
+  - 记得一样要先把autoresizing禁用了 `view.translatesAutoresizingMakeIntoConstraints = NO;` 要给谁添加约束这个view就是谁
+  - 加了约束后不要再设置frame了
+  - 记得要加完整的约束控件才会出来
+  - \- (void)addConstraint:(NSLayoutConstraint *)constraint; 加一个约束
+  - \- (void)addConstraints:(NSArray<__kindof NSLayoutConstraint *> *)constraints; 加一组约束
+
+  ```objc
+  #import "ViewController.h"
+  
+  @interface ViewController ()
+  
+  @property (nonatomic, weak) NSLayoutConstraint *test;
+  
+  @end
+  
+  @implementation ViewController
+  
+  - (void)viewDidLoad {
+      [super viewDidLoad];
+      // 创建蓝色view
+      UIView *blue = [UIView new];
+      blue.backgroundColor = [UIColor blueColor];
+      
+      [self.view addSubview:blue];
+      // 禁用autoresizing
+      blue.translatesAutoresizingMaskIntoConstraints = NO;
+      // 创建并添加约束
+      // 一个对象 的 某属性 怎么 另外一个对象 的 某属性 乘以多少倍 加上多少
+    // obj1.prop = obj2.prop * multiplier + constantValue
+    	// blue 高 等于 1 × 50
+      NSLayoutConstraint *blueHC = [NSLayoutConstraint constraintWithItem:blue attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:50];
+      [blue addConstraint:blueHC];
+    	// blue left 等于 blue父级的view left × 1 ＋ 50
+      NSLayoutConstraint *blueLC = [NSLayoutConstraint constraintWithItem:blue attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:blue.superview attribute:NSLayoutAttributeLeft multiplier:1 constant:30];
+      [self.view addConstraint:blueLC];
+      NSLayoutConstraint *blueRC = [NSLayoutConstraint constraintWithItem:blue attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:blue.superview attribute:NSLayoutAttributeRight multiplier:1 constant:-30];
+      [self.view addConstraint:blueRC];
+      // 相对于safeArea
+      NSLayoutConstraint *blueTC = [NSLayoutConstraint constraintWithItem:blue attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view.safeAreaLayoutGuide attribute:NSLayoutAttributeTop multiplier:1 constant:30];
+      [self.view addConstraint:blueTC];
+    // 顶部的距离加动画
+    	self.test = blueTC;
+    // 加一个动画的按钮
+    	UIButton *btn = [UIButton new];
+      [btn setTitle:@"btn" forState:UIControlStateNormal];
+      [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+      btn.frame = CGRectMake(0,500, 100, 100);
+      [self.view addSubview:btn];
+      [btn addTarget:self action:@selector(btnclick) forControlEvents:UIControlEventTouchUpInside];
+  }
+  - (void)btnclick{
+     // 先重新复制
+      self.test.constant += 100;
+      [UIView animateWithDuration:1 delay:1 options:UIViewAnimationOptionCurveLinear animations:^{
+        // 再重新布局，记得要把这句话加在动画的block内，没有这句话就没有动画
+          [self.view layoutIfNeeded];
+      } completion:^(BOOL finished) {}];
+  }
+  @end
+  ```
+
+### Trait Variations
+
+xcode7时的是size class ，不过size class不够直观，新版xcode都是用trait variations 可以置换的切换机型看效果。注意：因为iphone近年来出现的刘海屏会挡住屏幕的一部分，所以最顶层的view记得加上safe area 不然显示内容会被刘海屏挡住一部分
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
