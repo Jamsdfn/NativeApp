@@ -1187,20 +1187,20 @@ xcode7时的是size class ，不过size class不够直观，新版xcode都是用
 // 获取UIApplication对象
 UIApplication *app = [UIApplication sharedApplication];
 
-// iOS 8 系统要求设置通知的时候必须经过用户许可。
-UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
-
-[app registerUserNotificationSettings:settings];
-
+// iOS 10+ 系统要求设置通知的时候必须经过用户许可。
+UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+     //iOS 10+ 使用以下方法注册，才能得到授权
+[center requestAuthorizationWithOptions:UNAuthorizationOptionBadge completionHandler:^(BOOL granted, NSError * _Nullable error) {}];
+// 这之后才可以设置
 app.applicationIconBadgeNumber = 10; // 有10条消息
 
-//  app.applicationIconBadgeNumber = app.applicationIconBadgeNumber > 0 ? 0 : 10; // 有10条消息
 }
 ```
 
 * 联网操作时，状态栏上的等待图标指示器。waiting图标。
 
 ```objc
+// iOS13 被移除了，有没有代替不清楚，没找到
 UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndicatorVisible = YES;
 ```
 
@@ -1212,7 +1212,8 @@ UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndic
 // 系统会自动根据协议识别使用某个app打开。
 UIApplication *app = [UIApplication sharedApplication];
 // 打开一个网页:
-[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"]];
+[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"]];// <iOS 10
+[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"] options:@{} completionHandler:NULL];// >iOS 10
 
 // 打电话
 [app openURL:[NSURL URLWithString:@"tel://10086"]];
@@ -1227,51 +1228,6 @@ UIApplication *app = [UIApplication sharedApplication];
 * 使用openURL方法也可以打开其他应用，在不同应用之间互相调用对方。
   * 美图秀秀, 点击分享到"新浪微博", 打开"新浪微博"选择账号, 跳转回"美图秀秀", 开始分享
   * 喜马拉雅, 使用微博、QQ 账号 登录。都需要应用程序间跳转。
-
-### 状态栏管理
-
-* 理状态栏的管理：
-  * 自从iOS7开始可以通过两种方式来控制状态栏
-    * 控制器
-    * 通过UIViewController管理（每一个UIViewController都可以拥有自己不同的状态栏）
-
-```objc
-#pragma mark - 通过控制器来管理状态栏是否显示及显示类型
-// 是否隐藏"状态栏"
-- (BOOL)prefersStatusBarHidden {
-    return NO;
-}
-
-// 状态栏的样式
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    // 白色
-    return UIStatusBarStyleLightContent;
-}
-```
-
-* UIApplication
-  * 通过UIApplication管理（一个应用程序的状态栏都由它统一管理）
-
-  * iOS7开始状态栏默认交给了控制器来管理，如果希望通过UIApplication来管理，步骤如下:
-  * 在Info.plist文件中增加一个配置项
-    * View controller-based status bar appearance = NO
-
-```objc
-#pragma mark - 通过应用程序来管理状态栏
--  (IBAction)click:(id)sender {
-
-    UIApplication *app = [UIApplication sharedApplication];
-    // 设置状态栏是否隐藏                                    //app.statusBarHidden = YES;
-    // 动画的方式
-    [app setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-
-    // 设置状态栏显示为白色
-    // app.statusBarStyle = UIStatusBarStyleLightContent;
-    // 动画的方式
-    [app setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-}
-```
 
 ## iOS 小技巧
 
