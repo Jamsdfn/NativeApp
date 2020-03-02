@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7iU-J4-gOW">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="LLg-Z4-UHi">
+            <objects>
+                <viewController id="7iU-J4-gOW" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="D3z-QW-La5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="63x-QA-j3j">
+                                <rect key="frame" x="30" y="100" width="315" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="63x-QA-j3j" firstAttribute="leading" secondItem="0EJ-SF-WwA" secondAttribute="leading" constant="30" id="AHX-m4-0aW"/>
+                            <constraint firstItem="0EJ-SF-WwA" firstAttribute="trailing" secondItem="63x-QA-j3j" secondAttribute="trailing" constant="30" id="pwU-0K-riQ"/>
+                            <constraint firstItem="63x-QA-j3j" firstAttribute="top" secondItem="0EJ-SF-WwA" secondAttribute="top" constant="100" id="w11-jK-67s"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="0EJ-SF-WwA"/>
+                    </view>
+                    <connections>
+                        <outlet property="textField" destination="63x-QA-j3j" id="qwu-qV-c8n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="usT-qt-P1f" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="77" y="98"/>
+        </scene>
+    </scenes>
+</document>

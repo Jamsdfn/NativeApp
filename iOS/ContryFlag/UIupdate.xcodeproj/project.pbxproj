@@ -11,10 +11,10 @@
 		B7AD30BD240D0B22005841D5 /* Contry.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AD30BC240D0B22005841D5 /* Contry.m */; };
 		B7AD30C0240D0F10005841D5 /* ContryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7AD30BF240D0F10005841D5 /* ContryView.xib */; };
 		B7AD30C3240D10D5005841D5 /* ContryView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7AD30C2240D10D5005841D5 /* ContryView.m */; };
-		B7AD30C5240D1C6C005841D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7AD30C4240D1C6C005841D5 /* Main.storyboard */; };
 		B7C10E40240CC907007B3642 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C10E3F240CC907007B3642 /* AppDelegate.m */; };
 		B7C10E43240CC907007B3642 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C10E42240CC907007B3642 /* SceneDelegate.m */; };
 		B7C10E46240CC907007B3642 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C10E45240CC907007B3642 /* ViewController.m */; };
+		B7C10E49240CC907007B3642 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7C10E47240CC907007B3642 /* Main.storyboard */; };
 		B7C10E4B240CC908007B3642 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7C10E4A240CC908007B3642 /* Assets.xcassets */; };
 		B7C10E4E240CC908007B3642 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7C10E4C240CC908007B3642 /* LaunchScreen.storyboard */; };
 		B7C10E51240CC908007B3642 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C10E50240CC908007B3642 /* main.m */; };
@@ -46,7 +46,6 @@
 		B7AD30BF240D0F10005841D5 /* ContryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContryView.xib; sourceTree = "<group>"; };
 		B7AD30C1240D10D5005841D5 /* ContryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContryView.h; sourceTree = "<group>"; };
 		B7AD30C2240D10D5005841D5 /* ContryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContryView.m; sourceTree = "<group>"; };
-		B7AD30C4240D1C6C005841D5 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		B7C10E3B240CC907007B3642 /* UIupdate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIupdate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7C10E3E240CC907007B3642 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B7C10E3F240CC907007B3642 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -54,6 +53,7 @@
 		B7C10E42240CC907007B3642 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		B7C10E44240CC907007B3642 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		B7C10E45240CC907007B3642 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B7C10E48240CC907007B3642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B7C10E4A240CC908007B3642 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B7C10E4D240CC908007B3642 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B7C10E4F240CC908007B3642 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 		B7C10E74240CC94F007B3642 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B7AD30C4240D1C6C005841D5 /* Main.storyboard */,
+				B7C10E47240CC907007B3642 /* Main.storyboard */,
 				B7C10E4C240CC908007B3642 /* LaunchScreen.storyboard */,
 				B7AD30BF240D0F10005841D5 /* ContryView.xib */,
 				B7AD30C1240D10D5005841D5 /* ContryView.h */,
@@ -297,8 +297,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7C10E4E240CC908007B3642 /* LaunchScreen.storyboard in Resources */,
-				B7AD30C5240D1C6C005841D5 /* Main.storyboard in Resources */,
 				B7C10E4B240CC908007B3642 /* Assets.xcassets in Resources */,
+				B7C10E49240CC907007B3642 /* Main.storyboard in Resources */,
 				B7AD30BA240D0AED005841D5 /* 03flags.plist in Resources */,
 				B7AD30C0240D0F10005841D5 /* ContryView.xib in Resources */,
 			);
@@ -366,6 +366,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		B7C10E47240CC907007B3642 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B7C10E48240CC907007B3642 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		B7C10E4C240CC908007B3642 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

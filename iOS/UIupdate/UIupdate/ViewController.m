@@ -2,10 +2,12 @@
 #import "Contry.h"
 #import "ContryView.h"
 
-@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface ViewController ()
 
-@property (nonatomic, strong) NSArray *contries;
-@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIToolbar *toolbar;
+
 
 @end
 
@@ -13,42 +15,48 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self contries];
+    self.textField.inputView = self.datePicker;
+    self.textField.inputAccessoryView = self.toolbar;
 }
 
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
-    return 80;
-}
-
-- (NSArray *)contries{
-    if (!_contries) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"03flags.plist" ofType:nil];
-        NSArray *arr = [NSArray arrayWithContentsOfFile:path];
-        NSMutableArray *arrM = [NSMutableArray new];
-        for (NSDictionary *item in arr) {
-            Contry *model = [Contry contryWithDictionary:item];
-            [arrM addObject:model];
-        }
-        _contries = arrM;
+- (UIDatePicker *)datePicker{
+    if (!_datePicker) {
+        // 不需要设置frame，它会自动占据键盘的位置
+        _datePicker = [[UIDatePicker alloc] init];
+        _datePicker.datePickerMode = UIDatePickerModeDate;
+        _datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh-Hans"];
     }
-    return _contries;
+    return _datePicker;
 }
 
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return 1;
+- (UIToolbar *)toolbar{
+    if (!_toolbar) {
+        _toolbar = [UIToolbar new];
+        _toolbar.frame = CGRectMake(0, 0, 0, 44);
+        UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelItemClick)];
+        UIBarButtonItem *confirmItem = [[UIBarButtonItem alloc] initWithTitle:@"确认" style:UIBarButtonItemStylePlain target:self action:@selector(confirmItemClick)];
+        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        // 给bar加上barbuttonItem
+        _toolbar.items = @[cancelItem, flexSpace, confirmItem];
+        
+    }
+    return _toolbar;
 }
 
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-    return self.contries.count;
+- (void)cancelItemClick{
+    [self.view endEditing:YES];
 }
 
-- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    Contry *model = self.contries[row];
-    ContryView *contry = [ContryView contryView];
-    contry.contry = model;
-    
-    return contry;
-    
+- (void)confirmItemClick{
+    // 获取选中的日期
+    NSDate *date = self.datePicker.date;
+    // 将日期设置给文本框
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy年MM月dd日";
+    NSString *str = [formatter stringFromDate:date];
+    self.textField.text = str;
+    // 关闭键盘
+    [self.view endEditing:YES];
 }
 
 @end

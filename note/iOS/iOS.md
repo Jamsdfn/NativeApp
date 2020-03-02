@@ -706,7 +706,69 @@ transform可以进行平移、缩放、旋转
 
 #### UIDatePicker
 
-日期选择控件
+日期选择控件，通常和自定义键盘操作联系在一起，因为其本质就是用来做日期选择的。首先要一个文本框，还要UIDatePicker 设置为文本框的inputView。还要一个UIToolbar 设置为文本框的UIAccessoryView。
+
+控件也可以用懒加载，控件的懒加载要用strong修饰，设置方法和数据懒加载一样，先判断有没有，没有就创建
+
+```objc
+#import "ViewController.h"
+#import "Contry.h"
+#import "ContryView.h"
+@interface ViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIToolbar *toolbar;
+@end
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.textField.inputView = self.datePicker;
+    self.textField.inputAccessoryView = self.toolbar;
+}
+- (UIDatePicker *)datePicker{
+    if (!_datePicker) {
+        // 不需要设置frame，它会自动占据键盘的位置
+        _datePicker = [[UIDatePicker alloc] init];
+        _datePicker.datePickerMode = UIDatePickerModeDate;
+        _datePicker.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh-Hans"];
+    }
+    return _datePicker;
+}
+- (UIToolbar *)toolbar{
+    if (!_toolbar) {
+        _toolbar = [UIToolbar new];
+      // 只用设置键盘的高就可以了，toolbar系统会自动撑开
+        _toolbar.frame = CGRectMake(0, 0, 0, 44);
+        UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelItemClick)];
+        UIBarButtonItem *confirmItem = [[UIBarButtonItem alloc] initWithTitle:@"确认" style:UIBarButtonItemStylePlain target:self action:@selector(confirmItemClick)];
+        UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+        // 给bar加上barbuttonItem
+        _toolbar.items = @[cancelItem, flexSpace, confirmItem];
+        
+    }
+    return _toolbar;
+}
+
+- (void)cancelItemClick{
+    [self.view endEditing:YES];
+}
+
+- (void)confirmItemClick{
+    // 获取选中的日期
+    NSDate *date = self.datePicker.date;
+    // 将日期设置给文本框
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = @"yyyy年MM月dd日";
+    NSString *str = [formatter stringFromDate:date];
+    self.textField.text = str;
+    // 关闭键盘
+    [self.view endEditing:YES];
+}
+
+@end
+
+```
 
 ## 字典转模型
 
@@ -1095,6 +1157,122 @@ autoresizeing 十分不推荐使用，因此这里就略过
 
 xcode7时的是size class ，不过size class不够直观，新版xcode都是用trait variations 可以置换的切换机型看效果。注意：因为iphone近年来出现的刘海屏会挡住屏幕的一部分，所以最顶层的view记得加上safe area 不然显示内容会被刘海屏挡住一部分
 
+## UIApplication
+
+### 设置消息数量及联网指示器
+
+* 当一个iOS程序启动后，首先创建的第一个对象就是UIApplication对象。
+
+* 利用UIApplication可以做一些应用级别的操作。
+
+  * 应用级别操作：
+
+    * QQ有消息的时候右上角的消息条数。
+
+    ```objc
+    // 获取UIApplication对象。
+    UIApplication *app = [UIApplication sharedApplication];
+    
+    // 设置右上角, 有10条消息
+    app.applicationIconBadgeNumber = 10;
+    
+    // 取消显示消息
+    app.applicationIconBadgeNumber = 0;
+    ```
+
+```objc
+// 当点击按钮时, 设置右上角消息
+- (IBAction)click:(id)sender {
+
+// 获取UIApplication对象
+UIApplication *app = [UIApplication sharedApplication];
+
+// iOS 8 系统要求设置通知的时候必须经过用户许可。
+UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge categories:nil];
+
+[app registerUserNotificationSettings:settings];
+
+app.applicationIconBadgeNumber = 10; // 有10条消息
+
+//  app.applicationIconBadgeNumber = app.applicationIconBadgeNumber > 0 ? 0 : 10; // 有10条消息
+}
+```
+
+* 联网操作时，状态栏上的等待图标指示器。waiting图标。
+
+```objc
+UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndicatorVisible = YES;
+```
+
+### 打开一些资源
+
+* 利用UIApplication打开某个资源：
+
+```objc
+// 系统会自动根据协议识别使用某个app打开。
+UIApplication *app = [UIApplication sharedApplication];
+// 打开一个网页:
+[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"]];
+
+// 打电话
+[app openURL:[NSURL URLWithString:@"tel://10086"]];
+
+// 发短信
+[app openURL:[NSURL URLWithString:@"sms://10086"]];
+
+// 发邮件
+[app openURL:[NSURL URLWithString:@"mailto://12345@qq.com"]];
+```
+
+* 使用openURL方法也可以打开其他应用，在不同应用之间互相调用对方。
+  * 美图秀秀, 点击分享到"新浪微博", 打开"新浪微博"选择账号, 跳转回"美图秀秀", 开始分享
+  * 喜马拉雅, 使用微博、QQ 账号 登录。都需要应用程序间跳转。
+
+### 状态栏管理
+
+* 理状态栏的管理：
+  * 自从iOS7开始可以通过两种方式来控制状态栏
+    * 控制器
+    * 通过UIViewController管理（每一个UIViewController都可以拥有自己不同的状态栏）
+
+```objc
+#pragma mark - 通过控制器来管理状态栏是否显示及显示类型
+// 是否隐藏"状态栏"
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
+// 状态栏的样式
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    // 白色
+    return UIStatusBarStyleLightContent;
+}
+```
+
+* UIApplication
+  * 通过UIApplication管理（一个应用程序的状态栏都由它统一管理）
+
+  * iOS7开始状态栏默认交给了控制器来管理，如果希望通过UIApplication来管理，步骤如下:
+  * 在Info.plist文件中增加一个配置项
+    * View controller-based status bar appearance = NO
+
+```objc
+#pragma mark - 通过应用程序来管理状态栏
+-  (IBAction)click:(id)sender {
+
+    UIApplication *app = [UIApplication sharedApplication];
+    // 设置状态栏是否隐藏                                    //app.statusBarHidden = YES;
+    // 动画的方式
+    [app setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+    // 设置状态栏显示为白色
+    // app.statusBarStyle = UIStatusBarStyleLightContent;
+    // 动画的方式
+    [app setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+}
+```
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
@@ -1112,6 +1290,8 @@ xcode7时的是size class ，不过size class不够直观，新版xcode都是用
 
 ```
 
+
+
 **快速得到app路径**：
 
 ```objc
@@ -1119,9 +1299,15 @@ xcode7时的是size class ，不过size class不够直观，新版xcode都是用
 NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil];
 ```
 
+
+
 **创建plist存放数据**：plist文件本质上其实是XML文件（可扩展标记语言），那么为什么后缀是plist呢，其实只是为了方便xcode显示
 
+
+
 **占位符**：%02d 占位符表示保留两位整形数据，不足两位则前面补零
+
+
 
 **根据label内容算出label高宽**：
 
@@ -1138,9 +1324,15 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil]
 CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} context:nil].size;
 ```
 
+
+
 **label自动换行**：属性设置为0就好了 lbl.numberOfLines = 0;
 
+
+
 **可以通过代理textField监听键盘按下事件触**：<UITextFieldDelegate>
+
+
 
 **UITableViewHeaderFooterView**:注意，如果自定义一个类继承自此类用于自定义header或者footer的view，那么设置其子控件的frame放在layoutSubviews中设置，因为只有此时的self.frame/self.bounds 才是有值的。
 
@@ -1167,7 +1359,53 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 }
 ```
 
+
+
 **控件设置圆角**：先设置圆角半径，在裁剪圆角`lblMsg.layer.cornerRadius = 20;lblMsg.layer.masksToBounds = YES;`
 
+
+
 **生成随机数**：0 - n 随机数 arc4random_uniform(n+1);
+
+
+
+**info.plist文件**：生成项目自动生成的文件，修改这个文件可以控制一些app信息，比如app的名字，默认是项目名字，也可以修改一些版本号等
+
+- Bundle name ：app名字
+- Bundle version string, short：发布时候版本名字
+- Bundle version：内部测试的版本号
+- Bundle identifier：应用的唯一标识
+- Main storyboard file base name：app默认加载的界面
+
+我们可以用代码获取 info.plist 文件信息[NSBundle mainBundle].infoDictionary;
+
+
+
+**PCH 文件**：PCH文件是整个项目的预编译文件prefix header，通常用于引入头文件后或者加一些宏。在项目界面点build Settings 搜索 prefix header 在同名的那个项那里原本是空的，玻门双击加上地址就好了./xxxx/xx.. 相对路径的起点目录是工程的目录。
+
+常用地宏
+
+```objc
+// 通常在公司开发，我们都会重定义一下NSLog的名字，改为公司名缩写Log
+// 如果发布的时候有太多的NSLog的话，苹果是不允许通过的，用以下的宏就可以一次性解决这个问题
+#ifdef DEBUG
+
+#define XXLog(...) NSLog(__VA_ARGS__)
+
+#else
+
+#define XXLog(...)
+
+#endif
+// 这个宏是用来兼容C的，因为通常这个PCH文件也会用到OC的东西如#import，如果项目里有C文件没有下面的这个宏的话就会报错
+#ifdef __OBJC__
+
+// OC相关的内容
+
+#endif
+```
+
+
+
+
 
