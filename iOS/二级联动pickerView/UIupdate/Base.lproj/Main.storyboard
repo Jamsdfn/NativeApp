@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vPa-iF-mW3">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="216"/>
+                                <color key="backgroundColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="216" id="iIZ-i8-gqm"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="euo-hh-7oK"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="cZO-eh-gox"/>
+                                </connections>
+                            </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s88-ov-9l4">
+                                <rect key="frame" x="20" y="236" width="157.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c46-ey-zvP">
+                                <rect key="frame" x="197.5" y="236" width="157.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="s88-ov-9l4" firstAttribute="top" secondItem="vPa-iF-mW3" secondAttribute="bottom" constant="20" id="2GO-lG-zXC"/>
+                            <constraint firstItem="c46-ey-zvP" firstAttribute="leading" secondItem="s88-ov-9l4" secondAttribute="trailing" constant="20" id="BZp-af-BbE"/>
+                            <constraint firstItem="c46-ey-zvP" firstAttribute="width" secondItem="s88-ov-9l4" secondAttribute="width" id="QAL-I0-tcD"/>
+                            <constraint firstItem="c46-ey-zvP" firstAttribute="height" secondItem="s88-ov-9l4" secondAttribute="height" id="Rxr-JI-BKR"/>
+                            <constraint firstItem="vPa-iF-mW3" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="S4U-2l-YpS"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="c46-ey-zvP" secondAttribute="trailing" constant="20" id="UqF-Bj-epX"/>
+                            <constraint firstItem="vPa-iF-mW3" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Xlf-Xc-Dfi"/>
+                            <constraint firstItem="c46-ey-zvP" firstAttribute="top" secondItem="vPa-iF-mW3" secondAttribute="bottom" constant="20" id="Yhk-t0-MLp"/>
+                            <constraint firstItem="s88-ov-9l4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="cDm-WN-oXM"/>
+                            <constraint firstItem="vPa-iF-mW3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="xul-fh-qQV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="city" destination="c46-ey-zvP" id="UaF-Aw-098"/>
+                        <outlet property="pickerView" destination="vPa-iF-mW3" id="I23-2U-3Nw"/>
+                        <outlet property="province" destination="s88-ov-9l4" id="Njk-m2-1kc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.40000000000001" y="111.99400299850076"/>
+        </scene>
+    </scenes>
+</document>

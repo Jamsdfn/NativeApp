@@ -8,8 +8,6 @@
 
 UIView所有组件的父类，组件的创建和销毁的处理是UIViewController。每一个新的界面都是一个UIView，切换界面就涉及到UIView的创建和销毁，UIView与用户的交互。
 
-### UIViewController
-
 UIViewController是UIView的控制器，负责创建、显示、销毁UIView；负责监听UIView内部的事件；负责处理UIView与用户的交互。
 
 UIViewController内部有个UIView属性，就是它负责管理的UIView对象 ：
@@ -74,7 +72,7 @@ UIViewController内部有个UIView属性，就是它负责管理的UIView对象 
 
 控件的位置大小相关的属性：frame（CGRect）、center（CGPoint）、bounds（CGRect）；因此center只能控制位置（坐标原点为中心，为frame的坐标原点为左上角），虽然bounds他是个CGRect但是他的CGPoint始终是零，是无效的，因此bounds只能控制大小，以中心点放大（frame放大坐标点是左上角）。
 
-#### 简单动画
+### 简单动画
 
 ```objc
 // 法一：头尾式
@@ -112,7 +110,7 @@ UIViewController内部有个UIView属性，就是它负责管理的UIView对象 
 }
 ```
 
-#### 动态创建控件
+### 动态创建控件
 
 ```objc
 #import "ViewController.h"
@@ -156,7 +154,7 @@ UIViewController内部有个UIView属性，就是它负责管理的UIView对象 
 
 Tips:程序启动的时候出现的界面（一打开app放logo或者广告的那个界面）可以在LaunchScreen.storyboard上面画；Assets.xcassets 通常放媒体资源
 
-#### transform属性
+### transform属性
 
 transform可以进行平移、缩放、旋转
 
@@ -196,7 +194,7 @@ transform可以进行平移、缩放、旋转
 
 **销毁一个控件**：`[txt removeFromSuperview]`调用方法就销毁了
 
-#### UIImageView
+### UIImageView
 
 帧动画相关的属性和方法
 
@@ -265,7 +263,7 @@ transform可以进行平移、缩放、旋转
   - UIImageView：仅仅需要显示图片，点击图片后不需要做任何事情
   - UIButton：需要显示图片，点击图片后需要做一些特定的操作
 
-#### UIScrollView
+### UIScrollView
 
 是用来实现滚动和缩放的控件。UIScrollView的内容进行滚动和缩放。先创建UIScrollView，再在UIScrollView中加入子控件，最后设置UIScrollVIew的contentSize（内容大小）
 
@@ -459,7 +457,7 @@ transform可以进行平移、缩放、旋转
     - 调用timerWithXxx创建的timer，把这个timer对象手动加到”消息循环”中才能启动
     - 调用scheduledTimerWithXxx创建的timer，自动启动（创建完毕后自动启动）。
 
-#### UITableView
+### UITableView
 
 广泛用于界面布局的一个控件，必须要DataSource属性，是指定一个数据源对象。
 
@@ -615,7 +613,102 @@ transform可以进行平移、缩放、旋转
 
 详细例子可参考weibo[实例](https://github.com/Jamsdfn/NativeApp/tree/master/iOS/weibo/imgViewer)。
 
-### 字典转模型
+### 数据选择控件
+
+#### UIPickerView
+
+那种类似密码锁滚动效果的那个数据选择控件，这个控件和tableView差不多，也要delegate、和 DataSource。记得在控制器中关联上，或者在storyboard中直接拖线，使用方法和tableVIew也差不多。
+
+二级联动城市菜单
+
+```objc
+#import "ViewController.h"
+#import "Province.h"
+@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
+
+
+@property (nonatomic, strong) NSArray *provinces;
+@property (weak, nonatomic) IBOutlet UILabel *province;
+@property (weak, nonatomic) IBOutlet UILabel *city;
+@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (nonatomic, strong) Province *selectedProvince;
+
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [self pickerView:self.pickerView didSelectRow:0 inComponent:0];
+//    [self pickerView:self.pickerView didSelectRow:0 inComponent:0];
+   }
+
+- (NSArray *)provinces{
+    if (!_provinces) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"02cities.plist" ofType:nil];
+        NSArray *arr = [NSArray arrayWithContentsOfFile:path];
+        NSMutableArray *arrM = [NSMutableArray new];
+        for (NSDictionary *item in arr) {
+            Province *province = [Province provinceWithDictionary:item];
+            [arrM addObject:province];
+        }
+        _provinces = arrM;
+    }
+    return _provinces;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 2;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    if (component == 0) {
+        return self.provinces.count;
+    } else {
+        // 先获取第一个组的数据，才能确定这一组的数据（二级联动）
+        NSInteger selectedProvince = [pickerView selectedRowInComponent:0];
+        // 第一组和第二组数据在滚动的时候都会调用titleForRow这个方法，如果这里不把数据保存下来的话，第二组滚动的时候回频繁的创建一个新的对象，然而在这个新的对象中调用的被选择的row是旧的那个row，因此有可能会出现数组越界的错误。
+        self.selectedProvince = self.provinces[selectedProvince];
+        return self.selectedProvince.cities.count;
+    }
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    if (component == 0) {
+        Province *province = self.provinces[row];
+        return province.name;
+    } else {
+        // 用保存的数据，无论你第一组动的时候怎么调用这个方法也row也不会越界
+        return self.selectedProvince.cities[row];
+    }
+}
+
+// 滚动第一组要刷新数据
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
+    if (component == 0) {
+        [pickerView reloadComponent:1];
+        // 为了防止第二组原本停在一个位置，这个位置本身就超越了第一组数据中的数组范围。因为reload本身只是刷新数据,已选位置是不会改变的，因此要把一算位置改成第一行
+        [pickerView selectRow:0 inComponent:1 animated:NO];
+    }
+    NSInteger selCity = [pickerView selectedRowInComponent:1];
+    self.province.text = self.selectedProvince.name;
+    self.city.text = self.selectedProvince.cities[selCity];
+}
+@end
+```
+
+也可以在pickerView中放入view
+
+\- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view; 
+
+**设置行号**：\- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component;
+
+#### UIDatePicker
+
+日期选择控件
+
+## 字典转模型
 
 模型其实就是类，就是把字典装变为类对象来保存。好处：第一，在打代码的时候有智能提示，第二，如果是字典的话key写错了，不会报错，程序运行运行才会出问题，可能好找好久的bug，而用模型存在输错了马上报错。第三，可以使用面向对象的特征，让程序变得更灵活
 
@@ -664,7 +757,7 @@ transform可以进行平移、缩放、旋转
 }
 ```
 
-### xib封装
+## xib封装
 
 新建文件 User Interface -> Empty 选择后创建的就是xib。然后想storyboard那样吧组件拉出来，组成想要的形状，之后创建一个与xib同名的类，把xib的继承对象修改给这个新创建的类，再像storyboard那样往新类中连线。然后UIViewController中创建新类的对象就好了，通过此对象的属性也能访问到xib的属性。
 
@@ -748,7 +841,7 @@ transform可以进行平移、缩放、旋转
 
 只有在这个方法中才能操作控件。
 
-### 自定义代理
+## 自定义代理
 
 ```objc
 // A.h
@@ -1075,4 +1168,6 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 ```
 
 **控件设置圆角**：先设置圆角半径，在裁剪圆角`lblMsg.layer.cornerRadius = 20;lblMsg.layer.masksToBounds = YES;`
+
+**生成随机数**：0 - n 随机数 arc4random_uniform(n+1);
 
