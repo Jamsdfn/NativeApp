@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RedViewController">
+            <connections>
+                <outlet property="textField" destination="oKg-JI-4rD" id="hAs-DD-Ccl"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGH-SX-KXj">
+                    <rect key="frame" x="158.5" y="318.5" width="58" height="30"/>
+                    <state key="normal" title="ToGreen"/>
+                    <connections>
+                        <action selector="go2Green:" destination="-1" eventType="touchUpInside" id="1s8-cM-zcW"/>
+                    </connections>
+                </button>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oKg-JI-4rD">
+                    <rect key="frame" x="20" y="234.5" width="335" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="0.098851096138192096" blue="0.69227669261573876" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="oKg-JI-4rD" secondAttribute="trailing" constant="20" id="18B-nM-VGb"/>
+                <constraint firstItem="ZGH-SX-KXj" firstAttribute="top" secondItem="oKg-JI-4rD" secondAttribute="bottom" constant="50" id="D9K-nZ-rzF"/>
+                <constraint firstItem="ZGH-SX-KXj" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="MhQ-IZ-YOT"/>
+                <constraint firstItem="ZGH-SX-KXj" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="klx-eI-McI"/>
+                <constraint firstItem="oKg-JI-4rD" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" constant="20" id="zoa-ut-b90"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <point key="canvasLocation" x="132" y="100"/>
+        </view>
+    </objects>
+</document>

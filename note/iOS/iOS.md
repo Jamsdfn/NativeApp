@@ -708,7 +708,7 @@ transform可以进行平移、缩放、旋转
 
 日期选择控件，通常和自定义键盘操作联系在一起，因为其本质就是用来做日期选择的。首先要一个文本框，还要UIDatePicker 设置为文本框的inputView。还要一个UIToolbar 设置为文本框的UIAccessoryView。
 
-控件也可以用懒加载，控件的懒加载要用strong修饰，设置方法和数据懒加载一样，先判断有没有，没有就创建
+控件也可以用懒加载，控件的懒加载要用strong修饰（为了防止控件无人使用的时候被销毁），设置方法和数据懒加载一样，先判断有没有，没有就创建
 
 ```objc
 #import "ViewController.h"
@@ -1200,7 +1200,6 @@ app.applicationIconBadgeNumber = 10; // 有10条消息
 * 联网操作时，状态栏上的等待图标指示器。waiting图标。
 
 ```objc
-// iOS13 被移除了，有没有代替不清楚，没找到
 UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndicatorVisible = YES;
 ```
 
@@ -1229,6 +1228,286 @@ UIApplication *app = [UIApplication sharedApplication];
   * 美图秀秀, 点击分享到"新浪微博", 打开"新浪微博"选择账号, 跳转回"美图秀秀", 开始分享
   * 喜马拉雅, 使用微博、QQ 账号 登录。都需要应用程序间跳转。
 
+## 导航控制器
+
+一个iOS中的app很少只有一个控制器组成，除非这个app极其简单，当app中有多个控制器的时候，就需要对这些控制器进行管理，有多个view时，可以用一个大的view去管理1个或多个小view，控制器也是类似，可以用1个控制器去管理多个控制器。如，用一个控制器A去管理3个控制器B、C、D
+
+- 控制器A被称为控制器B、C、D的“父控制器”
+
+- 控制器B、C、D被称为控制器A的“子控制器”
+
+为了便于管理控制器，iOS提供了两个比较特殊的控制器
+
+- UINavigationController 导航控制器
+
+- UITabBarController    标签控制器
+
+### UINavigationController
+
+创建导航控制器时设置一个根控制器，然后根据用户操作才进行push（进入下一个控制器控制的界面） pull（回到上一个控制器控制的界面）操作。根据函数名可以看出其实导航栏就是个栈
+
+```objc
+// 自定义控制器
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    // 创建窗口 指定大小
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.windowScene = (UIWindowScene *)scene;
+       // 创建一个新的控制器
+    RedViewController *redvc = [RedViewController new];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:redvc];
+    self.window.rootViewController = nav;
+       // 将窗口作为应用程序的主窗口 并 可见
+    [self.window makeKeyAndVisible];
+}
+// redController 有一个按钮，
+- (IBAction)go2Green:(UIButton *)sender {
+    // 创建一个绿色控制器
+    GreenViewController *greenvc = [GreenViewController new];
+    // 跳转
+    [self.navigationController pushViewController:greenvc animated:YES];
+    // 系统会在导航条默认给我们加一个返回按钮
+}
+// GreenController 有一个按钮
+- (IBAction)pop2Green:(id)sender {
+  // 返回上一个控制器，和系统导航条中的返回按钮一样功能
+    [self.navigationController popViewControllerAnimated:NO];
+  // 返回根控制器
+  //[self.navigationController popToRootViewControllerAnimated:YES];
+  // 返回指定的控制器
+  	// 拿到控制器栈
+  // NSArray *Controllerstack = self.navigationController.viewControllers;
+  	// 回到栈的第二个数据的位置
+//注意只能给参数传进在栈中的控制器，如果新创建一个控制器传给第一个参数则会报错
+  // [self.navigationController popToViewController:Controllerstack[1] animated:YES];
+}
+```
+
+也可以通过storyboard建导航条，和别的控件差不多，这里就不演示了，和tableView controller 的storyboard创建方法差不多，先把默认的控制器删掉，再直接拉一个导航控制器出来，再这个控制器上右键就可以拖线连到下一个控制器（在控制器中放一个按钮，可以直接拖线到下一个控制器，选择show就好了，但是返回只能用代码实现）
+
+- self.navigationItem.title 设置当前控制器的导航条的标题
+- self.navigationItem.titleView 给导航栏添加控件(通常是btn)
+- self.navigationItem.leftBarButtonItem=(UIBarButtonItem *) 左边放一个按扭，同理右边
+- self.navigationItem.leftBarButtonItems = @[] 导航条左边放一组barbutton（同理右边）
+- self.navigaitonItem.backBarButtonItem=（UIBarButtonItem *） 设置返回按钮（要在父控制器中设置，如果已经设置的leftBarButtonItem就会覆盖掉这个backItem）
+
+**view生命周期的方法**
+
+![](./5.png)
+
+**导航控制器中的传值问题：** 
+
+### UITabBarController
+
+
+
+## iOS 生命周期
+
+**iOS 13以下生命周期**
+
+对应到方法就是一些AppDelegate里头的方法以及一些可以注册监听的通知.
+
+​		 当应用程序启动后：
+
+  * didFinishLaunchingWithOptions
+  * applicationDidBecomeActive
+    当应用程序进入后台：
+  * applicationWillResignActive
+  * applicationDidEnterBackground（通常在这一步保存数据）
+    当应用程序从后台进入前台：
+  * applicationWillEnterForeground
+  * applicationDidBecomeActive
+    当应用被销毁时：</br>
+  * [在应用程序打开时，直接通过双击"home"键，模拟器command+shift+双击"h"]
+  * applicationWillResignActive
+  * applicationDidEnterBackground
+  * applicationWillTerminate
+  * [先按一下"home"键，模拟器command+shift+"h"键，先让程序进入后台]
+  * applicationWillResignActive
+  * applicationDidEnterBackground
+  * 之后再销毁程序的时候不会执行任何方法，程序崩溃
+
+**iOS 13及以上的改动**
+
+原本AppDelegate(UIApplicationDelegate)控制生命周期的行为移交给了SceneDelegate(UIWindowSceneDelegate)
+如果直接使用Xcode 11(当然,目前是beta版)创建一个新的App.我们会发现.Appdelegate.m内代码少了一些生命周期的东西,多了一些其他的代码.并且多了一个SceneDelegate的类
+
+注意.AppDelegate.h中没有了window,window移到了SceneDelegate.h
+
+```objc
+//.h
+@property (strong, nonatomic) UIWindow * window;
+//.m
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
+    // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
+    // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+}
+
+
+- (void)sceneDidDisconnect:(UIScene *)scene {
+    // Called as the scene is being released by the system.
+    // This occurs shortly after the scene enters the background, or when its session is discarded.
+    // Release any resources associated with this scene that can be re-created the next time the scene connects.
+    // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+}
+
+
+- (void)sceneDidBecomeActive:(UIScene *)scene {
+    // Called when the scene has moved from an inactive state to an active state.
+    // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+}
+
+
+- (void)sceneWillResignActive:(UIScene *)scene {
+    // Called when the scene will move from an active state to an inactive state.
+    // This may occur due to temporary interruptions (ex. an incoming phone call).
+}
+
+
+- (void)sceneWillEnterForeground:(UIScene *)scene {
+    // Called as the scene transitions from the background to the foreground.
+    // Use this method to undo the changes made on entering the background.
+}
+
+
+- (void)sceneDidEnterBackground:(UIScene *)scene {
+    // Called as the scene transitions from the foreground to the background.
+    // Use this method to save data, release shared resources, and store enough scene-specific state information
+    // to restore the scene back to its current state.
+}
+```
+
+苹果文档如是说
+
+- In iOS 13 and later, use UISceneDelegate objects to respond to life-cycle events in a scene-based app.
+
+- In iOS 12 and earlier, use the UIApplicationDelegate object to respond to life-cycle events.
+
+**在iOS13以前后iOS13以后是不一样的，我们可以iOS13的声明周期改为旧的声明周期**
+
+旧的不在info.plist中添加UIApplicationSceneManifest.
+
+或者是Xcode11以上的删除UIApplicationSceneManifest(Application Scene Manifest).以及appdelegate.m中注释掉scene有关的代码.还有,在Appdelegate.h中添加一个window属性
+
+`@property (strong, nonatomic) UIWindow * window;`
+
+然后就走的以前的Appdelegate的那些方法了.
+
+如果要使用的话,记住需要判断一下版本.建议是用一个统一的类来处理这个问题.在内部转换成统一的通知名.方法等.方便处理
+
+需要注意的点是,不使用场景的情况下别忘了在AppDelegate.h中添加window属性
+
+`@property (strong, nonatomic) UIWindow * window;`
+
+## iOS13 自定义控制器
+
+这次iOS13的发布，其改动步子有点大了，尤其是是其多场景窗口（多任务）已经颠覆了老应用的设计基础了
+这里记录下一些界面层面的适配体会：
+如果是Xcode 10及以下创建的老项目，用Xcode 11打开，老项目基本能正常运行。但是如果用Xcode 11创建新项目，还按照老项目思路写代码就会有坑了。
+
+用Xcode 11创建一个Single View App项目，会多生成一些文件和代码
+
+多了SceneDelegate代理
+Info.plist里面多了Application Scene Manifest配置
+多出来的这些文件和代码，影响最直观的是多场景窗口和导航控制器。
+
+### **适配方案——不支持多场景窗口**
+
+这种适配方案最简单。
+将多出来的文件和代码删除就好了
+
+删除SceneDelegate代理文件 (可选)
+**删除 Info.plist里面的Application Scene Manifest配置**（一定要删除）
+删除 AppDelegate代理的两个方法：
+application:configurationForConnectingSceneSession:options:
+application: didDiscardSceneSessions:
+这两个方法一定要删除，否则使用纯代码创建的Window和导航控制器UINavigationController不会生效。
+
+**注意**：如果不使用iPad的多窗口的话建议大家不要使用场景！
+
+### **适配方案——支持多场景窗口**
+
+首先还是要删除info.plist 的一些配置
+
+![](./4.png)
+
+尽管我不会为每个应用自定义窗口和导航，但我我依然会使用纯代码创建UIWindow和UINavigationController，具体如下
+
+```objc
+//SceneDelegate.m
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  // 主要是这一句代码 和 以前的代码不一样，是多出来的一句
+    self.window.windowScene = (UIWindowScene*)scene;
+  // 这个是个ViewController是一个继承自UIViewController的类
+    UINavigationController *rootNavgationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
+    self.window.rootViewController = rootNavgationController;
+  // 代码创建的window默认是隐藏的
+    [self.window makeKeyAndVisible];
+}
+```
+
+### **同时兼容iOS13和iOS12及以下**
+
+多场景窗口、SceneDelegate等只有在iOS13才可以，若要考虑iOS12及以下的运行环境，那么上述解决方案就要考虑环境版本匹配了，完整代码如下
+
+AppDelegate部分代码
+
+```objc
+//AppDelegate.h
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
+// xcode 11 要自己加
+@property (strong, nonatomic) UIWindow *window;
+
+@end
+
+//AppDelegate.m
+@implementation AppDelegate
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Override point for customization after application launch.
+    if (@available(iOS 13,*)) {
+        return YES;
+    } else {
+      // 这里就是老版本的自定义控制器的代码
+        self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UINavigationController *rootNavgationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
+        self.window.rootViewController = rootNavgationController;
+        [self.window makeKeyAndVisible];
+        return YES;
+    }
+}
+
+
+@end
+```
+
+
+SceneDelegate部分代码
+
+```objc
+//SceneDelegate.h
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
+
+@property (strong, nonatomic) UIWindow * window;
+
+@end
+
+//SceneDelegate.m
+@implementation SceneDelegate
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+- 
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.windowScene = (UIWindowScene*)scene;
+    UINavigationController *rootNavgationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
+    self.window.rootViewController = rootNavgationController;
+    [self.window makeKeyAndVisible];
+}
+
+@end
+```
+
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
@@ -1238,12 +1517,10 @@ UIApplication *app = [UIApplication sharedApplication];
   // 设置状态栏样式（默认，dark，light）
 		return UIStatusBarStyleDefault;
 }
-
 - (BOOL)prefersStatusBarHidden{
   // 是否隐藏状态栏
     return YES;
 }
-
 ```
 
 
