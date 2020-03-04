@@ -1294,7 +1294,28 @@ UIApplication *app = [UIApplication sharedApplication];
 
 ![](./5.png)
 
-**导航控制器中的传值问题：** 
+#### Segue
+
+Storyboard上每一根用来界面跳转的线，都是一个UIStoryboardSegue对象(简称segue)。
+
+每一个Segue对象，都有3个属性
+
+- 唯一标识表示去那个
+  - @property (nonatomic, readonly) NSString *identifier;
+
+- 来源控制器
+  - @property (nonatomic, readonly) id sourceViewController;
+
+- 目标控制器
+
+  - @property (nonatomic, readonly) id destinationViewController;
+
+  因此可以根据segue来进行控制器之间的传值
+
+**segue通常分为自动型和手动型**
+
+- 自动型：通常给按钮这一类的控件通过拖线的方式连接两个控制器（从控件到控制器）。这样就会自动舔砖到下一个控制器。如果点击某个控件后，不需要进行任何判断，一点要跳转到下一个界面(唯一)，那么建议使用自动型segue。
+- 手动型：从源控制器拖到目标控制器。手动型的segue需要一个表示唯一标识，在恰当的时候使用perform方法执行跳转(`[self performSegueWithIdentifier:@"ID" sender:nil];`)。因此如果跳转前要进行逻辑判断，建议使用手动型segue。如果源控制器有多个目标控制器，只能用手动型进行跳转。
 
 ### UITabBarController
 
