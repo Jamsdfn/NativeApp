@@ -19,6 +19,10 @@
 		B745724D240FAE2500963539 /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7457248240FAE2500963539 /* SVIndefiniteAnimatedView.m */; };
 		B745724E240FAE2500963539 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B745724A240FAE2500963539 /* SVProgressHUD.bundle */; };
 		B745724F240FAE2500963539 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B745724C240FAE2500963539 /* SVProgressHUD.m */; };
+		B7CC85E32410A80B00C602B1 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC85E22410A80B00C602B1 /* ContactViewController.m */; };
+		B7CC85E62410BF1500C602B1 /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC85E52410BF1500C602B1 /* AddViewController.m */; };
+		B7CC85E92410C8A900C602B1 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC85E82410C8A900C602B1 /* Contact.m */; };
+		B7CC85EC2410D3D500C602B1 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CC85EB2410D3D500C602B1 /* EditViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +67,14 @@
 		B745724A240FAE2500963539 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		B745724B240FAE2500963539 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		B745724C240FAE2500963539 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		B7CC85E12410A80B00C602B1 /* ContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		B7CC85E22410A80B00C602B1 /* ContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
+		B7CC85E42410BF1500C602B1 /* AddViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		B7CC85E52410BF1500C602B1 /* AddViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+		B7CC85E72410C8A900C602B1 /* Contact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		B7CC85E82410C8A900C602B1 /* Contact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		B7CC85EA2410D3D500C602B1 /* EditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		B7CC85EB2410D3D500C602B1 /* EditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +167,8 @@
 		B7457224240F76FE00963539 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B7CC85E72410C8A900C602B1 /* Contact.h */,
+				B7CC85E82410C8A900C602B1 /* Contact.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -173,6 +187,12 @@
 			children = (
 				B7457228240F774700963539 /* LoginController.h */,
 				B7457229240F774700963539 /* LoginController.m */,
+				B7CC85E12410A80B00C602B1 /* ContactViewController.h */,
+				B7CC85E22410A80B00C602B1 /* ContactViewController.m */,
+				B7CC85E42410BF1500C602B1 /* AddViewController.h */,
+				B7CC85E52410BF1500C602B1 /* AddViewController.m */,
+				B7CC85EA2410D3D500C602B1 /* EditViewController.h */,
+				B7CC85EB2410D3D500C602B1 /* EditViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -331,11 +351,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7CC85E32410A80B00C602B1 /* ContactViewController.m in Sources */,
 				B745724D240FAE2500963539 /* SVIndefiniteAnimatedView.m in Sources */,
 				B74571F0240F6CA700963539 /* AppDelegate.m in Sources */,
 				B745722A240F774700963539 /* LoginController.m in Sources */,
+				B7CC85EC2410D3D500C602B1 /* EditViewController.m in Sources */,
 				B7457201240F6CA800963539 /* main.m in Sources */,
 				B74571F3240F6CA700963539 /* SceneDelegate.m in Sources */,
+				B7CC85E62410BF1500C602B1 /* AddViewController.m in Sources */,
+				B7CC85E92410C8A900C602B1 /* Contact.m in Sources */,
 				B745724F240FAE2500963539 /* SVProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

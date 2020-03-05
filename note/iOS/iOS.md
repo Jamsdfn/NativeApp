@@ -59,7 +59,8 @@ UIViewController内部有个UIView属性，就是它负责管理的UIView对象 
   	[self.view endEditing:YES];
 }
 @end
-
+  // 如果需求是已进入界面就弹出键盘，并且焦点在文本框上，就可以吧文本框设置为第一响应者
+// [self.txtNum2 becomeFirstResponder];
 ```
 
 ![](./1.png)
@@ -500,6 +501,9 @@ transform可以进行平移、缩放、旋转
 
 **方法**：
 
+-  [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+  - 设置分割线长度（相当于分割线位置插入内边距），这样写就是宽度沾满屏幕，设置上下是没用的，只会有左右的生效（上左下右）
+
 - [self.tableView reloadData]; 重新刷新数据
 
 - [self.tableView reloadRowsAtIndexPaths:(NSArray *) withRowAnimation:(UITableViewRowAnimation)] 局部刷新，可以刷新多条数据
@@ -513,6 +517,11 @@ transform可以进行平移、缩放、旋转
 
   - 参数一：一个组的类，创建方法和NSIndexPath差不多
   - 参数二：动画方法枚举
+  
+- [self.tableView indexPathForSelectedRow]; 
+
+  - 返回值是NSIndexPath
+  - 得到当前被选中的cell的indexPath
 
 ```objc
 #import "ViewController.h"
@@ -1301,11 +1310,13 @@ Storyboard上每一根用来界面跳转的线，都是一个UIStoryboardSegue�
 每一个Segue对象，都有3个属性
 
 - 唯一标识表示去那个
-  - @property (nonatomic, readonly) NSString *identifier;
-
+  
+- @property (nonatomic, readonly) NSString *identifier;
+  
 - 来源控制器
-  - @property (nonatomic, readonly) id sourceViewController;
-
+  
+- @property (nonatomic, readonly) id sourceViewController;
+  
 - 目标控制器
 
   - @property (nonatomic, readonly) id destinationViewController;
@@ -1316,6 +1327,28 @@ Storyboard上每一根用来界面跳转的线，都是一个UIStoryboardSegue�
 
 - 自动型：通常给按钮这一类的控件通过拖线的方式连接两个控制器（从控件到控制器）。这样就会自动舔砖到下一个控制器。如果点击某个控件后，不需要进行任何判断，一点要跳转到下一个界面(唯一)，那么建议使用自动型segue。
 - 手动型：从源控制器拖到目标控制器。手动型的segue需要一个表示唯一标识，在恰当的时候使用perform方法执行跳转(`[self performSegueWithIdentifier:@"ID" sender:nil];`)。因此如果跳转前要进行逻辑判断，建议使用手动型segue。如果源控制器有多个目标控制器，只能用手动型进行跳转。
+
+**performSegueWithIdentifier:sender:方法的完整执行过程**
+
+[self performSegueWithIdentifier:@“login2contacts” sender:nil];
+
+- 根据identifier去storyboard中找到对应的线，新建UIStoryboardSegue对象
+
+  - 设置Segue对象的sourceViewController（来源控制器）
+
+  - 新建并且设置Segue对象的destinationViewController（目标控制器）
+
+- 调用sourceViewController的下面方法，做一些跳转前的准备工作并且传入创建好的Segue对象(因此我们可以重写这个方法在这个方法里传值，无论自动型或者是手动型都会自动调用这个方法)
+
+  - \- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender;
+
+  - 这个sender是当初performSegueWithIdentifier:sender:中传入的sender
+
+- 调用Segue对象的- (void)perform;方法开始执行界面跳转操作
+
+  - 取得sourceViewController所在的UINavigationController
+
+  - 调用UINavigationController的push方法将destinationViewController压入栈中，完成跳转
 
 ### UITabBarController
 
@@ -1528,6 +1561,49 @@ SceneDelegate部分代码
 @end
 ```
 
+## 数据存储
+
+iOS应用数据存储常用的方式：XML属性列表（plist）归档、Preference(偏好设置)、NSKeyedArchiver归档(NSCoding)、SQLite3、Core Data
+
+### 应用沙盒
+
+众所周知，iOS应用的环境是沙盒环境，每个iOS应用都有自己的应用沙盒(应用沙盒就是应用的文件夹)，与其他文件系统隔离。应用必须待在自己的沙盒里，其他应用不能访问该沙盒。
+
+- 应用沙盒的目录，如下图
+
+  ![](./6.png)
+
+**应用程序包**：(上图中的Layer)包含了所有的资源文件和可执行文件
+
+- **Documents**：保存应用运行时生成的需要持久化的数据，iTunes同步设备时会备份该目录。例如，游戏应用可将游戏存档保存在该目录
+
+- **tmp**：保存应用运行时所需的临时数据，使用完毕后再将相应的文件从该目录删除。应用没有运行时，系统也可能会清除该目录下的文件。iTunes同步设备时不会备份该目录
+
+- **Library/Caches**：保存应用运行时生成的需要持久化的数据，iTunes同步设备时不会备份该目录。一般存储体积大、不需要备份的非重要数据
+
+- **Library/Preference**：保存应用的所有偏好设置，iOS的Settings(设置)应用会在该目录中查找应用的设置信息。iTunes同步设备时会备份该目录
+
+**沙盒路径的获取**
+
+- **沙盒根目录**：NSString *home = **NSHomeDirectory**();
+
+
+
+- **Documents**：(2种方式)
+  - 利用沙盒根目录拼接”Documents”字符串
+    - NSString *home = **NSHomeDirectory**();
+    - NSString *documents = [home **stringByAppendingPathComponent**:@"**Documents**"];// 不建议采用，因为新版本的操作系统可能会修改目录名
+  - 利用NSSearchPathForDirectoriesInDomains函数
+
+// NSUserDomainMask 代表从用户文件夹下找
+
+// YES 代表展开路径中的波浪字符“~”
+
+NSArray *array = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO);
+
+// 在iOS中，只有一个目录跟传入的参数匹配，所以这个集合里面只有一个元素
+
+NSString *documents = [array objectAtIndex:0];
 
 ## iOS 小技巧
 
