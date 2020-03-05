@@ -31,7 +31,9 @@
 - (void)save{
     self.conctact.name = self.nameTextField.text;
     self.conctact.phoneNumber = self.phoneTextField.text;
-    [self.tableView reloadData];
+    if ([self.delegate respondsToSelector:@selector(editViewController:)]) {
+        [self.delegate editViewController:self];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -502,8 +502,9 @@ transform可以进行平移、缩放、旋转
 **方法**：
 
 -  [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-  - 设置分割线长度（相当于分割线位置插入内边距），这样写就是宽度沾满屏幕，设置上下是没用的，只会有左右的生效（上左下右）
-
+  
+- 设置分割线长度（相当于分割线位置插入内边距），这样写就是宽度沾满屏幕，设置上下是没用的，只会有左右的生效（上左下右）
+  
 - [self.tableView reloadData]; 重新刷新数据
 
 - [self.tableView reloadRowsAtIndexPaths:(NSArray *) withRowAnimation:(UITableViewRowAnimation)] 局部刷新，可以刷新多条数据
@@ -1586,24 +1587,127 @@ iOS应用数据存储常用的方式：XML属性列表（plist）归档、Prefer
 **沙盒路径的获取**
 
 - **沙盒根目录**：NSString *home = **NSHomeDirectory**();
-
-
+- **临时文件目录**: NSString *tmp = **NSTemporaryDirectory**();
 
 - **Documents**：(2种方式)
   - 利用沙盒根目录拼接”Documents”字符串
-    - NSString *home = **NSHomeDirectory**();
-    - NSString *documents = [home **stringByAppendingPathComponent**:@"**Documents**"];// 不建议采用，因为新版本的操作系统可能会修改目录名
+    1. NSString *home = NSHomeDirectory();
+
+    2. NSString *documents = [home stringByAppendingPathComponent:@"Documents"];
+
+    不建议用，因为万一新版本的操作系统修改目录名,那么整个工程用到沙盒的地方都要改
+
   - 利用NSSearchPathForDirectoriesInDomains函数
 
-// NSUserDomainMask 代表从用户文件夹下找
+    NSArray *array = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO);
 
-// YES 代表展开路径中的波浪字符“~”
+    - NSDocumentDirectory 搜索 documents 文件夹(目标文件)
 
-NSArray *array = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, NO);
+    - NSUserDomainMask 代表从用户文件夹下找(在沙盒路径下找)
 
-// 在iOS中，只有一个目录跟传入的参数匹配，所以这个集合里面只有一个元素
+    -  YES 代表展开路径中的波浪字符“~”, 即真是的路径的路径; NO 则是一个相对的路径"~/Documents"
 
-NSString *documents = [array objectAtIndex:0];
+    在iOS中，只有一个目录跟传入的参数匹配，所以这个集合里面只有一个元素
+
+    - NSString *documents = [array objectAtIndex:0];(这就得到的 documents 路径)
+
+- **Caches**
+
+  - 和 documents 的两个方法一模一样,只是参数改成 NSCachesDirectory
+
+- **Preference**
+
+  - 通过NSUserDefaults类存取该目录下的设置信息,这个类是个单例对象[NSUserDefaults standardUserDefaults]。完全不用关心路径,自动创建自动读取
+
+    - 可以把它当做一个字典,这个字典关闭 app 后不会丢失数据。
+
+    - [ [NSUserDefaults standardUserDefaults] set<#type#>:（type）param forKey:@"keyname"];的方法赋值如 
+
+      ```objc
+      [[NSUserDefaults standardUserDefaults] setObject:@"test" forKey:@"key"];
+      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isOk"];
+      ```
+
+    - [[NSUserDefaults standardUserDefaults] <#type#>ForKey:@"keyname"];
+
+      ```objc
+      NSString *str = [[NSUserDefaults standardUserDefaults] objectForKey:@"key"];
+      BOOL flag = [[NSUserDefaults standardUserDefaults] boolForKey:@"isOk"];
+      ```
+
+  - 注意：UserDefaults设置数据时，不是立即写入，而是根据时间戳定时地把缓存中的数据写入本地磁盘。所以调用了set方法之后数据有可能还没有写入磁盘应用程序就终止了。出现以上问题，可以通过调用synchornize方法强制写入`[[NSUserDefaults standardUserDefaults] synchornize];` 建议都加上这句话
+
+### 归档解档
+
+这是专门又来做自定义对象存储的，通常用来存储模型。归档就是存对象，解档就是取对象
+
+**归档**
+
+```objc
+// 获取 tmp 文件夹路径,这里只是测试所以脂肪在 tmp 文件夹下
+NSString *tmpPath = NSTemporaryDirectory();
+// 文件名字+路径,名字后缀什么的可以随便去，只要和系统文件不冲突就型
+NSString *filePath = [tmpPath stringByAppendingPathComponent:@"test.data"];
+Teacher *t = [Teacher new];
+t.name = @"Alice";
+t.age = @"22";
+// iOS 12.0+ 后废弃次方法,这个方法要对象遵守 NSCoding 协议实现 encodeWithCoder、initWithCoder 方法
+// [NSKeyedArchiver archiveRootObject:t toFile:filePath];
+// iOS 12.0+ 的方法 需要遵守 NSSecureCoding 协议,比以前的方法多实现一个supportsSecureCoding 方法
+NSData *data = [NSKeyedArchiver archivedDataWithRootObject:t requiringSecureCoding:YES error:nil];
+[data writeToFile:filePath atomically:YES];
+// Teacher
+
+//@interface Teacher : NSobject <NSCoding>
+@interface Teacher : NSobject <NSSecureCoding>
+@property (copy) NSStirng *name;
+@property int age;
+
+@end
+  
+@implementation Teacher
+-(void)encodeWithCoder:(NSCoder *)coder{
+  // 写上你要存储的属性
+  [coder encodeObject:_name forKey:@"name"];
+  [coder encodeInt:_age forKey:@"age"];
+}
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        _name = [coder decodeObjectForKey:@"name"];
+        _phoneNumber = [coder decodeIntForKey:@"age"];
+    }
+    return self;
+}
+
+// 如果是 iOS12.0 以上则加上
++ (BOOL)supportsSecureCoding{
+    return YES;
+}
+@end
+```
+
+**解档**：
+
+```objc
+// 废弃方法
+//Teacher *tea =[NSKeyedUnachiver unarchiveObjectWithFile:filePath];
+// iOS12.0+ 支持的方式
+NSData *data = [NSData dataWithContentsOfFile:filePath];
+Teacher *model = [NSKeyedUnarchiver unarchivedObjectOfClass:[Contact class] fromData:data error:nil];
+NSLog(@"%@ %@",model.name, model.age);
+```
+
+***注意！！！*** 如果属性包含其他数据类型或自定义类型，则使用unarchivedObjectOfClasses把所有类型写入集合中，且自定义类型也需实现NSSecureCoding协议！
+
+```objc
+// 这里和旧方法有很大不同，旧方法属性包含其他数据类型直接解档也没问题，而新方法中要用两位一个方法 
+// 注意！ 这里是 unarchivedObjectOfClasses 方法, 不是 class 
+// 第一个参数要传一个集合，里面存放着这个对象凡是涉及到的所有对象
+NSSet *set = [[NSSet alloc] initWithObjects:[Contact class],[NSMutableArray class], nil];
+self.contacts = [NSKeyedUnarchiver unarchivedObjectOfClasses:set fromData:data error:&err];
+```
 
 ## iOS 小技巧
 

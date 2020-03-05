@@ -1,9 +1,10 @@
 #import "ContactViewController.h"
 #import "AddViewController.h"
 #import "EditViewController.h"
-@interface ContactViewController ()<AddViewControllerDelegate>
+@interface ContactViewController ()<AddViewControllerDelegate, EditViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *contacts;
+@property (strong, nonatomic) NSData *archivedData;
 
 @end
 
@@ -19,6 +20,13 @@
     self.navigationItem.leftBarButtonItem = item;
     // 分割线长度，这样写就是宽度沾满屏幕，设置上下是没用的，只会有左右的生效（上左下右）
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+    NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    // 文件名字+路径,名字后缀什么的可以随便去，只要和系统文件不冲突就型
+    NSString *filePath = [docPath stringByAppendingPathComponent:@"contacts.data"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    NSError *err = [NSError new];
+    NSSet *set = [[NSSet alloc] initWithObjects:[Contact class],[NSMutableArray class], nil];
+    self.contacts = [NSKeyedUnarchiver unarchivedObjectOfClasses:set fromData:data error:&err];
 }
 
 - (NSMutableArray *)contacts{
@@ -57,14 +65,30 @@
         NSIndexPath *idxPath = [self.tableView indexPathForSelectedRow];
         Contact *model = self.contacts[idxPath.row];
         edit.conctact = model;
-        edit.tableView = self.tableView;
+        edit.delegate = self;
     }
     
+}
+- (void)editViewController:(EditViewController *)editViewController{
+    [self.tableView reloadData];
+    NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    // 文件名字+路径,名字后缀什么的可以随便去，只要和系统文件不冲突就型
+    NSString *filePath = [docPath stringByAppendingPathComponent:@"contacts.data"];
+     
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.contacts requiringSecureCoding:YES error:nil];
+    [data writeToFile:filePath atomically:YES];
 }
 
 - (void)addViewController:(AddViewController *)addViewController withContact:(Contact *)contactInfo{
     [self.contacts addObject:contactInfo];
     [self.tableView reloadData];
+    // 获取 documents 文件夹路径
+   NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+   // 文件名字+路径,名字后缀什么的可以随便去，只要和系统文件不冲突就型
+   NSString *filePath = [docPath stringByAppendingPathComponent:@"contacts.data"];
+    
+   NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.contacts requiringSecureCoding:YES error:nil];
+   [data writeToFile:filePath atomically:YES];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

@@ -19,9 +19,19 @@
     [self.passwordTextField addTarget:self action:@selector(textChange) forControlEvents:UIControlEventEditingChanged];
     // 监听登录按钮
     [self.loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
-    [self textChange];
     [self.remPasswordSwitch addTarget:self action:@selector(rememberPassword) forControlEvents:UIControlEventValueChanged];
     [self.autoLoginSwitch addTarget:self action:@selector(autoLogin) forControlEvents:UIControlEventValueChanged];
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    self.remPasswordSwitch.on = [ud boolForKey:@"isRemPassword"];
+    self.autoLoginSwitch.on = [ud boolForKey:@"isAutoLogin"];
+    self.usernameTextField.text = [ud objectForKey:@"username"];
+    if (self.remPasswordSwitch.isOn) {
+        self.passwordTextField.text = [ud objectForKey:@"password"];
+    }
+    [self textChange];
+    if (self.autoLoginSwitch.isOn) {
+        [self login];
+    }
 }
 
 - (void)rememberPassword{
@@ -46,8 +56,15 @@
             [SVProgressHUD showErrorWithStatus:@"用户名或密码错误"];
             return;
         }
-        
-        
+        // 保存 preference 的状态
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud setBool:self.remPasswordSwitch.isOn forKey:@"isRemPassword"];
+        [ud setBool:self.autoLoginSwitch.isOn forKey:@"isAutoLogin"];
+        if (self.remPasswordSwitch.isOn) {
+            [ud setObject:self.usernameTextField.text forKey:@"username"];
+            [ud setObject:self.passwordTextField.text forKey:@"password"];
+        }
+        [ud synchronize];
         [self performSegueWithIdentifier:@"login2contact" sender:nil];
         
     });
