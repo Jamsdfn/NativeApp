@@ -1414,6 +1414,26 @@ UITabBarItem有以下属性影响着UITabBarButton的内容
 - @property(nonatomic,copy) NSString *badgeValue;
   - 提醒数字，就是徽章
 
+### Model
+
+通常用于和导航关联不大的跳转，比如跳出广告，或者一些 app 游客用户登录不要，导航到一半要进行登录，这时候就弹出的就是 model。和 web 的 model 模态框的感觉差不多
+
+创建好一个控制器之后，只要在想跳转的地方执行下列代码
+
+```objc
+TestViewController *test = [TestViewController new];
+[self presentViewController:test animated:YES completion:^{
+  NSLog(@"调用完成");
+}];
+
+// 此外记得在 model 这个控制器的实现中的适当的地方加一个跳出的方法，让程序退回弹出前的地方
+[self dismissViewControllerAnimated:YES completion:^{
+  NSLog(@"跳出完成");
+}];
+```
+
+
+
 ## iOS 生命周期
 
 **iOS 13以下生命周期**
