@@ -1,5 +1,5 @@
 #import "SceneDelegate.h"
-#import "RedViewController.h"
+
 @interface SceneDelegate ()
 
 @end
@@ -8,25 +8,9 @@
 
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    // 创建窗口 指定大小
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.windowScene = (UIWindowScene *)scene;
-    // 创建一个新的控制器
-    UITabBarController *tabBar = [UITabBarController new];
-    RedViewController *r1 = [RedViewController new];
-    RedViewController *r2 = [RedViewController new];
-    RedViewController *r3 = [RedViewController new];
-    
-    r1.view.backgroundColor = [UIColor redColor];
-    r2.view.backgroundColor = [UIColor blueColor];
-    r3.view.backgroundColor = [UIColor grayColor];
-    //    [tabBar addChildViewController:r1];
-    //    [tabBar addChildViewController:r2];
-    //    [tabBar addChildViewController:r3];
-    tabBar.viewControllers = @[r1, r2, r3];
-    self.window.rootViewController = tabBar;
-    // 将窗口作为应用程序的主窗口 并 可见
-    [self.window makeKeyAndVisible];
+    // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
+    // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
+    // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 }
 
 

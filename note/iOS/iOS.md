@@ -475,9 +475,14 @@ transform可以进行平移、缩放、旋转
      -  required 返回每组显示怎样的数据
      - tableView 同上
      - indexPath indexPath.section第几组 indexPath.row第几个
-   - \- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableVie; optional 返回要显示几组数据，如果不实现本方法则默认值为1
-   - \- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section; 设置组标题类似于Word文档页眉的感觉
-   - \- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section; 设置组尾的描述类似于Word文档的页脚
+   - \- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableVie; optional 
+     - 返回要显示几组数据，如果不实现本方法则默认值为1
+   - \- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section; 
+     - 设置组标题类似于Word文档页眉的感觉
+   - \- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section; 
+     - 设置组尾的描述类似于Word文档的页脚
+   - \- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath; 
+     - 实现这个方法后系统给我们家的左滑出现删除按钮。这个方式就是点击按钮后的点击事件。
 
 **属性**：
 
@@ -523,6 +528,14 @@ transform可以进行平移、缩放、旋转
 
   - 返回值是NSIndexPath
   - 得到当前被选中的cell的indexPath
+  
+-  [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+
+   -  删除一组 row
+   -  参数一：一个属性为 indexPath 的数组
+   -  参数二：系统给我们提供的动画效果
+
+   调用这个方法前必须先删除数据源的数据，再执行这句话，否则会报错。
 
 ```objc
 #import "ViewController.h"
@@ -1353,7 +1366,51 @@ Storyboard上每一根用来界面跳转的线，都是一个UIStoryboardSegue�
 
 ### UITabBarController
 
+跟UINavigationController类似，UITabBarController也可以轻松地管理多个控制器，轻松完成控制器之间的切换，典型例子就是QQ、微信等应用(就是底部的导航条)。
 
+```objc
+- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
+    // 创建窗口 指定大小
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.windowScene = (UIWindowScene *)scene;
+       // 创建一个新的控制器
+    UITabBarController *tabBar = [UITabBarController new];
+    RedViewController *r1 = [RedViewController new];
+    RedViewController *r2 = [RedViewController new];
+    RedViewController *r3 = [RedViewController new];
+    r1.view.backgroundColor = [UIColor redColor];
+    r2.view.backgroundColor = [UIColor blueColor];
+    r3.view.backgroundColor = [UIColor grayColor];
+  // 一个个添加控制器
+    [tabBar addChildViewController:r1];
+    [tabBar addChildViewController:r2];
+    [tabBar addChildViewController:r3];
+  	// 添加一组自控制器
+  	// tabBar.viewControllers = @[r1, r2, r3];
+    self.window.rootViewController = tabBar;
+       // 将窗口作为应用程序的主窗口 并 可见
+    [self.window makeKeyAndVisible];
+}
+// 创建好后因为有三个子控制器，所以底部导航条被分成三份，点对应的地方就可以跳转了
+```
+
+#### UITabBarButton
+
+导航条对应区域显示的按钮，UITabBarButton里面显示什么内容，由对应子控制器的tabBarItem属性决定
+
+UITabBarItem有以下属性影响着UITabBarButton的内容
+
+- @property(nonatomic,copy) NSString *title;
+  - 标题文字
+
+- @property(nonatomic,retain) UIImage *image;
+  - 图标
+
+- @property(nonatomic,retain) UIImage *selectedImage;
+  - 选中的图标
+
+- @property(nonatomic,copy) NSString *badgeValue;
+  - 提醒数字，就是徽章
 
 ## iOS 生命周期
 

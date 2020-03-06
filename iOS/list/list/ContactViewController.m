@@ -108,5 +108,11 @@
     return cell;
 }
 
+// 让 tableView 进入编辑模式，系统给我们家的左滑出现删除按钮。这个方式就是点击按钮后的点击事件
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.contacts removeObject:self.contacts[indexPath.row]];
+    
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
 
 @end
