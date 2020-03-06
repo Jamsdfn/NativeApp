@@ -636,6 +636,8 @@ transform可以进行平移、缩放、旋转
 
 详细例子可参考weibo[实例](https://github.com/Jamsdfn/NativeApp/tree/master/iOS/weibo/imgViewer)。
 
+可以纯用 storyboard 涉及 tableView，把 tableView 的属性 -> content ->static cells 就好了，如果设置的静态单元格，那个对应的 controller 可以不实现 DataSource 协议的方法
+
 ### 数据选择控件
 
 #### UIPickerView
