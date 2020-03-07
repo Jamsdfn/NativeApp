@@ -795,6 +795,14 @@ transform可以进行平移、缩放、旋转
 
 ```
 
+### UISlider
+
+就是一个滑动条。
+
+监听滑动条值改变时间 [[UISlider new] addTarget:self action:@selector(valueChange) forControlEvents:UIControlEventValueChanged];
+
+也可以直接 storyboard 拉线到 controller.m （操作就和 button 创建 click 方法一样）选择 valueChanged 也可以
+
 ## 字典转模型
 
 模型其实就是类，就是把字典装变为类对象来保存。好处：第一，在打代码的时候有智能提示，第二，如果是字典的话key写错了，不会报错，程序运行运行才会出问题，可能好找好久的bug，而用模型存在输错了马上报错。第三，可以使用面向对象的特征，让程序变得更灵活
@@ -1422,6 +1430,10 @@ UITabBarItem有以下属性影响着UITabBarButton的内容
 
 ```objc
 TestViewController *test = [TestViewController new];
+// 跳转样式
+test.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+// 页面模式
+test.modalPresentationStyle = UIModalPresentationFullScreen;
 [self presentViewController:test animated:YES completion:^{
   NSLog(@"调用完成");
 }];
@@ -1432,7 +1444,214 @@ TestViewController *test = [TestViewController new];
 }];
 ```
 
+也可以用 storyboard 做，和 navigation和 tabbar 一样，按钮连线过去下一个 controller 选择 show，在 sugue 线上 kind 修改成 model 的样式，跳转方式和 model 的样式也可以在那里改
 
+## 绘图
+
+Quartz 2D是一个二维绘图引擎，同时支持iOS和Mac OS X系统（跨平台，纯 C 语言的）。包含在 Core Graphics 框架中。
+
+Quartz 2D能完成的工作：绘制图形 : 线条\三角形\矩形\圆\弧等、绘制文字（水印）、绘制\生成图片(图像)、读取\生成PDF、截图\裁剪图片、自定义UI控件…
+
+**注意:**
+
+Quartz2D 是苹果官方的二维绘图引擎，同时支持 iOS 和 Mac OS X 系统。它的 API 是纯 C 语言的，只是苹果给我们封装好了，才可以用 OC 编写。但是 OC 只封装的部分的 API 因此功能还是没有用纯 C 那么强大的。
+
+Cocos2D（Cocos2D-x、Cocos2D-iPhone、Cocos2D-HTML5等）, Cocos2D 是一个第三方开源的2D游戏框架。做2D 游戏的 还有 Sprite Kit。 一般3D 游戏用 unity3D。
+
+**Quartz2D绘图主要步骤**
+
+1. 获取【图形上下文】对象：CGContextRef
+
+2. 向【图形上下文】对象中添加【路径】
+
+3. 渲染（把【图形上下文】中的图形会知道对应的设备上）
+
+图形上下文中主要包含如下信息
+
+- 绘图路径：各种各样的图形
+- 绘图状态：颜色、线宽、样式、旋转、缩放、平移、图片裁剪区域等
+- 输出目标：绘制到什么地方去？UIView、图片、pdf、打印机等（输出目标可以是PDF文件、Bitmap或者显示器的窗口上）
+
+**纯 C 方式绘图** 两种方式，一是直接画，而是先写路径在吧路径添加到上下文上
+
+```objc
+// 继承自 UIView 的类实现这个方法就可以画图了
+- (void)drawRect:(CGRect)rect {
+    [self way1];
+  	[self way2];
+  	[self way3];
+    [self way4];
+    [self way5];
+}
+- (void)way1{
+  // 1. 获取上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+  
+    // 2. 拼接路径并添加到上下文中
+    CGContextMoveToPoint(ctx, 50, 50);// 起点
+    CGContextAddLineToPoint(ctx, 100, 100);// 拐点，除了最后一个 addlinetopoint 其他点都是拐点
+  	CGContextAddLineToPoint(ctx, 150, 0); // 终点
+    // 想加一条线直接重新 MoveToPoint 就好了，同理第二个方法
+  	CGContextMoveToPoint(ctx, 50, 250);// 另一条线的起点
+    CGContextAddLineToPoint(ctx, 100, 250);
+    // 根据矩形绘制椭圆路径
+    CGContextAddEllipseInRect(ctx, CGRectMake(0, 0, 200, 100));
+  
+    // 3. 渲染
+    CGContextStrokePath(ctx);
+}
+- (void)way2{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 拼接路径
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 250, 250);
+    CGPathAddLineToPoint(path, NULL, 250, 300);
+    // 把路劲添加到上下文中
+    CGContextAddPath(ctx, path);
+    // 渲染
+    CGContextStrokePath(ctx);
+}
+```
+
+**OC 方式绘图**
+
+```objc
+- (void)way3{
+    // 1. 获取上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 2. 拼接路径并添加到上下文中
+    UIBezierPath *path = [UIBezierPath new];
+    [path moveToPoint:CGPointMake(50, 50)];
+    [path addLineToPoint:CGPointMake(100, 100)];
+    CGContextAddPath(ctx, path.CGPath);
+    // 渲染
+    CGContextStrokePath(ctx);
+}
+
+- (void)way4{
+    // 1. 获取上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 2. 拼接路径并添加到上下文中
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 50, 50);
+    CGPathAddLineToPoint(path, NULL, 100, 100);
+    // 把 path 转化为 OC 的 path 对象然后接着画
+    UIBezierPath *path1 = [UIBezierPath bezierPathWithCGPath:path];
+    [path1 addLineToPoint:CGPointMake(200, 0)];
+    CGContextAddPath(ctx, path1.CGPath);
+    // 渲染
+    CGContextStrokePath(ctx);
+}
+
+- (void)way5{
+    // 纯 OC
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(50, 50)];
+    [path addLineToPoint:CGPointMake(100, 100)];
+    // 直接创建就画一个矩形
+    UIBezierPath *path1 = [UIBezierPath bezierPathWithRect:CGRectMake(100,100,100,100)];
+    // 直接创建就画一个圆角矩形
+    // 注意，能使矩形变成圆形的radius那个临界值，只要大于等于临界值的 2/3 都会变成圆形
+    // 比喻下面的例子大于 33.33333 就会让圆角矩形变成圆
+    UIBezierPath *path2 = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(100,100,100,100) cornerRadius:10];
+    // 根据一个矩形来画椭圆，就是矩形的 a b 就是矩形长或宽的一半
+    UIBezierPath *path3 = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0,0,200,100)];
+    [path stroke];
+    [path1 stroke];
+    [path2 stroke];
+}
+
+// 画扇形
+- (void)test{
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(50, 50) radius:50 startAngle:0 endAngle: 2*M_PI*0.3 clockwise:YES];
+    [path addLineToPoint:CGPointMake(50,50)];
+    [path fill];
+}
+```
+
+- 根据矩形画椭圆
+
+  - C :`CGContextAddEllipseInRect(ctx, CGRectMake(0, 0, 200, 100));`
+  - OC：` UIBezierPath *path3 = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0,0,200,100)];`
+
+- 画圆
+
+  - 可以用画椭圆的方式花园，也可以用圆角矩形的方式画圆，当然用原本就是用来画圆的方法画也是可以的
+
+  - OC：`UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(150, 150) radius:15.0 startAngle:0 endAngle:2 * M_PI clockwise:YES];`
+
+    - 参数一：圆心位置 CGPoint
+    - 参数二：半径 CGFloat
+    - 参数三：起始**位置**（弧度制）坐标轴和正常的布局的坐标轴一样，三点方向是 x 正方向，六点方向是 y 正方向
+    - 参数四：结束**位置**（弧度制）坐标轴同上
+    - 参数五：BOOL YES 就是顺时针画 NO 就是逆时针画（和直角坐标对应极坐标的旋转方向，YES 就是极坐标方向，NO 就是反方向）
+
+    注意参数三四是起始和结束位置，即如果开始位置是 0结束位置是 π/2 YES则会画出右下方的四分之一圆，而用 NO，则会画出四份之三的圆（除了右下方没有）
+
+  - C : `CGContextAddArc(ctx, 50, 50, 50, 0, M_PI / 2, 0);`
+
+    - 参数一：上下文
+    - 参数二、三：圆心X 、圆心 Y
+    - 参数四：半径
+    - 参数五、六：起始位置，结束位置
+    - 参数七：int 旋转方向， 和 OC 的方向相反
+
+- 设置线的样式
+
+  - C: `CGContextSetLineWidth(ctx, 10);` 粗线中心就是路径的位置
+    - 设置连接处的样式 `CGContextSetLineJoin(ctx, kCGLineJoinRound);`
+      - KCGLineJoinRound 拐角变成圆
+      - kCGLineJoinBevel 原本拐角尖的部分被削平
+      - kCGLineJoinMiter 默认样式尖角
+    - 设置头尾的样式 `CGContextSetLineCap(ctx, kCGLineCapButt);`
+      - kCGLineCapButt 默认样式 直角
+      - kCGLineCapRound 圆 (起始\结束位置补上了一个与线宽等宽的圆，因此看起来会长一点)
+      - kCGLineCapSquare 直角（起始\结束位置补上了一个与线宽等宽的正方形，因此看起来会长一点）
+    - 设置线颜色：`CGContextSetRGBStrokeColor(ctx, .8, .8, .8, 1);`
+      - 参数二三四五：RGBA 范围全是 [0,1]
+  - OC: `[path setLineWidth:10];`
+    - 设置连接处演示 `[path setLineJoinStyle:kCGLineJoinRound];` 参数的枚举和 C 一样
+    - 设置头尾的样式 `  [path setLineCapStyle:kCGLineCapRound];` 参数的枚举和 C 的也是一样的
+    - 设置颜色 `[[UIColor whiteColor] setStroke];` 什么对象都不用传进来就一个 UIClolor 创建一个对象调用 setStroke 方法就行了，这个方法也可以用于 C 绘图，代替原本的那个设置颜色的方法
+
+- 渲染方式：描边和填充，很多方法 Stroke 换成 Fill 都是可以执行的，只是渲染方式变了，Fill 默认渲染的是黑色的。改变颜色的方式和上一点设置线的颜色一样，把 stroke 改成 fill 就好了。
+
+  - C 的渲染方式的方法
+    -  CGContextStrokePath(ctx);就是描边
+    - CGContextClosePath(ctx); 闭合路径，如果起始位置和结束位置不一致则会自动连接头尾
+    - 闭合路径之后调用 CGContextFillPath(ctx); 给闭合路径填充
+    - CGContextDrawpath(ctx, kCGPathFill); 根据参数进行渲染
+      - kCGPathFill 填充方式渲染
+      - kCGPathStroke 描边的方式渲染
+      - kCGPathFillStroke 即填充又描边
+      - kCGPathEOFill 奇偶填充规则
+      - kCGPathEOFillStroke 
+  - OC 方式方法
+    - [path stroke]; 描边
+    - [path fill]; 填充
+    - 上述两个方法都执行则为 即描边又填充 
+
+### drawrect
+
+要把绘图代码写在 drawrect 方法内的原因就是，绘图要先获取上下文，而只有在 drawrect 中才可以获取到上下文，在别的方法中是获取不到的。这个方法的参数 rect 其实就是当前 view 的 bounds。
+
+drawrect 是系统调用的，不能手动调用，当 view 第一次显示的时候就会调用；当这个 view 重绘的时候也是会调用的。
+
+重绘：可以理解为刷新一下画布，在想要它重绘的位置添加 [self setNeedsDisplay] 全部刷新，[self setNeedsDisplayInRect:(CGRect)] 局部刷新，这里的 self 就是那个需要重绘的对象
+
+### 填充规则
+
+#### 奇偶填充规则
+
+同一个点被重复填充的几次，奇数次则变色，偶数测则不填充。
+
+C 使用这个规则 CGContextDrawpath(ctx, kCGPathEOFill); 就好了
+
+OC使用就填充规则 path.usesEvenOddFillRule = YES; 就好了
+
+#### 非零环绕规则
+
+默认规则，图上取一点，对任意方向连一条射线，图形的线经过该线从左跨到右则+1 反之 -1 。直到最远处（图形已经不会再有焦点了）最终的和为 0 则不填充，不为 0 则填充（这里的左右是自己定的，也就是线的两边而已）
 
 ## iOS 生命周期
 
