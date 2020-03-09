@@ -1653,6 +1653,171 @@ OC使用就填充规则 path.usesEvenOddFillRule = YES; 就好了
 
 默认规则，图上取一点，对任意方向连一条射线，图形的线经过该线从左跨到右则+1 反之 -1 。直到最远处（图形已经不会再有焦点了）最终的和为 0 则不填充，不为 0 则填充（这里的左右是自己定的，也就是线的两边而已）
 
+### 矩阵操作
+
+其实就是平移、旋转、缩放的操作
+
+**缩放**
+
+- void CGContextScaleCTM(CGContextRef c, CGFloat sx, CGFloat sy)
+
+**旋转**
+
+- void CGContextRotateCTM(CGContextRef c, CGFloat angle)
+
+**平移**
+
+- void CGContextTranslateCTM(CGContextRef c, CGFloat tx, CGFloat ty)
+
+**注意 :** 此处是先把上下文旋转、缩放、平移了, 然后后面再绘制的所有图形就都是在旋转、缩放、平移之后的上下文中进行了。可以理解为先绘制好图形在进行操作，但是在代码中是先进行操作再绘图
+
+```objc
+- (void)drawRect:(CGRect)rect {
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 拿到上下文后就要进行矩阵操作，如果先绘制在进行矩阵操作是没有效果的
+    // 矩阵操作
+//    CGContextRotateCTM(ctx, M_PI/10);
+//    CGContextScaleCTM(ctx, 0.5, 0.5);
+    CGContextTranslateCTM(ctx, 50, 50);
+    
+    CGContextAddArc(ctx, 150, 150, 100, 0, 2 * M_PI, 0);
+    
+    CGContextMoveToPoint(ctx, 0, 0);
+    CGContextAddLineToPoint(ctx, 300, 300);
+    
+    CGContextSetLineWidth(ctx, 10);
+    CGContextStrokePath(ctx);
+}
+```
+
+### 内存管理
+
+因为每次 stroke 或者 fill 之后都只是路径填充到了目标上，如果用纯 C 的画 path（CGPath） 也还在，所以需要内存管理。可以使用 xcode 的 analysis 功能（command + shift + B）进行静态分析查看问题，通常开发中不用刻意的去用这个功能，上架前用一次，有问题改问题就好了。
+
+因此在绘图的最后要加上一句代码释放 path 的内存`  CGPathRelease(path); ` 或者`CFRelease(path);`
+
+### 绘制文字
+
+用绘制的方法在 view 中写文字
+
+- \- (void)drawAtPoint:(CGPoint)point withAttributes:(nullable NSDictionary<NSAttributedStringKey, id> *)attrs
+
+```objc
+- (void)drawRect:(CGRect)rect {
+NSString *str = @"Test";
+// 只画一行，即不会换行
+[str drawAtPoint:CGPointZero withAttributes:nil];
+// 绘制到指定的区域，允许换行
+[str drawInRect:CGRectMake(0, 0, 300, 300) withAttributes:nil];
+}
+```
+
+第二个参数是一个字典，字典的键值对可以在在 NSAttributedString.h 文件中查看。可以记住NSFontAttributeName这个属性按住 command 键点进去（通常如果要传一个字典且这个参数名字是 attributes 大部分情况下都是这些属性）
+
+### 绘制图片
+
+水印的本质就是先把一张图绘制好，再在这张图像上绘制好水印
+
+```objc
+- (void)drawRect:(CGRect)rect {
+    UIImage *img = [UIImage imageNamed:@"me"];
+    // 从一个点开始画，大小就是图片原本的大小
+    [img drawAtPoint:CGPointZero];
+    // 绘制到某个区域，并按照这个矩形区域拉伸
+    [img drawInRect:CGRectMake(0, 0, 300, 300)];
+    // 绘制到某个区域，并平铺到这个区域
+    [img drawAsPatternInRect:CGRectMake(0, 0, 300, 300)];
+}
+```
+
+**图片裁剪**
+
+void CGContextClip(CGContextRef c);
+
+```objc
+- (void)drawRect:(CGRect)rect {
+    UIImage *img = [UIImage imageNamed:@"me"];
+    // 获取上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 画出显示区域 可以理解为 fill 的区域就是显示的区域
+    CGContextAddArc(ctx, 150, 150, 150, 0, 2*M_PI, 1);
+    // 裁剪
+    CGContextClip(ctx);
+    // 图片显示到 view 上
+    [img drawInRect:rect];
+}
+```
+
+**图片类型的上下文**
+
+可以在 viewcontroller 中在一个空白的 imageview 中绘图。开启图片上下文后，输出对象就是一个 image 对象了。图片类型上下文可以在任意地方开启，开启后记得关闭就好了。UIGraphicsGetCurrentContext()；这个获取上下文要放在开启和关闭中间
+
+```objc
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    // 开启图片上下文
+    //UIGraphicsBeginImageContext(CGSizeMake(300, 300));
+    // 参数三 是否透明（NO 为透明） 参数四缩放比,如果穿 0 那么就是当前手机屏幕的缩放比（iPhone 的手机都是有缩放的）
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(300, 300), NO, 0);
+    // 获取当前上下文
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // 绘制路径
+    CGContextMoveToPoint(ctx, 50, 50);
+    CGContextAddLineToPoint(ctx, 100, 100);
+    // 渲染
+    CGContextStrokePath(ctx);
+    // 得到绘制好的一张图片
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    // 关闭图形上下文
+    UIGraphicsEndImageContext();
+    self.imageView.image = image;
+}
+```
+
+**把图片放入沙盒中**
+
+```objc
+// 先把图片转化为 NSData 再把 data 写入到沙盒总
+NSData *data = UIImagePNGRepresentation(img);
+NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+NSLog(@"%@",docPath);
+NSString *filePath = [docPath stringByAppendingPathComponent:@"test.png"];
+[data writeToFile:filePath atomically:YES];
+```
+
+**图片保存到系统默认的相册**
+
+```objc
+// 参数二目标控制器 参数三在磁控制器中实现保存完成后的方法(通常都传这个方法，然后给这个方法实现) 参数四：随意的值都行，这个值会在保存完成方法的contextInfo参数接收到
+UIImageWriteToSavedPhotosAlbum(img, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    NSLog(@"ok");
+}
+```
+
+在项目管理，中添加权限提示，只能在这里加，不知道为什么加载 info.plist中没反应。不添加的话程序会崩溃
+
+![](7.png)
+
+**屏幕截图**
+
+```objc
+UIGraphicsBeginImageContextWithOptions(self.view.bound, NO, 0);
+CGContextRef ctx = UIGraphicsGetCurrentContext();
+[self.view.layer renderIncontext:ctx];
+UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+UIGraphicsEndImageContext();
+// 用程序拿到这个截图后就看你怎么用了，通常是用来加个二维码做分享的app 或者商品信息的
+```
+
+### bitmap context
+
+UIGraphicsGetCurrentContext()；不开启图片上下文直接执行这句话得到的是 layer 类型的上下文。如果先执行开启图片上下文在执行这句话得到的就是图片上下文。
+
+一开始说过不能再任意地方直接执行UIGraphicsGetCurrentContext()；，但是我们可以向图片上下文那样自己开启上下文就可以在想要的地方开启上下文了。
+
+
+
 ## iOS 生命周期
 
 **iOS 13以下生命周期**

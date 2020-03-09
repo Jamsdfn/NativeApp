@@ -23,18 +23,30 @@
                                     <constraint firstAttribute="width" constant="300" id="t9q-mx-WWr"/>
                                 </constraints>
                             </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mH3-Ax-KWc">
+                                <rect key="frame" x="35.5" y="513.5" width="304" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="1ub-zT-wYH"/>
+                                </constraints>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="mH3-Ax-KWc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="9Ln-o5-8hc"/>
                             <constraint firstItem="Yvw-mB-x81" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="AYA-hV-sjG"/>
+                            <constraint firstItem="mH3-Ax-KWc" firstAttribute="top" secondItem="Yvw-mB-x81" secondAttribute="bottom" constant="30" id="WFs-aI-Ivo"/>
                             <constraint firstItem="Yvw-mB-x81" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vnv-1t-CDD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="canvas" destination="Yvw-mB-x81" id="kbF-Dt-wMC"/>
+                        <outlet property="slider" destination="mH3-Ax-KWc" id="Ceq-iT-ugG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="132" y="103.89805097451276"/>
+            <point key="canvasLocation" x="132" y="104"/>
         </scene>
     </scenes>
 </document>
