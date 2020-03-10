@@ -2281,14 +2281,28 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
     ```
     
     - UIPinchGestureRecognizer(捏合，用于缩放)
-  
-    - UIPanGestureRecognizer(拖拽)
-  
+    - 如果用这个方法进行缩放参考下面的旋转，每一次scale属性都要恢复为1
+    
+  - UIPanGestureRecognizer(拖拽)
+      - CGPoint p = [sender translationInview:sender.view]; 拿到移动的距离
+      - 如果用这个方法进行拖拽参考下面的旋转，每一次都要清零，清零方式`[sender setTranslation:CGPointZero inView:sender.view];`
     - UISwipeGestureRecognizer(轻扫)
-    
       - 默认轻扫手势是从左往右划，你面有个方向的属性，可以改变方向后继续添加（四次不同方向的添加轻扫手势添加后有才会四个方向都有用）
-    
+      - 也可以设置方向的时候用 | 分开把四个方向都写上去，这样就只要添加一次手势了
     - UIRotationGestureRecognizer(旋转)
+      - 有个sender 有rotation属性可以直接看转了多少度
+    
+    ```objc
+    UIRotationGestureRecognizer *rg = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [self.imgView addGestureRecognizer:rg];
+    
+    - (void)tap:(UIRotationGestureRecognizer *)sender{
+        // 新的0坐标就是因为这个方法就是基于上一次移动后的位置进行旋转的
+        CGAffineTransformRotate(self.imgView.transform, sender.rotation);
+            // 让每一次的旋转值都是一个新的0坐标，而不是在之前的值上增加
+        sender.rotation = 0;
+    }
+  ```
     
     - UILongPressGestureRecognizer(长按)
     
@@ -2302,7 +2316,7 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
               NSLog(@"ok");
           }
       }
-    ```
+      ```
     
       
   
@@ -2327,7 +2341,17 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
   };
   ```
   
+  **手势冲突**
   
+  默认手势是冲突的，不能一起用的，可以用手势的代理<UIGestureRecognizerDelegate>就可以同时使用不同的手势
+  
+  ```objc
+  // 记得手势的delegate属性要设置一下
+  // 实现这个方法，返回yes就可以了
+  - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+      return YES;
+  }
+  ```
 
 ### 加速器事件
 
@@ -2340,6 +2364,92 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
 ### 远程控制事件
 
 \- (void)remoteControlReceivedWithEvent:(UIEvent *)event;
+
+## CALayer
+
+在iOS中，你能看得见摸得着的东西基本上都是UIView，比如一个按钮、一个文本标签、一个文本输入框、一个图标等等，这些都是UIView
+
+其实UIView之所以能显示在屏幕上，完全是因为它内部的一个图层在创建UIView对象时，UIView内部会自动创建一个图层(即CALayer对象)，通过UIView的layer属性可以访问这个层
+
+@property(nonatomic,readonly,retain) CALayer *layer;
+
+当UIView需要显示到屏幕上时，会调用drawRect:方法进行绘图，并且会将所有内容绘制在自己的图层上，绘图完毕后，系统会将图层拷贝到屏幕上，于是就完成了UIView的显示。苹果对一些layer常用的属性都给UIView使用，但是还有很丰富的属性没有给UIView，我们要调用layer才能设置，比如：阴影、圆角、边框宽度和颜色.....
+
+换句话说，UIView本身不具备显示的功能，是它内部的层才有显示功能，可以这么说**UIView是用来监听和处理事件的，而layer是用来显示的**
+
+```objc
+// layer 内颜色相关的属性都是CGColorRef
+// layer 设置阴影，阴影的默认透明度是0（全透明）
+view.layer.shadowOpacity = 1; // 透明度设置回1
+view.layer.shadowColor = [UIColor whiteColor].CGColor;
+view.layer.shadowOffset = CGSizeZero;
+view.layer.shadowRadius = 20;// 阴影半径
+// 圆角设置
+view.layer.cornerRadius = 20;
+view.layer.masksToBounds = YES; // 裁剪超出部分，即剪出圆角
+// 默认情况下 view.layer.position 就是 view.center
+// view.layer.bounds == view.bounds 
+// 注意除了第一次设置用frame外修改都用bounds和position
+
+// 设置内容，可以是图片，但是如果是图片的话要求是CGImage，又要求是OC的id，因此要把C桥接为OC的id
+// 桥接语法：这个id是可以改成别的，OC类就行（这里因为要求传id，那就转为id）
+view.layer.contents = (__bridge id)([UIImage imageNamed:@"me"].CGImage);
+```
+
+**手动创建layer**
+
+```objc
+CALayer *layer = [CALayer new];
+layer.backgroundColor = [UIColor redColor].CGColor;
+layer.position = CGPointMake(200,200);
+layer.bounds = CGRectMake(0,0,100,100);
+// 记得要添加layer
+[self.view.layer addSublayer:layer];
+// 点哪里就去哪里，默认就有动画
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch *t = touches.anyObject;
+    CGPoint p = [t locationInView:t.view];
+    self.layer.position = p;
+}
+```
+
+layer是有隐式动画的，即默认就有动画（可以点进layer看看那些属性的注释，注释的最后会告诉你这个属性是不是可动画属性）。 可禁用，代码如下，但是禁用的情况很少
+
+```objc
+[CATransaction begin];
+[CATransaction setDisableActions:YES]; // 禁用隐式动画
+// 修改属性的地方放这里面就没有动画了
+[CATransaction commit];
+```
+
+控件的根layer是没有隐式动画的，根layer就是UIView自带的layer属性
+
+### Layer transform
+
+3D旋转
+
+```objc
+// 基于最开始位置旋转的旋转后再旋转是不动的,零点为图片中心，z轴是从屏幕射出
+self.layer.transform = CATransform3DMakeRotation(M_PI_4, 0, 1, 0);
+// 基于上一次的旋转的
+self.layer.transform = CATransform3DRotate(self.layer.transform, M_PI_4, 0, 1, 0);
+```
+
+缩放
+
+```objc
+self.layer.transform = CATransform3DMakeScale(2, 2, 2);
+self.layer.transform = CATransform3DScale(self.layer.transform,2, 2, 2);
+```
+
+平移
+
+```objc
+self.layer.transform = CATransform3DMakeTranslation(10, 10, 10);
+self.layer.transform = CATransform3DTranslate(self.layer.transform, 10, 10, 10);
+```
+
+
 
 ## 动画
 
@@ -2508,5 +2618,5 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), di
 
 
 
-
+**把C的东西强转成OC**：`view.layer.contents = (__bridge id)([UIImage imageNamed:@"me"].CGImage);`
 
