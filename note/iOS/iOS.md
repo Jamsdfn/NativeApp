@@ -1,4 +1,4 @@
-# iOS
+iOS
 
 什么是iOS这里就不介绍了，都要接触开发了，应该对系统的基本信息都挺清楚了。本篇笔记重点将记下iOS 开发过程中所涉及到的知识点。
 
@@ -1236,6 +1236,13 @@ app.applicationIconBadgeNumber = 10; // 有10条消息
 UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndicatorVisible = YES;
 ```
 
+- 获取 keywindow
+
+```objc
+[UIApplication sharedApplication].keyWindow; // 这个方法 iOS13后废除
+[UIApplication sharedApplication].windows[0];// iOS13 后获取 keywindow
+```
+
 ### 打开一些资源
 
 * 利用UIApplication打开某个资源：
@@ -2172,6 +2179,172 @@ NSSet *set = [[NSSet alloc] initWithObjects:[Contact class],[NSMutableArray clas
 self.contacts = [NSKeyedUnarchiver unarchivedObjectOfClasses:set fromData:data error:&err];
 ```
 
+## iOS 中的事件
+
+用户使用 app 的过程中会有各种各样的事件，iOS 中的事件主要分为三大类：触摸事件、加速器事件、远程控制事件
+
+在iOS中不是任何对象都能处理事件，只有继承了UIResponder的对象才能接收并处理事件。我们称之为**响应者对象**
+
+UIApplication、UIViewController、UIView都继承自UIResponder，因此它们都是响应者对象，都能够接收并处理事件。继承自 UIResponder 的对象都会有三大事件的所有方法。
+
+如果控件或其父控件透明度小于 0.01 或者 hidden 或者 userInteractionEnable 没有打开都是无法响应事件的。如果这些设置都设置好了还是不能响应事件，可以检查一下是否超出了父控件的游戏范围。
+
+### 触摸事件
+
+多点触控`self.view.multipleTouchEnabled = NO;`默认是关闭的，系要实现多点触摸的功能打开就好了。
+
+**UITouch *touche 触摸对象**
+
+- touche.tapCount  
+  - 快速点击的次数
+- touche.phase 
+  - 在触摸的那个阶段枚举（开始0、移动1、接触无移动 2、抬起3、打断4）
+- touche.window
+  -  触摸对象所在 view 的 window
+- \- (CGPoint)locationInView:(nullable UIView *)view; 
+  - 当前 touche 在参数 view 中的哪个位置
+- \- (CGPoint)previousLocationInView:(nullable UIView *)view;  
+  - 上一个触摸点在 view 的位置（移动的时候移动前的位置）
+
+**手指按下事件**
+
+\- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+
+这个方法可以调用父类的触摸事件 [super touchesBegan:touches withEvent:event]; 即把触摸事件冒泡到父控件触摸事件
+
+**手指移动事件**
+
+\- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+
+**手指抬起事件**
+
+\- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+
+**意外中断**（如忽然接入电话）
+
+\- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+
+**找到被触摸的控件**
+
+\- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event; 
+
+返回值是下一个要找的控件[super hitTest:point withEvent:event];，直到找到最合适响应事件的对象。
+
+这个方法可以在系统查找控件的过程中人为的截断响应的对象（打麻将截胡的感觉）。即本来不是你响应的，而你又比要响应的对象先被查询到，这时你 hitTest 方法返回值是 self，那就直接变成你响应了
+
+**事件的产生和传递**：
+
+- 发生触摸事件后，系统会将该事件加入到一个由UIApplication管理的事件队列中
+
+- UIApplication会从事件队列中取出最前面的事件，并将事件分发下去以便处理，通常，先发送事件给应用程序的主窗口（keyWindow）
+
+-  主窗口会在视图层次结构中找到一个最合适的视图来处理触摸事件，这也是整个事件处理过程的第一步
+
+- 主窗口会调用hitTest:withEvent:方法在视图继承树中找到一个最合适的子视图来处理触摸事件，该子视图即为hit-test视图
+- 找到合适的视图控件后，就会调用视图控件的touches方法来作具体的事件处理
+
+系统先从最低不的 UIApplication 开始找，一层一层往上找（如果是同一层则从后往前找），找到后如果控件调用了父类的触摸事件再自上而下的往下执行。一直到无法响应的父级为止。这些自上而下的响应者就是响应者链条，第一个响应的对象，就叫第一响应者
+
+#### 手势识别
+
+- UIGestureRecognizer
+
+  - 为了完成手势识别，必须借助于手势识别器----UIGestureRecognizer
+  
+  - 利用UIGestureRecognizer，能轻松识别用户在某个view上面做的一些常见手势
+  
+  - UIGestureRecognizer是一个抽象类，定义了所有手势的基本行为，使用它的子类才能处理具体的手势
+    - UITapGestureRecognizer(敲击)
+    
+    ```objc
+    //每一个手势识别器的用法都差不多，比如UITapGestureRecognizer的使用步骤如下
+  //创建手势识别器对象
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
+    
+    // 创建时指定监听对象, 如果这样创建，下面的监听可以省掉
+    //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    
+    //设置手势识别器对象的具体属性(可以点进定义去看)
+    // 连续敲击2次
+    tap.numberOfTapsRequired = 2;
+    // 需要2根手指一起敲击
+    tap.numberOfTouchesRequired = 2;
+    
+    //添加手势识别器到对应的view上
+    [self.view addGestureRecognizer:tap];
+    
+    //监听手势的触发
+    [tap addTarget:self action:@selector(tap:)];
+    
+    // 步骤都是一样的这里就不全部演示了，具体属性进定义看，都有英文注释的
+    - (void)tap:(UITapGestureRecognizer *)sender{NSLog(@"ok");}
+    ```
+    
+    - UIPinchGestureRecognizer(捏合，用于缩放)
+  
+    - UIPanGestureRecognizer(拖拽)
+  
+    - UISwipeGestureRecognizer(轻扫)
+    
+      - 默认轻扫手势是从左往右划，你面有个方向的属性，可以改变方向后继续添加（四次不同方向的添加轻扫手势添加后有才会四个方向都有用）
+    
+    - UIRotationGestureRecognizer(旋转)
+    
+    - UILongPressGestureRecognizer(长按)
+    
+      - 默认长按后移动会重复调用监听的方法，可以在监听方法中判断手势的状态
+    
+      ```objc
+      - (void)longPress:(UILongPressGestureRecognizer *)sender{
+          // 通过手势识别器状态防止重复调用
+          // 这个手势识别器状态是每一个手势事件都有的
+          if (sender.state == UIGestureRecognizerStateBegan){
+              NSLog(@"ok");
+          }
+      }
+    ```
+    
+      
+  
+  **手势识别器的状态**
+  
+  ```objc
+  typedef NS_ENUM(NSInteger, UIGestureRecognizerState) {
+      // 没有触摸事件发生，所有手势识别的默认状态
+      UIGestureRecognizerStatePossible,
+      // 一个手势已经开始但尚未改变或者完成时
+      UIGestureRecognizerStateBegan,
+      // 手势状态改变
+      UIGestureRecognizerStateChanged,
+      // 手势完成
+      UIGestureRecognizerStateEnded,
+      // 手势取消，恢复至Possible状态
+      UIGestureRecognizerStateCancelled, 
+      // 手势失败，恢复至Possible状态
+      UIGestureRecognizerStateFailed,
+      // 识别到手势识别
+      UIGestureRecognizerStateRecognized = UIGestureRecognizerStateEnded
+  };
+  ```
+  
+  
+
+### 加速器事件
+
+\- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event;
+
+\- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event;
+
+\- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event;
+
+### 远程控制事件
+
+\- (void)remoteControlReceivedWithEvent:(UIEvent *)event;
+
+## 动画
+
+
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
@@ -2256,6 +2429,10 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 }
 ```
 
+**layoutSubviews**: 系统创建控件的时候
+
+**didMoveToSuperview**：控件创建完并加载完的时候
+
 
 
 **控件设置圆角**：先设置圆角半径，在裁剪圆角`lblMsg.layer.cornerRadius = 20;lblMsg.layer.masksToBounds = YES;`
@@ -2300,6 +2477,33 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 // OC相关的内容
 
 #endif
+```
+
+
+
+**设置背景图片**：
+
+- 如果背景图用平铺的方式`self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Home_refresh_bg"]];`
+
+
+
+**判断point是否在Rect中**：`CGRectContainsPoint(CGRect rect, CGPoint point)` 返回值为BOOL
+
+```objc
+if (CGRectContainsPoint(btn.frame, point)){
+    btn.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"gesture_node_highlighted"]];
+}
+```
+
+
+
+**延时执行代码**：`void dispatch_after(dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t block);`
+
+```objc
+// 参数一延时时间（s）
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self clear];
+    });
 ```
 
 
