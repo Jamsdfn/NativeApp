@@ -2302,6 +2302,7 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
             // 让每一次的旋转值都是一个新的0坐标，而不是在之前的值上增加
         sender.rotation = 0;
     }
+    ```
   ```
     
     - UILongPressGestureRecognizer(长按)
@@ -2316,9 +2317,9 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
               NSLog(@"ok");
           }
       }
-      ```
-    
-      
+  ```
+  
+  ​    
   
   **手势识别器的状态**
   
@@ -2449,11 +2450,159 @@ self.layer.transform = CATransform3DMakeTranslation(10, 10, 10);
 self.layer.transform = CATransform3DTranslate(self.layer.transform, 10, 10, 10);
 ```
 
+**CALayer有2个非常重要的属性：position和anchorPoint**
 
+- @property CGPoint position;
+  - 用来设置CALayer在父层中的位置
+  - 以父层的左上角为原点(0, 0)
 
-## 动画
+- @property CGPoint anchorPoint;
+  - 称为“定位点”、“锚点”，决定着CALayer的position属性所指的是哪个点
+  - 以自己的左上角为原点(0, 0)
+  - 它的x、y取值范围都是0~1，默认值为（0.5, 0.5）
+  - 可以理解为改变center的位置
 
+## 核心动画
 
+Core Animation，中文翻译为核心动画，它是一组非常强大的动画处理API，使用它能做出非常炫丽的动画效果，而且往往是事半功倍。也就是说，使用少量的代码就可以实现非常强大的功能。Core Animation可以用在Mac OS X和iOS平台。Core Animation的动画执行过程都是在后台操作的，不会阻塞主线程。
+
+要注意的是，Core Animation是直接作用在CALayer上的，并非UIView。
+
+核心动画在执行完动画后默认是回到原来位置的，我们可以设置两个属性让其不回到原位`animation.fillMode = kCAFillModeForwards; animation.removedOnCompletion = NO;`
+
+### 基本动画
+
+步骤：1. 创建动画对象。2. 怎么做动画。3. 添加动画（对谁做动画）
+
+```objc
+CABasicAnimation *animation = [CABasicAnimation new];
+animation.keyPath = @"position.x";// 用这个属性取要执行动画的layer的属性
+// 从一个值到另一个值
+//animation.fromValue = @10;
+//animation.toValue = @300;
+
+// 每次从原本值得基础上累加一个值
+animation.byValue = @10;
+
+// 不让动画回到原来位置
+animation.fillMode = kCAFillModeForwards;
+animation.removedOnCompletion = NO;
+
+[self.layer addAnimation:animation forKey:nil];
+```
+
+**关键帧动画**
+
+就是一个属性可以改变多次
+
+```objc
+CAKeyframeAnimation *animation = [CAKeyframeAnimation new];
+    animation.keyPath = @"position";
+
+    // 按照几个属性关键的点做动画
+    //animation.values = @[
+    //    [NSValue valueWithCGPoint:CGPointMake(100, 100)],
+    //    [NSValue valueWithCGPoint:CGPointMake(100, 150)],
+    //    [NSValue valueWithCGPoint:CGPointMake(150, 100)],
+    //    [NSValue valueWithCGPoint:CGPointMake(150, 150)]
+    //];
+	
+	// 按照路径做动画
+        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(150, 150) radius:100 startAngle:0 endAngle:2*M_PI clockwise:YES];
+    animation.path = path.CGPath;
+	
+    animation.duration = 1;// 持续时间
+	animation.repeatCount = INT_MAX;// 重复次数
+    // 不回来原来位置
+    animation.fillMode = kCAFillModeForwards;
+    animation.removedOnCompletion = NO;
+    [self.layer addAnimation:animation forKey:nil];
+```
+
+### 组动画
+
+同时指向多个不同的动画
+
+```objc
+// 自传加公转效果
+CAAnimationGroup *group = [CAAnimationGroup new];
+    // 简单动画
+CABasicAnimation *animation = [CABasicAnimation new];
+animation.keyPath = @"transform.rotation";
+animation.byValue = @(2*M_PI*5);
+// 关键帧动画
+CAKeyframeAnimation *animation1 = [CAKeyframeAnimation new];
+animation1.keyPath = @"position";
+UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(150, 150) radius:100 startAngle:0 endAngle:2*M_PI clockwise:YES];
+animation1.path = path.CGPath;
+group.animations = @[animation, animation1];
+group.duration = 1;
+group.repeatCount = INT_MAX;
+[self.layer addAnimation:group forKey:nil];
+```
+
+### 转成动画
+
+```objc
+// 3d 切换图片效果
+// 创建转场动画
+CATransition *animation = [CATransition new];
+// 设置你要做怎样的转场动画
+animation.type = @"cube";
+
+if(sender.direction == UISwipeGestureRecognizerDirectionRight) {
+    if (self.imageName == 5) {
+        self.imageName = 0;
+    }
+    self.imageName++;
+    // 设置转场动画的方向
+    animation.subtype = kCATransitionFromLeft;
+} else {
+    if (self.imageName == 1){
+        self.imageName = 6;
+    }
+    self.imageName--;
+    // 设置转场动画的方向
+    animation.subtype = kCATransitionFromRight;
+}
+self.imgView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%ld", self.imageName]];
+// 添加动画到layer
+[self.imgView.layer addAnimation:animation forKey:nil];
+```
+
+转场动画的type的值就是系统给我们提供的转场动画的样式
+
+ fade   //交叉淡化过渡(不支持过渡方向)宏： kCATransitionFade
+ push   //新视图把旧视图推出去 宏： kCATransitionPush
+ moveIn  //新视图移到旧视图上面 宏：  kCATransitionMoveIn
+ reveal  //将旧视图移开,显示下面的新视图 宏： kCATransitionReveal
+ cube   //立方体翻滚效果
+ oglFlip //上下左右翻转效果
+ suckEffect  //收缩效果，如一块布被抽走(不支持过渡方向)
+ rippleEffect //滴水（波纹）效果(不支持过渡方向)
+ pageCurl   //向上翻页效果
+ pageUnCurl  //向下翻页效果
+ cameraIrisHollowOpen //相机镜头打开效果(不支持过渡方向)
+ cameraIrisHollowClose //相机镜头关上效果(不支持过渡方向)
+
+### CADisplayLink
+
+CADisplayLink是一种以屏幕刷新频率触发的时钟机制，每秒钟执行大约60次左右
+
+CADisplayLink是一个计时器，可以使绘图代码与视图的刷新频率保持同步，而NSTimer无法确保计时器实际被触发的准确时间
+
+使用方法：
+
+定义CADisplayLink并制定触发调用方法
+
+将显示链接添加到主运行循环队列
+
+```objc
+// 定义
+CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeChange)];
+// 加入到主循环
+[link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+```
 
 ## iOS 小技巧
 
