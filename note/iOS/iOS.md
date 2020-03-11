@@ -1767,6 +1767,10 @@ void CGContextClip(CGContextRef c);
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(300, 300), NO, 0);
     // 获取当前上下文
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    // 截图,这个方法可以把当前view的layer直接绘制到上下文中
+    // [self.view.layer renderInContext:ctx];
+    
     // 绘制路径
     CGContextMoveToPoint(ctx, 50, 50);
     CGContextAddLineToPoint(ctx, 100, 100);
