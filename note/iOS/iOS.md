@@ -1060,7 +1060,7 @@ NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 [center postNotificationName:@"notification1" object:sender userInfo@{@"title":@"hello world"}];
 ```
 
-### 原生通知事件
+**原生通知事件**
 
 键盘状态改变的时候,系统会发出一些特定的通知
 
@@ -1330,9 +1330,6 @@ UIApplication *app = [UIApplication sharedApplication];
 - self.navigationItem.leftBarButtonItems = @[] 导航条左边放一组barbutton（同理右边）
 - self.navigaitonItem.backBarButtonItem=（UIBarButtonItem *） 设置返回按钮（要在父控制器中设置，如果已经设置的leftBarButtonItem就会覆盖掉这个backItem）
 
-**view生命周期的方法**
-
-![](./5.png)
 
 #### Segue
 
@@ -1827,9 +1824,15 @@ UIGraphicsGetCurrentContext()；不开启图片上下文直接执行这句话得
 
 一开始说过不能再任意地方直接执行UIGraphicsGetCurrentContext()；，但是我们可以向图片上下文那样自己开启上下文就可以在想要的地方开启上下文了。
 
+## 控制器生命周期的方法
 
+![](./5.png)
 
-## iOS 生命周期
+如果在的loadVIew方法中对view重新创建，loadView的优先级最高，不论你是用什么方式创建的view，只要重写了loadVIew方法，控制器view的创建就执行loadView里的代码，即一旦重写，即使loadVIew方法一句话也没有，控制器也会根据没有代码的loadVIew创建view，即控制器的view就为nil。
+
+注意一个问题，因为控制器是懒加载view的，所以如果loadview中没有给self.view创建view，就在viewDidload方法中创建子控件，并添加给self.view，就会形成一个死锁，然后程序崩溃。问题的原因就是 self.view 懒加载，懒加载的时候又不创建，又进入viewDidLoad，didLoad发现self.view=nil又跑去loadView中创建。
+
+## app 生命周期
 
 **iOS 13以下生命周期**
 
@@ -1966,11 +1969,13 @@ application: didDiscardSceneSessions:
 //SceneDelegate.m
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  // 主要是这一句代码 和 以前的代码不一样，是多出来的一句
+  // 主要是这一句代码 和 以前的代码不一样，是多出来的一句，别的都一样
     self.window.windowScene = (UIWindowScene*)scene;
   // 这个是个ViewController是一个继承自UIViewController的类
-    UINavigationController *rootNavgationController = [[UINavigationController alloc] initWithRootViewController:[ViewController new]];
-    self.window.rootViewController = rootNavgationController;
+    ViewController *vc = [[ViewController alloc] init];
+    // 默认是没有颜色的，自己设置一下
+    vc.view.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = vc;
   // 代码创建的window默认是隐藏的
     [self.window makeKeyAndVisible];
 }
@@ -2249,7 +2254,7 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
 
 系统先从最低不的 UIApplication 开始找，一层一层往上找（如果是同一层则从后往前找），找到后如果控件调用了父类的触摸事件再自上而下的往下执行。一直到无法响应的父级为止。这些自上而下的响应者就是响应者链条，第一个响应的对象，就叫第一响应者
 
-#### 手势识别
+### 手势识别
 
 - UIGestureRecognizer
 
@@ -2288,14 +2293,15 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
     - 如果用这个方法进行缩放参考下面的旋转，每一次scale属性都要恢复为1
     
   - UIPanGestureRecognizer(拖拽)
-      - CGPoint p = [sender translationInview:sender.view]; 拿到移动的距离
+      - CGPoint p = [sender translationInview:sender.view]; 拿到移动的距离(相对于原来的位置偏移了多少)
       - 如果用这个方法进行拖拽参考下面的旋转，每一次都要清零，清零方式`[sender setTranslation:CGPointZero inView:sender.view];`
-    - UISwipeGestureRecognizer(轻扫)
+      - CGPoint p = [sender locationInView:self.view];拿到拖拽点在父容器的相对位置(手指的位置)
+  - UISwipeGestureRecognizer(轻扫)
       - 默认轻扫手势是从左往右划，你面有个方向的属性，可以改变方向后继续添加（四次不同方向的添加轻扫手势添加后有才会四个方向都有用）
       - 也可以设置方向的时候用 | 分开把四个方向都写上去，这样就只要添加一次手势了
-    - UIRotationGestureRecognizer(旋转)
+  - UIRotationGestureRecognizer(旋转)
       - 有个sender 有rotation属性可以直接看转了多少度
-    
+      
     ```objc
     UIRotationGestureRecognizer *rg = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self.imgView addGestureRecognizer:rg];
@@ -2307,26 +2313,25 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
         sender.rotation = 0;
     }
     ```
-  ```
-    
-    - UILongPressGestureRecognizer(长按)
-    
-      - 默认长按后移动会重复调用监听的方法，可以在监听方法中判断手势的状态
-    
-      ```objc
-      - (void)longPress:(UILongPressGestureRecognizer *)sender{
-          // 通过手势识别器状态防止重复调用
-          // 这个手势识别器状态是每一个手势事件都有的
-          if (sender.state == UIGestureRecognizerStateBegan){
-              NSLog(@"ok");
-          }
-      }
-  ```
   
-  ​    
-  
+  - UILongPressGestureRecognizer(长按)
+    
+    - 默认长按后移动会重复调用监听的方法，可以在监听方法中判断手势的状态
+
+
+```objc
+- (void)longPress:(UILongPressGestureRecognizer *)sender{
+    // 通过手势识别器状态防止重复调用
+    // 这个手势识别器状态是每一个手势事件都有的
+    if (sender.state == UIGestureRecognizerStateBegan){
+        NSLog(@"ok");
+    }
+}
+```
+
+
   **手势识别器的状态**
-  
+
   ```objc
   typedef NS_ENUM(NSInteger, UIGestureRecognizerState) {
       // 没有触摸事件发生，所有手势识别的默认状态
@@ -2345,11 +2350,11 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
       UIGestureRecognizerStateRecognized = UIGestureRecognizerStateEnded
   };
   ```
-  
+
   **手势冲突**
-  
+
   默认手势是冲突的，不能一起用的，可以用手势的代理<UIGestureRecognizerDelegate>就可以同时使用不同的手势
-  
+
   ```objc
   // 记得手势的delegate属性要设置一下
   // 实现这个方法，返回yes就可以了
@@ -2606,6 +2611,305 @@ CADisplayLink是一个计时器，可以使绘图代码与视图的刷新频率�
 CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeChange)];
 // 加入到主循环
 [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+```
+
+## UIDynamic
+
+UIDynamic—UIKit动力学，是iOS的一个动力仿真的一个类
+
+UIKit动力学最大的特点是将现实世界动力驱动的动画引入了UIKit，比如重力，铰链连接，碰撞，悬挂等效果，即将2D物理引擎引入了UIKit
+
+注意：UIKit动力学的引入，并不是为了替代CA或者UIView动画，在绝大多数情况下CA或者UIView动画仍然是最优方案，只有在需要引入逼真的交互设计的时候，才需要使用UIKit动力学它是作为现有交互设计和实现的一种补充
+
+其他2D仿真引擎：
+
+- BOX2D：C语言框架，免费
+
+- Chipmunk：C语言框架免费，其他版本收费
+
+**UIDynamic中的三个重要概念**
+
+- Dynamic Animator：动画者，为动力学元素提供物理学相关的能力及动画，同时为这些元素提供相关的上下文，是动力学元素与底层iOS物理引擎之间的中介，将Behavior对象添加到Animator即可实现动力仿真
+- Dynamic Animator Item：动力学元素，是任何遵守了UIDynamicItem协议的对象，从iOS 7.0开始，UIView和UICollectionViewLayoutAttributes默认实现该协议。如果自定义的对象实现了该协议，即可通过Dynamic Animator实现物理仿真
+- UIDynamicBehavior：仿真行为，是动力学行为的父类，基本的动力学行为类UIGravityBehavior（重力）、UICollisionBehavior（碰撞）、UIAttachmentBehavior（附着）、UISnapBehavior（甩）、UIPushBehavior（推）以及UIDynamicItemBehavior（自身属性：密度、弹性等，动力学电磁学的单位都有）均继承自该父类
+- 每个行为都有的action 属性：类型是block，用于监听其下落，下落过程中系统会实时的触发这个block
+
+### 重力
+
+动画者对象应该和view的声明周期一样，所以在类属性中要添加一个动画者对象属性，用强指针。如果这个动画者对象是局部变量，超出了作用于就不会有动画执行了
+
+- @property (readwrite, nonatomic) CGVector gravityDirection;
+  - 重力的方向（类型是CGViector，向量）坐标轴就是系统默认的坐标轴，三角形法则那些都是准守的
+
+- @property (readwrite, nonatomic) CGFloat angle;
+  - 重力方向的另一种设置方式（角度）如果两个改变方向的方法同时设置，以最后一个为准
+
+- @property (readwrite, nonatomic) CGFloat magnitude;
+  - 就是重力学的 g(重力加速度)，g 越大，同等时间下落的速度就越快（v=gt）
+
+```objc
+// 根据一个范围 创建一个动画者对象
+self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+
+// 根据某一个动力学元素，创建动力学行为， 重力方向默认朝下
+UIGravityBehavior *g = [[UIGravityBehavior alloc] initWithItems:@[self.redView]];
+
+// 力的方向，向量，用向量的模的大小会影响力的大小(模就是速度，单位矢量的方向就是方向)
+// 这个力的大小如果写在magnitude下面的话就以向量的膜为标准，反之则以magnitude为标准
+g.gravityDirection = CGVectorMake(1, 1);
+
+// 行为添加到动画者中
+[self.animator addBehavior:g];
+```
+
+### 碰撞
+
+注意：碰撞，顾名思义要两个物体才能发生碰撞，因此初始化的时候起码要传2个参数，或者设置边界，dynamic只能做方块的碰撞，不能做圆形的碰撞
+
+- @property (nonatomic, readonly, copy) NSArray<id <UIDynamicItem>> *items;
+- 设置碰撞物体，不设置的view，如果遇到设置了碰撞的view会穿过
+- @property (nonatomic, readwrite) UICollisionBehaviorMode collisionMode;
+  - 设置碰撞的模式，是一个枚举，这个优先级是最高的，即使设置了边界，但是模式是item也会超出边界。但是如果模式是边界，如果没事设置边界就超出边界
+    - UICollisionBehaviorModeItems 仅仅是item之间发生碰撞
+    - UICollisionBehaviorModeBoundaries 仅仅和边界发生碰撞
+    - UICollisionBehaviorModeEverything  默认效果
+- @property (nonatomic, readwrite) BOOL translatesReferenceBoundsIntoBoundary;
+  - 是否让父view称为边界，可以理解为父级view是一个笼子，你们的view出不去
+  - 也可以自己创建边界
+- \- (void)addBoundaryWithIdentifier:(id <NSCopying>)identifier forPath:(UIBezierPath *)bezierPath;
+  
+  - 根据路径创建边界
+- \- (void)addBoundaryWithIdentifier:(id <NSCopying>)identifier fromPoint:(CGPoint)p1 toPoint:(CGPoint)p2;
+  
+  - 根据两点创建一条直线边界
+- \- (void)removeAllBoundaries; 删除所有的边界
+- @property (nullable, nonatomic, readonly, copy) NSArray<id <NSCopying>> *boundaryIdentifiers;
+
+  - 存放边界标识数组的
+- @property (nullable, nonatomic, weak, readwrite) id <UICollisionBehaviorDelegate> collisionDelegate;
+  - 代理对象
+  - 代理的方法
+  - \- (void)collisionBehavior:(UICollisionBehavior *)behavior beganContactForItem:(id <UIDynamicItem>)item1 withItem:(id <UIDynamicItem>)item2 atPoint:(CGPoint)p;
+    - item之间开始发生碰撞了
+  - \- (void)collisionBehavior:(UICollisionBehavior *)behavior endedContactForItem:(id <UIDynamicItem>)item1 withItem:(id <UIDynamicItem>)item2;*
+    - item之间碰撞结束了
+  - \- (void)collisionBehavior:(UICollisionBehavior*)behavior beganContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(nullable id <NSCopying>)identifier atPoint:(CGPoint)p;
+    - item与边界发生碰撞了(父类view的边界id为nil)
+  - \- (void)collisionBehavior:(UICollisionBehavior*)behavior endedContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(nullable id <NSCopying>)identifier;
+    - item与边界碰撞结束了
+
+```objc
+// 根据一个范围 创建一个动画者对象
+self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+
+// 根据某一个动力学元素，创建动力学行为
+UIGravityBehavior *gravity = [[UIGravityBehavior alloc] initWithItems:@[self.redView]];
+// 行为添加到动画者中
+[self.animator addBehavior:gravity];
+
+// 添加碰撞行为
+UICollisionBehavior *collision = [[UICollisionBehavior alloc] initWithItems:@[self.redView, self.blueView]];
+// 设置边界，可以理解为父级view是一个笼子，你们的view出不去
+collision.translatesReferenceBoundsIntoBoundary = YES;
+
+// 此外再一条隐藏的创建边界，这个identifier只是个标识，用于区分不同的边界
+[collision addBoundaryWithIdentifier:@"key" fromPoint:CGPointMake(0, 200) toPoint:CGPointMake(200, 250)];
+
+collision.action = ^{
+    NSLog(@"%@", NSStringFromCGRect(self.redView.frame));
+};
+collision.collisionDelegate = self;
+// 为了防止蓝view被撞飞，给他加一个边界（当然也可以用UIDynamicItemBehavior给蓝view固定死）
+[collision addBoundaryWithIdentifier:@"collision" forPath:[UIBezierPath bezierPathWithRect:self.blueView.frame]];
+
+// 行为添加到动画者中
+[self.animator addBehavior:collision];
+
+[self.animator addBehavior:item];
+
+// 代理方法的实现，碰到边界key或者系统边界就变色
+- (void)collisionBehavior:(UICollisionBehavior*)behavior beganContactForItem:(id <UIDynamicItem>)item withBoundaryIdentifier:(nullable id <NSCopying>)identifier atPoint:(CGPoint)p{
+    NSString *str = (NSString*) identifier;
+    if ([str isEqualToString:@"key"]){
+        self.redView.backgroundColor = [UIColor yellowColor];
+    } else {
+        self.redView.backgroundColor = [UIColor greenColor];
+    }
+}
+```
+
+### 甩
+
+就是有个移动的时候甩出目标点又回来的效果
+
+```objc
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch *t = touches.anyObject;
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:self.redView snapToPoint:[t locationInView:t.view]];
+    snap.damping = 0;// 0甩开的幅度最大,1最小 [0,1]
+    [self.animator addBehavior:snap];
+}
+```
+
+### 附着
+
+附着分为两大类：刚性附着、弹性附着。可以理解为，刚性附着是用一个两头都有铰链（都可活动）的棒子推或者拉view，而弹性附着就是用橡皮筋拉的感觉
+
+```objc
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    UITouch *t = touches.anyObject;
+    CGPoint p = [t locationInView:t.view];
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    // 默认创建的是刚性附着
+    UIAttachmentBehavior *attach = [[UIAttachmentBehavior alloc] initWithItem:self.redView attachedToAnchor:p];
+    // 默认长度就是根据attachedToAnchor 和 Item来确定的，设置就是固定死了棒子的长度
+    // attach.length = 100;
+    // --------如果想弹性附着加上这两个属性就好了------------
+    attach.damping = 0.5;
+    // 这个频率不能太大也不能太小，不然都没有弹性效果
+    attach.frequency = 0.6;
+    // -------------------------------------------------
+    self.attach = attach;
+    [self.animator addBehavior:attach];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    UITouch *t = touches.anyObject;
+    CGPoint p = [t locationInView:t.view];
+    self.attach.anchorPoint = p;// 设置新的位置，让view跟着移动
+}
+```
+
+### 推行为
+
+顾名思义，推view，给view一个作用力。可以给view一个恒力，或者给他一个瞬时的力（冲量）
+
+```objc
+self.animator = [[UIDynamicAnimator alloc] init];
+// 创建时候的第二个参数 mode 设置为UIPushBehaviorModeInstantaneous就好了
+UIPushBehavior *push = [[UIPushBehavior alloc] initWithItems:@[self.redView] mode:UIPushBehaviorModeContinuous];
+// 设置，力默认是0
+push.magnitude = 10;
+// 力的方向，向量，用向量的模的大小会影响力的大小(模就是速度，单位矢量的方向就是方向)
+// 这个力的大小如果写在magnitude下面的话就以向量的膜为标准，反之则以magnitude为标准
+push.pushDirection = CGVectorMake(0, 1);
+// 力的方向，角度
+push.angle = M_PI/2;
+
+[self.animator addBehavior:push];
+    
+```
+
+### item的属性
+
+自身属性：密度、弹性等，动力学电磁学的都有
+
+```objc
+UIDynamicItemBehavior *item = [[UIDynamicItemBehavior alloc] initWithItems:@[self.redView]];
+// 设置属性
+item.anchored = YES;// 固定死一个view
+[self.animator addBehavior:item];
+```
+
+###### **属性**
+
+- **弹性系数**
+   用于碰撞行为的动态元素的弹性量。
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat elasticity;
+```
+
+默认值为`0.0`，有效范围从`0.0(没有碰撞)`到`1.0(不是完全碰撞，只是比较大而已)`。
+
+- **摩擦系数**
+   用于两个发生摩擦的动态元素。
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat friction;
+```
+
+默认值`0.0(没有摩擦)`，当值为`1.0`时，强烈摩擦。如果设置更高的摩擦，可以使用更高的数值。
+
+- **相对质量密度**
+   用于动态元素相对密度。其连同动态元素大小，决定动态元素的有效质量。其参与的动力学行为包括摩擦、碰撞、推动等...
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat density;
+```
+
+默认值为`1.0`。
+
+> 假设你有两个具有相同密度但大小不同的动态元素：`元素一`尺寸为`100x100像素点`，`元素二`尺寸为`100x200像素点`。
+>  这个例子中，`元素二`的有效质量是`元素一`的两倍。
+>  在一个弹性碰撞中，这些元素根据它们的相对质量表现出自然的动量守恒。`元素一`密度为`1.0`，当施加一个力(通过推动行为)`1.0`级时，加速度为`100点/s²`。
+
+- **线速度阻尼**
+   用于动态元素所受线速度阻尼大小。
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat resistance;
+```
+
+默认值是`0.0`。有效范围从`0.0(没有速度阻尼)`到`CGFLOAT_MAX(最大速度阻尼)`。当设置为`1.0`，动态元素会立马停止就像没有力量作用于它一样。
+
+- **角速度阻尼**
+   用于动态元素所受角速度阻尼大小。
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat angularResistance;
+```
+
+有效范围从`0.0`到`CGFLOAT_MAX`，值越大，角速度阻尼越大，旋转减速越快，到停止。
+
+- **电荷**
+   好吧，物理太差，不懂，请高手指教，只能官翻了。
+
+```objectivec
+@property (readwrite, nonatomic) CGFloat charge NS_AVAILABLE_IOS(9_0);
+```
+
+电荷数确定动态元素与电场和磁场相互作用的程度。这个属性值没有单位，电磁场强度由你调控的适当的值来决定。默认值`0.0`。
+
+- **是否固定**
+   用于指定动态元素是否固定在当前位置。
+
+```objectivec
+@property (nonatomic, getter = isAnchored) BOOL anchored NS_AVAILABLE_IOS(9_0);
+```
+
+当一个动态元素被设置为固定后，该元素参与碰撞，但不受碰撞影响，仿佛成为一个碰撞边界。默认值为`NO`。
+
+###### **方法**
+
+- 添加一个动态元素，并设置它的角速度
+
+```objectivec
+-(void)addAngularVelocity:(CGFloat)velocity forItem:(id<UIDynamicItem>)item;
+```
+
+默认值为`0.0`，单位`弧度/秒`。设置一个负值，减少一定角速度。
+
+- 添加一个动态元素，并设置它的线速度
+
+```objectivec
+-(void)addLinearVelocity:(CGPoint)velocity forItem:(id<UIDynamicItem>)item;
+```
+
+默认值为`0.0`，单位`点/秒`。设置一个负值，减少一定线速度。
+
+- 获得动态元素的角速度
+
+```objectivec
+-(CGFloat)angularVelocityForItem:(id<UIDynamicItem>)item;
+```
+
+- 获得动态元素的线速度
+
+```objectivec
+-(CGPoint)linearVelocityForItem:(id<UIDynamicItem>)item;
 ```
 
 ## iOS 小技巧
