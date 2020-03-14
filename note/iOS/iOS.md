@@ -2802,7 +2802,7 @@ push.angle = M_PI/2;
     
 ```
 
-### item的属性
+### item
 
 自身属性：密度、弹性等，动力学电磁学的都有
 
@@ -2813,7 +2813,7 @@ item.anchored = YES;// 固定死一个view
 [self.animator addBehavior:item];
 ```
 
-###### **属性**
+#### **属性**
 
 - **弹性系数**
    用于碰撞行为的动态元素的弹性量。
@@ -2882,7 +2882,7 @@ item.anchored = YES;// 固定死一个view
 
 当一个动态元素被设置为固定后，该元素参与碰撞，但不受碰撞影响，仿佛成为一个碰撞边界。默认值为`NO`。
 
-###### **方法**
+#### **方法**
 
 - 添加一个动态元素，并设置它的角速度
 
@@ -2996,7 +2996,9 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 }
 ```
 
-**layoutSubviews**: 系统创建控件的时候
+**layoutSubviews**: 系统创建控件的时候，xib的子控件布局，通常布局写在这里面
+
+**awakeFromNib**: xib创建子控件写在这里面
 
 **didMoveToSuperview**：控件创建完并加载完的时候
 
@@ -3077,3 +3079,34 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), di
 
 **把C的东西强转成OC**：`view.layer.contents = (__bridge id)([UIImage imageNamed:@"me"].CGImage);`
 
+
+
+**block 作为方法参数、属性**：
+
+```objc
+// 作为属性
+@property (nonatomic, assign) void (^block)(void);
+// 作为方法参数
+- (void)alertMessageTitle:(NSString *)title withContent:(NSString *)msg andAction:(void (^)(void))callback;
+```
+
+
+
+**取消高亮状态**：
+
+- button.adjustsImageWhenHighlighted=NO; 这样式让高亮状态效果消失了，并不是真正的取消
+
+- 想取消这个状态，自己写一个继承则UIButton的类，然后重写其高亮状态的方法
+
+  ```objc
+  @interface MyBtn : UIButton
+      
+  @end
+  @implementation MyBtn
+  - (void)setHighlighted:(BOOL)highlighted{
+      // [super setHighlighted:highlighted] 不要这句话就是可以了
+  }
+  @end
+  ```
+
+  
