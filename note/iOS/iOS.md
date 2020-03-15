@@ -2403,6 +2403,7 @@ view.layer.masksToBounds = YES; // 裁剪超出部分，即剪出圆角
 
 // 设置内容，可以是图片，但是如果是图片的话要求是CGImage，又要求是OC的id，因此要把C桥接为OC的id
 // 桥接语法：这个id是可以改成别的，OC类就行（这里因为要求传id，那就转为id）
+// 设置图片默认拉伸到view等大
 view.layer.contents = (__bridge id)([UIImage imageNamed:@"me"].CGImage);
 ```
 
@@ -2912,6 +2913,10 @@ item.anchored = YES;// 固定死一个view
 -(CGPoint)linearVelocityForItem:(id<UIDynamicItem>)item;
 ```
 
+## Tint
+
+几乎很多属性都有一个tint属性，这个是修改系统默认渲染，比如设置了一个控件tintColor的颜色为红色，那个这个控件的文字等属性、甚至其子控件默认渲染的颜色都会变成红色。这个设置控制器tintColor，那个在这个控制器中默认出来的控件的默认颜色都是这个颜色。可以用来当主题颜色，一次设置后后面的控件都不用再手动设置了
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
@@ -3109,4 +3114,8 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), di
   @end
   ```
 
-  
+
+
+
+**label、button可以根据内容自动适配大小**：`- (void)sizeToFit;`
+

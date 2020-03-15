@@ -9,7 +9,7 @@
         <!--Navigation Controller-->
         <scene sceneID="6BV-5M-dfU">
             <objects>
-                <navigationController id="h1A-qb-kHt" sceneMemberID="viewController">
+                <navigationController id="h1A-qb-kHt" customClass="NavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tcF-XN-dgQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -22,10 +22,10 @@
             </objects>
             <point key="canvasLocation" x="-747" y="-132"/>
         </scene>
-        <!--Table View Controller-->
+        <!--够彩大厅-->
         <scene sceneID="1bK-uO-jBG">
             <objects>
-                <tableViewController id="Yl4-an-Uwf" sceneMemberID="viewController">
+                <tableViewController id="Yl4-an-Uwf" customClass="HallController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Mjf-J6-w5A">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -45,7 +45,7 @@
                             <outlet property="delegate" destination="Yl4-an-Uwf" id="Qv3-Lu-3Em"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="4gf-21-Jki"/>
+                    <navigationItem key="navigationItem" title="够彩大厅" id="4gf-21-Jki"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3aV-Kx-cAA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

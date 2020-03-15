@@ -8,6 +8,7 @@
 
 #import "TabBarController.h"
 #import "Tabbar.h"
+
 @interface TabBarController ()
 
 
@@ -25,13 +26,14 @@
    UIViewController *v5 = [self loadSubViewControllerWithSBName:@"MyLottery"];
    self.viewControllers = @[v1,v2,v3,v4,v5];
     
-    // 自定义tabbar，直接自定义一个tabbar把系统默认的盖住
+    // 自定义tabbar
     Tabbar *tabbar = [Tabbar tabbar];
     tabbar.count = self.viewControllers.count;
     tabbar.tabbarBtnBlock = ^(NSInteger index) {
         self.selectedIndex = index;
     };
-    [self.view addSubview:tabbar];
+//    [self.view addSubview:tabbar];
+    [self.tabBar  addSubview:tabbar];
     // 给tabbar创建按钮
     for (int i = 0; i < self.viewControllers.count; i++) {
         UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"TabBar%d", i + 1]];
@@ -43,6 +45,5 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:name bundle:nil];
     return sb.instantiateInitialViewController;
 }
-
 
 @end

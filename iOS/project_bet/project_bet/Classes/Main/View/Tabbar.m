@@ -59,7 +59,7 @@
     CGFloat scale = KScreenWidth / 320;
     CGFloat w = 320 * scale;
     CGFloat h = 49 * scale;
-    CGFloat y = KScreenHeight - h;
+    CGFloat y = 49 - h;
     CGFloat x = 0;
     return [[self alloc] initWithFrame:CGRectMake(x, y, w, h)];
 }

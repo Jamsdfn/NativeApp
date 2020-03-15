@@ -12,6 +12,12 @@
 		B7250213241C9B18006D7316 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7250212241C9B18006D7316 /* main.m */; };
 		B725021D241C9B18006D7316 /* project_betTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B725021C241C9B18006D7316 /* project_betTests.m */; };
 		B7250228241C9B18006D7316 /* project_betUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B7250227241C9B18006D7316 /* project_betUITests.m */; };
+		B75CB667241DF06C008B47A9 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB666241DF06C008B47A9 /* NavigationController.m */; };
+		B75CB66A241DF502008B47A9 /* HallController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB669241DF502008B47A9 /* HallController.m */; };
+		B75CB66D241E004E008B47A9 /* ArenaController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB66C241E004E008B47A9 /* ArenaController.m */; };
+		B75CB670241E1C3A008B47A9 /* GroupBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB66F241E1C3A008B47A9 /* GroupBtn.m */; };
+		B75CB673241E1E7A008B47A9 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB672241E1E7A008B47A9 /* UIView+Frame.m */; };
+		B75CB676241E2160008B47A9 /* GroupBtnController.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CB675241E2160008B47A9 /* GroupBtnController.m */; };
 		B75CEE33241CD2B700477764 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CEE0A241CD2B600477764 /* AppDelegate.m */; };
 		B75CEE34241CD2B700477764 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B75CEE0C241CD2B600477764 /* SceneDelegate.m */; };
 		B75CEE37241CD5DE00477764 /* Hall.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B75CEE36241CD5DE00477764 /* Hall.storyboard */; };
@@ -52,6 +58,18 @@
 		B7250223241C9B18006D7316 /* project_betUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = project_betUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7250227241C9B18006D7316 /* project_betUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = project_betUITests.m; sourceTree = "<group>"; };
 		B7250229241C9B18006D7316 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B75CB665241DF06C008B47A9 /* NavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
+		B75CB666241DF06C008B47A9 /* NavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
+		B75CB668241DF502008B47A9 /* HallController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HallController.h; sourceTree = "<group>"; };
+		B75CB669241DF502008B47A9 /* HallController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HallController.m; sourceTree = "<group>"; };
+		B75CB66B241E004E008B47A9 /* ArenaController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArenaController.h; sourceTree = "<group>"; };
+		B75CB66C241E004E008B47A9 /* ArenaController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArenaController.m; sourceTree = "<group>"; };
+		B75CB66E241E1C3A008B47A9 /* GroupBtn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupBtn.h; sourceTree = "<group>"; };
+		B75CB66F241E1C3A008B47A9 /* GroupBtn.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupBtn.m; sourceTree = "<group>"; };
+		B75CB671241E1E7A008B47A9 /* UIView+Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
+		B75CB672241E1E7A008B47A9 /* UIView+Frame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
+		B75CB674241E2160008B47A9 /* GroupBtnController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupBtnController.h; sourceTree = "<group>"; };
+		B75CB675241E2160008B47A9 /* GroupBtnController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GroupBtnController.m; sourceTree = "<group>"; };
 		B75CEE09241CD2B600477764 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B75CEE0A241CD2B600477764 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B75CEE0B241CD2B600477764 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -161,6 +179,8 @@
 		B75CEE0D241CD2B700477764 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B75CB671241E1E7A008B47A9 /* UIView+Frame.h */,
+				B75CB672241E1E7A008B47A9 /* UIView+Frame.m */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -191,6 +211,8 @@
 		B75CEE10241CD2B700477764 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B75CB66B241E004E008B47A9 /* ArenaController.h */,
+				B75CB66C241E004E008B47A9 /* ArenaController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -223,6 +245,8 @@
 		B75CEE15241CD2B700477764 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B75CB674241E2160008B47A9 /* GroupBtnController.h */,
+				B75CB675241E2160008B47A9 /* GroupBtnController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -238,6 +262,8 @@
 			isa = PBXGroup;
 			children = (
 				B75CEE38241CD6D900477764 /* Discovery.storyboard */,
+				B75CB66E241E1C3A008B47A9 /* GroupBtn.h */,
+				B75CB66F241E1C3A008B47A9 /* GroupBtn.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -255,6 +281,8 @@
 		B75CEE1A241CD2B700477764 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B75CB668241DF502008B47A9 /* HallController.h */,
+				B75CB669241DF502008B47A9 /* HallController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -321,6 +349,8 @@
 			children = (
 				B75CEE40241CD9EF00477764 /* TabBarController.h */,
 				B75CEE41241CD9EF00477764 /* TabBarController.m */,
+				B75CB665241DF06C008B47A9 /* NavigationController.h */,
+				B75CB666241DF06C008B47A9 /* NavigationController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -516,9 +546,15 @@
 			files = (
 				B75CEE45241CEAF800477764 /* Tabbar.m in Sources */,
 				B75CEE33241CD2B700477764 /* AppDelegate.m in Sources */,
+				B75CB66A241DF502008B47A9 /* HallController.m in Sources */,
 				B75CEE42241CD9F000477764 /* TabBarController.m in Sources */,
+				B75CB676241E2160008B47A9 /* GroupBtnController.m in Sources */,
+				B75CB667241DF06C008B47A9 /* NavigationController.m in Sources */,
 				B75CEE34241CD2B700477764 /* SceneDelegate.m in Sources */,
+				B75CB670241E1C3A008B47A9 /* GroupBtn.m in Sources */,
 				B7250213241C9B18006D7316 /* main.m in Sources */,
+				B75CB673241E1E7A008B47A9 /* UIView+Frame.m in Sources */,
+				B75CB66D241E004E008B47A9 /* ArenaController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

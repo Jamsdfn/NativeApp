@@ -10,7 +10,7 @@
         <!--Navigation Controller-->
         <scene sceneID="6BV-5M-dfU">
             <objects>
-                <navigationController id="h1A-qb-kHt" sceneMemberID="viewController">
+                <navigationController id="h1A-qb-kHt" customClass="NavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="tcF-XN-dgQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -23,17 +23,27 @@
             </objects>
             <point key="canvasLocation" x="-747" y="-132"/>
         </scene>
-        <!--View Controller-->
+        <!--Arena Controller-->
         <scene sceneID="OFu-No-fIA">
             <objects>
-                <viewController id="ovM-kr-UeH" sceneMemberID="viewController">
+                <viewController id="ovM-kr-UeH" customClass="ArenaController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ooY-Xt-7Kp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="605-Iq-nVn"/>
                     </view>
-                    <navigationItem key="navigationItem" id="4Lf-oZ-uWW"/>
+                    <navigationItem key="navigationItem" id="4Lf-oZ-uWW">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="bgz-RJ-rJC">
+                            <rect key="frame" x="122" y="6" width="131" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="足球"/>
+                                <segment title="篮球"/>
+                            </segments>
+                        </segmentedControl>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DxF-J8-IS7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
