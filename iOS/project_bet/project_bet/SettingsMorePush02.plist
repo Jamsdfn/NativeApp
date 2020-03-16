@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string>开启后，当我投注或关注的比赛。。。。开启后，当我投注或关注的比赛。。。。开启后，当我投注或关注的比赛。。。。开启后，当我投注或关注的比赛。。。。</string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>推送我关注的比赛</string>
+				<key>accessory</key>
+				<string>UISwitch</string>
+				<key>keyName</key>
+				<string>settings_cell_push_mine_game</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>只在以下时间内接受推送的比赛</string>
+		<key>footer</key>
+		<string></string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>起始时间</string>
+				<key>details</key>
+				<string>00:00</string>
+				<key>cellStyle</key>
+				<string>UITableViewCellStyleValue1</string>
+				<key>isHighlighted</key>
+				<true/>
+				<key>detailsKeyName</key>
+				<string>startTime</string>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string></string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>结束时间</string>
+				<key>details</key>
+				<string>23:59</string>
+				<key>cellStyle</key>
+				<string>UITableViewCellStyleValue1</string>
+				<key>isHighlighted</key>
+				<true/>
+				<key>detailsKeyName</key>
+				<string>endTime</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string></string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>评分支持</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>funcName</key>
+				<string>comment</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>客服电话</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>details</key>
+				<string>10000</string>
+				<key>cellStyle</key>
+				<string>UITableViewCellStyleValue1</string>
+				<key>funcName</key>
+				<string>callService</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

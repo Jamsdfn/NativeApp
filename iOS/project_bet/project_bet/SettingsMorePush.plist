@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string></string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>开奖推送</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>targetVcName</key>
+				<string>SettingController</string>
+				<key>plistName</key>
+				<string>SettingsMorePush01.plist</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>比分直播推送</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>targetVcName</key>
+				<string>LiveScorePushController</string>
+				<key>plistName</key>
+				<string>SettingsMorePush02.plist</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>中奖动画</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>targetVcName</key>
+				<string>SettingController</string>
+				<key>plistName</key>
+				<string>SettingsMorePush03.plist</string>
+			</dict>
+			<dict>
+				<key>title</key>
+				<string>购彩提醒</string>
+				<key>accessory</key>
+				<string>UIImageView</string>
+				<key>accessoryImage</key>
+				<string>arrow_right</string>
+				<key>targetVcName</key>
+				<string>SettingController</string>
+				<key>plistName</key>
+				<string>SettingsMorePush04.plist</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

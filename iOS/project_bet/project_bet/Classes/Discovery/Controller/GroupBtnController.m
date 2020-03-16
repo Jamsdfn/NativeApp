@@ -35,9 +35,11 @@
     [self.navigationController.navigationBar setTranslucent:NO];
 }
 // 按钮点击事件
-- (IBAction)groupBtnClick:(id)sender {
+- (IBAction)groupBtnClick:(UIButton *)sender {
     [UIView animateWithDuration:0.25 animations:^{
         self.blueView.h = self.blueView.h ? 0 : 150;
+        // 图片旋转
+        sender.imageView.transform = CGAffineTransformRotate(sender.imageView.transform, M_PI);
     }];
 }
 

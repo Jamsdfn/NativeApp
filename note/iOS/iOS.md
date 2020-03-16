@@ -195,7 +195,9 @@ transform可以进行平移、缩放、旋转
 
 **销毁一个控件**：`[txt removeFromSuperview]`调用方法就销毁了
 
-### UIImageView
+### 帧动画
+
+帧动画是在UIImageView类中实现的，帧动画相关的属性都是uiimageview的属性和方法
 
 帧动画相关的属性和方法
 
@@ -236,7 +238,7 @@ transform可以进行平移、缩放、旋转
     self.imgViewCat.animationImages = arrM;
     // 设置动画持续时间
     self.imgViewCat.animationDuration = (self.imgViewCat.animationImages.count / 24);
-    // 重复播放多少次
+    // 重复播放多少次, 不设置或者设置为0则为无限循环
     self.imgViewCat.animationRepeatCount = 1;
     // 开始
     [self.imgViewCat startAnimating];
@@ -1330,6 +1332,8 @@ UIApplication *app = [UIApplication sharedApplication];
 - self.navigationItem.leftBarButtonItems = @[] 导航条左边放一组barbutton（同理右边）
 - self.navigaitonItem.backBarButtonItem=（UIBarButtonItem *） 设置返回按钮（要在父控制器中设置，如果已经设置的leftBarButtonItem就会覆盖掉这个backItem）
 
+**注意**：默认的navigationbar是半透明的，所以frame的position 0,0就是主屏幕的0,0点，若果我们想把navigationbar设置为不透明，那么frame的position的零零点也会跟着改变，变成了y的零点变成了bar的高，不透明设置` [self.navigationController.navigationBar setTranslucent:NO];`
+
 
 #### Segue
 
@@ -1943,7 +1947,7 @@ UIGraphicsGetCurrentContext()；不开启图片上下文直接执行这句话得
 Info.plist里面多了Application Scene Manifest配置
 多出来的这些文件和代码，影响最直观的是多场景窗口和导航控制器。
 
-### **适配方案——不支持多场景窗口**
+### **适配方案—不支持多场景窗口**
 
 这种适配方案最简单。
 将多出来的文件和代码删除就好了
@@ -1957,7 +1961,7 @@ application: didDiscardSceneSessions:
 
 **注意**：如果不使用iPad的多窗口的话建议大家不要使用场景！
 
-### **适配方案——支持多场景窗口**
+### **适配方案—支持多场景窗口**
 
 首先还是要删除info.plist 的一些配置
 
@@ -3116,6 +3120,27 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), di
 
 
 
+**label、button可以根据内容自动适配大小**：`- (void)sizeToFit;` 
 
-**label、button可以根据内容自动适配大小**：`- (void)sizeToFit;`
+注：如果imageVIew已经设置了图片也可以用这个方法
+
+
+
+**保证四角不变，拉伸图片**：
+
+```objc
+UIImage *image = [UIImage imageNamed:@"RedButton"];
+image = [image stretchableImageWithLeftCapWidth:0.5 * image.size.width topCapHeight:0.5 * image.size.height];
+```
+
+
+
+**根据字符串生成对象**
+
+```objc
+NSString *accessoryType = item[@"accessory"];
+cell.accessoryView = [NSClassFromString(accessoryType) new];
+```
+
+
 

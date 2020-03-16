@@ -26,18 +26,88 @@
         <!--我的菜票-->
         <scene sceneID="OFu-No-fIA">
             <objects>
-                <viewController id="ovM-kr-UeH" sceneMemberID="viewController">
+                <viewController id="ovM-kr-UeH" customClass="MyLotteryController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ooY-Xt-7Kp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LoginScreen" translatesAutoresizingMaskIntoConstraints="NO" id="0vj-QG-rPy">
+                                <rect key="frame" x="39" y="61" width="297" height="139"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="139" id="Pec-v4-ejr"/>
+                                    <constraint firstAttribute="width" constant="297" id="lb7-D8-i6O"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用邮箱可以直接登录" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcg-61-eds">
+                                <rect key="frame" x="109.5" y="240" width="156" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CaO-mG-wPw">
+                                <rect key="frame" x="24" y="294" width="327" height="34.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="327" id="p2d-sY-bc7"/>
+                                    <constraint firstAttribute="height" constant="34.5" id="t4l-BB-DcA"/>
+                                </constraints>
+                                <state key="normal" title="登录">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
+                                </state>
+                                <state key="highlighted" title="登录"/>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RedButton" translatesAutoresizingMaskIntoConstraints="NO" id="4lY-aK-LE4">
+                                <rect key="frame" x="24" y="344" width="327" height="34.5"/>
+                                <rect key="contentStretch" x="0.25" y="0.25" width="0.5" height="0.5"/>
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="0vj-QG-rPy" firstAttribute="top" secondItem="605-Iq-nVn" secondAttribute="top" constant="17" id="22e-UY-jkz"/>
+                            <constraint firstItem="wcg-61-eds" firstAttribute="centerX" secondItem="ooY-Xt-7Kp" secondAttribute="centerX" id="2LH-JS-Kg8"/>
+                            <constraint firstItem="CaO-mG-wPw" firstAttribute="leading" secondItem="605-Iq-nVn" secondAttribute="leading" constant="24" id="6aT-Bb-ffL"/>
+                            <constraint firstItem="wcg-61-eds" firstAttribute="top" secondItem="0vj-QG-rPy" secondAttribute="bottom" constant="40" id="AyT-KU-t8J"/>
+                            <constraint firstItem="4lY-aK-LE4" firstAttribute="top" secondItem="CaO-mG-wPw" secondAttribute="bottom" constant="15.5" id="GBj-TO-Irg"/>
+                            <constraint firstItem="4lY-aK-LE4" firstAttribute="trailing" secondItem="CaO-mG-wPw" secondAttribute="trailing" id="KtG-Oc-BO1"/>
+                            <constraint firstItem="CaO-mG-wPw" firstAttribute="centerX" secondItem="ooY-Xt-7Kp" secondAttribute="centerX" id="Ljo-9I-bC1"/>
+                            <constraint firstItem="605-Iq-nVn" firstAttribute="trailing" secondItem="CaO-mG-wPw" secondAttribute="trailing" constant="24" id="N4G-4B-CnW"/>
+                            <constraint firstItem="4lY-aK-LE4" firstAttribute="centerX" secondItem="ooY-Xt-7Kp" secondAttribute="centerX" id="YLN-2e-OI3"/>
+                            <constraint firstItem="CaO-mG-wPw" firstAttribute="centerX" secondItem="ooY-Xt-7Kp" secondAttribute="centerX" id="eXS-aj-fN2"/>
+                            <constraint firstItem="4lY-aK-LE4" firstAttribute="height" secondItem="CaO-mG-wPw" secondAttribute="height" id="gcB-cb-rFH"/>
+                            <constraint firstItem="CaO-mG-wPw" firstAttribute="top" secondItem="wcg-61-eds" secondAttribute="bottom" constant="33" id="n9e-GE-Avu"/>
+                            <constraint firstItem="0vj-QG-rPy" firstAttribute="centerX" secondItem="ooY-Xt-7Kp" secondAttribute="centerX" id="rCk-kO-rFq"/>
+                            <constraint firstItem="4lY-aK-LE4" firstAttribute="leading" secondItem="CaO-mG-wPw" secondAttribute="leading" id="ucm-yh-iry"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="605-Iq-nVn"/>
                     </view>
-                    <navigationItem key="navigationItem" title="我的菜票" id="4Lf-oZ-uWW"/>
+                    <navigationItem key="navigationItem" title="我的菜票" id="4Lf-oZ-uWW">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="dCe-bj-kqG">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RwM-EU-TKe">
+                                <rect key="frame" x="16" y="6" width="69" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="客服" image="FBMM_Barbutton"/>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="Mylottery_config" id="8rI-4q-pYs">
+                            <connections>
+                                <action selector="settingClick:" destination="ovM-kr-UeH" id="eHi-j3-pIl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="loginBtn" destination="CaO-mG-wPw" id="7LS-qr-yG5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DxF-J8-IS7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10" y="-127"/>
+            <point key="canvasLocation" x="8.8000000000000007" y="-127.28635682158921"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="FBMM_Barbutton" width="13" height="13"/>
+        <image name="LoginScreen" width="296.5" height="138.5"/>
+        <image name="Mylottery_config" width="22" height="22"/>
+        <image name="RedButton" width="61.5" height="34.5"/>
+    </resources>
 </document>

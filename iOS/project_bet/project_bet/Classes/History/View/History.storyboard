@@ -30,14 +30,26 @@
                     <view key="view" contentMode="scaleToFill" id="ooY-Xt-7Kp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="605-Iq-nVn"/>
                     </view>
-                    <navigationItem key="navigationItem" title="历史信息" id="4Lf-oZ-uWW"/>
+                    <navigationItem key="navigationItem" title="历史信息" id="4Lf-oZ-uWW">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="wgZ-XV-A0v">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="OAP-R7-crY">
+                                <rect key="frame" x="-23" y="-15" width="106" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="开奖推送" image="pushSettings"/>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DxF-J8-IS7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="10" y="-127"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="pushSettings" width="14" height="13.5"/>
+    </resources>
 </document>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string>开启后,可设置。。。fjkdsafjdaklsfl.jkl。附近的凯撒浪费就打开了司法局的萨克雷锋的司法局</string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>购彩提醒</string>
+				<key>accessory</key>
+				<string>UISwitch</string>
+				<key>keyName</key>
+				<string>settings_cell_buy_remind</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string></string>
+		<key>footer</key>
+		<string>开启后，地方撒冷咖啡进阿杜说开了房间爱的是克劳福德了司法局的考虑是附近的刷卡了房间爱多考虑是否将圣诞快乐</string>
+		<key>items</key>
+		<array>
+			<dict>
+				<key>title</key>
+				<string>中奖动画</string>
+				<key>accessory</key>
+				<string>UISwitch</string>
+				<key>keyName</key>
+				<string>settings_cell_adward_animation</string>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>
