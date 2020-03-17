@@ -649,7 +649,15 @@ transform可以进行平移、缩放、旋转
 UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
 
 // 和tableview不一样的就是，cell的样子要在layout中自己设置
-
+    
+// 设置 每个item的大小
+layout.itemSize = CGSizeMake(80, 80);
+// item 的行与行的间距
+layout.minimumLineSpacing = 30;
+// 设置一组的内边距
+layout.sectionInset = UIEdgeInsetsMake(20, 10, 0, 10);
+// 滑动的方向,如果超出显示范围可以这个设置改变默认的从下往上滚
+// layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 // 创建controller的时候吧布局方式也传进来
 UICollectionViewController *VC = [[UICollectionViewController alloc] initWithCollectionViewLayout:layout];
 ```
@@ -660,6 +668,13 @@ collectionView 可以直接给controller导入nib，这样不用cell就可以直
 // 写在viewdidLoad中
 UINib *nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
 [self.collectionView registerNib:nib forCellWithReuseIdentifier:reuseIdentifier];
+// 设置一页页滑动的效果
+// self.collectionView.pagingEnabled = YES;
+// 取消滚动条
+// self.collectionView.showsHorizontalScrollIndicator = NO;
+// 取消弹性效果，防止在最左边还能往左划
+// self.collectionView.bounces = NO;
+
 // cellforitem 和tableview那个差不多的
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     ProductCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
@@ -667,7 +682,9 @@ UINib *nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
 }
 ```
 
+可以看看这个[例子](https://github.com/Jamsdfn/NativeApp/blob/master/iOS/project_bet/project_bet/Classes/mylottery/Controller/settings/ProductController.m)。这个例子重写的init方法就是创建的过程，复用注册nib也有，那几个实现的方法，就是对colletction的设置，还有一个json的懒加载
 
+**可以用collectionView做新特性页面**：可以参照这个[project]()的guideController
 
 ### 数据选择控件
 
@@ -3002,7 +3019,7 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil]
 
 
 
-**占位符**：%02d 占位符表示保留两位整形数据，不足两位则前面补零
+**占位符**：%02d 占位符表示保留两位整形数据，不足两位则前面补零。%zd 根据手机系统是32位还是64位字典判断是%ld还是%d，现在绝大部分手机都是64了
 
 
 
@@ -3191,6 +3208,17 @@ image = [image stretchableImageWithLeftCapWidth:0.5 * image.size.width topCapHei
 ```objc
 NSString *accessoryType = item[@"accessory"];
 cell.accessoryView = [NSClassFromString(accessoryType) new];
+```
+
+
+
+**对应已经确定肯定存在的方法如何取消警告**：
+
+```objc
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+[self performSelector:NSSelectorFromString(dict[@"funcName"])];
+#pragma clang diagnostic pop
 ```
 
 

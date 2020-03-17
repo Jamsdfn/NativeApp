@@ -36,6 +36,8 @@
 		B7D0753B2420A83F00A2F725 /* ProductController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0753A2420A83F00A2F725 /* ProductController.m */; };
 		B7D0753E2420AC7600A2F725 /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0753D2420AC7600A2F725 /* ProductCell.m */; };
 		B7D075402420AC8C00A2F725 /* ProductCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7D0753F2420AC8C00A2F725 /* ProductCell.xib */; };
+		B7D075482420C10B00A2F725 /* GuideController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D075472420C10B00A2F725 /* GuideController.m */; };
+		B7D0754B2420C50F00A2F725 /* GuideCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D0754A2420C50F00A2F725 /* GuideCell.m */; };
 		B7E708FA241F48C900C1AE7D /* LuckyController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E708F9241F48C900C1AE7D /* LuckyController.m */; };
 		B7E708FD241F55F900C1AE7D /* MyLotteryController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E708FC241F55F900C1AE7D /* MyLotteryController.m */; };
 		B7E70900241F6E7300C1AE7D /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7E708FF241F6E7300C1AE7D /* SettingController.m */; };
@@ -120,6 +122,10 @@
 		B7D0753C2420AC7600A2F725 /* ProductCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
 		B7D0753D2420AC7600A2F725 /* ProductCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProductCell.m; sourceTree = "<group>"; };
 		B7D0753F2420AC8C00A2F725 /* ProductCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProductCell.xib; sourceTree = "<group>"; };
+		B7D075462420C10B00A2F725 /* GuideController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuideController.h; sourceTree = "<group>"; };
+		B7D075472420C10B00A2F725 /* GuideController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuideController.m; sourceTree = "<group>"; };
+		B7D075492420C50F00A2F725 /* GuideCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuideCell.h; sourceTree = "<group>"; };
+		B7D0754A2420C50F00A2F725 /* GuideCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuideCell.m; sourceTree = "<group>"; };
 		B7E708F8241F48C900C1AE7D /* LuckyController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuckyController.h; sourceTree = "<group>"; };
 		B7E708F9241F48C900C1AE7D /* LuckyController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuckyController.m; sourceTree = "<group>"; };
 		B7E708FB241F55F900C1AE7D /* MyLotteryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLotteryController.h; sourceTree = "<group>"; };
@@ -242,6 +248,7 @@
 		B75CEE0E241CD2B700477764 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				B7D075412420C0D300A2F725 /* Guide */,
 				B75CEE0F241CD2B700477764 /* Arena */,
 				B75CEE14241CD2B700477764 /* Discovery */,
 				B75CEE19241CD2B700477764 /* Hall */,
@@ -481,6 +488,49 @@
 			path = Libs;
 			sourceTree = "<group>";
 		};
+		B7D075412420C0D300A2F725 /* Guide */ = {
+			isa = PBXGroup;
+			children = (
+				B7D075422420C0D300A2F725 /* Controller */,
+				B7D075432420C0D300A2F725 /* Model */,
+				B7D075442420C0D300A2F725 /* Ohter */,
+				B7D075452420C0D300A2F725 /* View */,
+			);
+			path = Guide;
+			sourceTree = "<group>";
+		};
+		B7D075422420C0D300A2F725 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B7D075462420C10B00A2F725 /* GuideController.h */,
+				B7D075472420C10B00A2F725 /* GuideController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B7D075432420C0D300A2F725 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B7D075442420C0D300A2F725 /* Ohter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Ohter;
+			sourceTree = "<group>";
+		};
+		B7D075452420C0D300A2F725 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B7D075492420C50F00A2F725 /* GuideCell.h */,
+				B7D0754A2420C50F00A2F725 /* GuideCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B7E70901241F7E3900C1AE7D /* SupportFile */ = {
 			isa = PBXGroup;
 			children = (
@@ -667,10 +717,12 @@
 				B7D0753B2420A83F00A2F725 /* ProductController.m in Sources */,
 				B7E70925241FB98500C1AE7D /* SettingCell.m in Sources */,
 				B7E70900241F6E7300C1AE7D /* SettingController.m in Sources */,
+				B7D0754B2420C50F00A2F725 /* GuideCell.m in Sources */,
 				B7E70921241FAB3400C1AE7D /* RedeemController.m in Sources */,
 				B75CB667241DF06C008B47A9 /* NavigationController.m in Sources */,
 				B75CEE34241CD2B700477764 /* SceneDelegate.m in Sources */,
 				B75CB670241E1C3A008B47A9 /* GroupBtn.m in Sources */,
+				B7D075482420C10B00A2F725 /* GuideController.m in Sources */,
 				B7D0752C24209C2F00A2F725 /* AboutController.m in Sources */,
 				B7E708FA241F48C900C1AE7D /* LuckyController.m in Sources */,
 				B7250213241C9B18006D7316 /* main.m in Sources */,

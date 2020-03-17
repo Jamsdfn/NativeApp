@@ -62,12 +62,18 @@ static NSString* const reuseIdentifier = @"Product_cell";
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    Product *model = self.products[indexPath.row];
+    NSLog(@"%@", model.title);
+}
+
 // 为了可以复用代码，即不用重写settingCotroller的方法，我们重写init方法
 - (instancetype)init
 {
     // 自动创建流式布局（自动换行）的layout
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
     
+    // 设置 每个item的大小
     layout.itemSize = CGSizeMake(80, 80);
     // item 的行与行的间距
     layout.minimumLineSpacing = 30;

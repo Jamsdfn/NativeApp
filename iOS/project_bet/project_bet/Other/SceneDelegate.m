@@ -1,5 +1,6 @@
 #import "SceneDelegate.h"
 #import "TabBarController.h"
+#import "GuideController.h"
 @interface SceneDelegate ()
 
 @end
@@ -12,12 +13,39 @@
     self.window = [[UIWindow alloc] initWithFrame:KScreenSize];
     // 设置 scene
     self.window.windowScene = (UIWindowScene*)scene;
-    // 创建 tabbarController
-    TabBarController *tabbarController = [[TabBarController alloc] init];
-    // window设置根控制器
-    self.window.rootViewController = tabbarController;
+    
+    self.window.rootViewController = [self pickRootController];
     // window 显示
     [self.window makeKeyAndVisible];
+    // 保存当前版本到沙盒中
+    [self saveAppVersion];
+}
+
+// 判断应该显示那个控制器
+- (UIViewController*)pickRootController{
+    if ([[self loadOldVersion] isEqualToString:[self loadInfoVersion]]){
+        // 显示默认的控制器
+         return [[TabBarController alloc] init];
+    } else {
+        // 显示新特性控制器
+        return [[GuideController alloc] init];
+    }
+}
+
+// 把当前的版本号保存到沙盒中
+- (void)saveAppVersion{
+    NSString *infoVersion = [self loadInfoVersion];
+    // 往沙盒中存的版本号
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"oldVersion"];
+}
+
+- (NSString*)loadOldVersion{
+    return [[NSUserDefaults standardUserDefaults] stringForKey:@"oldVersion"];
+}
+
+- (NSString*)loadInfoVersion{
+    NSDictionary *info = [NSBundle mainBundle].infoDictionary;
+    return info[@"CFBundleShortVersionString"];
 }
 
 - (void)sceneDidDisconnect:(UIScene *)scene {

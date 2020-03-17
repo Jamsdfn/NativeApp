@@ -78,9 +78,8 @@
     NSDictionary *group = self.groups[indexPath.section];
     NSArray *items = group[@"items"];
     NSDictionary *item = items[indexPath.row];
-    NSString *vcName = item[@"targetVcName"];
     // 设置导航栏的title
-    if (vcName && [vcName length] > 0){
+    if (item[@"targetVcName"] && [item[@"targetVcName"] length] > 0){
         UIViewController *vc = [NSClassFromString(item[@"targetVcName"]) new];
         vc.navigationItem.title = item[@"title"];
         if ([vc isKindOfClass:[SettingController class]]) {
@@ -89,7 +88,26 @@
         }
         [self.navigationController pushViewController:vc animated:YES];
     }
+    if (item[@"funcName"] && [item[@"funcName"] length] > 0) {
+        if ([self respondsToSelector:NSSelectorFromString(item[@"funcName"])]){
+            #pragma clang diagnostic push
+            #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            [self performSelector:NSSelectorFromString(item[@"funcName"])];
+            #pragma clang diagnostic pop
+        }
+    }
 }
+
+- (void)checkUpdate{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"版本检测" message:@"您的应用已是最新版本" preferredStyle:UIAlertControllerStyleAlert];
+     
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault
+       handler:^(UIAlertAction * action) {}];
+     
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 // 重写init方法，因为都是重用代码，用的都要是分组
 - (instancetype)init{
     return [super initWithStyle:UITableViewStyleGrouped];
