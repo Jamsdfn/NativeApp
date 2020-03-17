@@ -654,10 +654,13 @@ UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
 layout.itemSize = CGSizeMake(80, 80);
 // item 的行与行的间距
 layout.minimumLineSpacing = 30;
+// item 与 item 的间距
+layout.minimumInteritemSpacing = 30;
 // 设置一组的内边距
 layout.sectionInset = UIEdgeInsetsMake(20, 10, 0, 10);
 // 滑动的方向,如果超出显示范围可以这个设置改变默认的从下往上滚
 // layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+
 // 创建controller的时候吧布局方式也传进来
 UICollectionViewController *VC = [[UICollectionViewController alloc] initWithCollectionViewLayout:layout];
 ```
@@ -668,7 +671,7 @@ collectionView 可以直接给controller导入nib，这样不用cell就可以直
 // 写在viewdidLoad中
 UINib *nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
 [self.collectionView registerNib:nib forCellWithReuseIdentifier:reuseIdentifier];
-// 设置一页页滑动的效果
+// 设置一页页滑动的效果，而不是连贯的翻动
 // self.collectionView.pagingEnabled = YES;
 // 取消滚动条
 // self.collectionView.showsHorizontalScrollIndicator = NO;
@@ -684,7 +687,7 @@ UINib *nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
 
 可以看看这个[例子](https://github.com/Jamsdfn/NativeApp/blob/master/iOS/project_bet/project_bet/Classes/mylottery/Controller/settings/ProductController.m)。这个例子重写的init方法就是创建的过程，复用注册nib也有，那几个实现的方法，就是对colletction的设置，还有一个json的懒加载
 
-**可以用collectionView做新特性页面**：可以参照这个[project]()的guideController
+**可以用collectionView做新特性页面**：可以参照这个[新特性界面的例子](https://github.com/Jamsdfn/NativeApp/blob/master/iOS/project_bet/project_bet/Classes/Guide/Controller/GuideController.m)的guideController
 
 ### 数据选择控件
 
