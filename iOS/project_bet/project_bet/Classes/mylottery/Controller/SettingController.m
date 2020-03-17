@@ -16,6 +16,7 @@
 
 @implementation SettingController
 
+
 - (NSArray *)groups{
     if (!_groups) {
         NSString *path = [[NSBundle mainBundle] pathForResource:self.plistName ofType:nil];
@@ -82,7 +83,7 @@
     if (vcName && [vcName length] > 0){
         UIViewController *vc = [NSClassFromString(item[@"targetVcName"]) new];
         vc.navigationItem.title = item[@"title"];
-        if ([vc isMemberOfClass:[SettingController class]]) {
+        if ([vc isKindOfClass:[SettingController class]]) {
             SettingController *reuseVc = (SettingController*)vc;
             reuseVc.plistName = item[@"plistName"];
         }

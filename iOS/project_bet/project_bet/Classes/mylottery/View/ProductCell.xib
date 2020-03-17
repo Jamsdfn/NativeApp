@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="3d4-Db-Dh1" customClass="ProductCell">
+            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iqw-B9-kux">
+                    <rect key="frame" x="11" y="0.0" width="58" height="58"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="58" id="lFw-J3-aCs"/>
+                        <constraint firstAttribute="width" constant="58" id="xoR-6K-Eu5"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1S-tx-kfo">
+                    <rect key="frame" x="0.0" y="63" width="80" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="iqw-B9-kux" firstAttribute="top" secondItem="R1h-Uv-q74" secondAttribute="top" id="5Sk-I4-ruO"/>
+                <constraint firstItem="R1h-Uv-q74" firstAttribute="trailing" secondItem="B1S-tx-kfo" secondAttribute="trailing" id="Dad-q6-X6c"/>
+                <constraint firstItem="B1S-tx-kfo" firstAttribute="leading" secondItem="R1h-Uv-q74" secondAttribute="leading" id="Op8-vy-9Uh"/>
+                <constraint firstItem="B1S-tx-kfo" firstAttribute="bottom" secondItem="R1h-Uv-q74" secondAttribute="bottom" id="hGe-8q-J0y"/>
+                <constraint firstItem="iqw-B9-kux" firstAttribute="centerX" secondItem="3d4-Db-Dh1" secondAttribute="centerX" id="jsu-of-cVk"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="R1h-Uv-q74"/>
+            <connections>
+                <outlet property="imageView" destination="iqw-B9-kux" id="s6q-DX-2og"/>
+                <outlet property="title" destination="B1S-tx-kfo" id="FAq-XQ-1DP"/>
+            </connections>
+            <point key="canvasLocation" x="-390.39999999999998" y="-188.90554722638683"/>
+        </view>
+    </objects>
+</document>

@@ -640,6 +640,35 @@ transform可以进行平移、缩放、旋转
 
 可以纯用 storyboard 涉及 tableView，把 tableView 的属性 -> content ->static cells 就好了，如果设置的静态单元格，那个对应的 controller 可以不实现 DataSource 协议的方法
 
+### UICollectionView
+
+创建的方式和继承方式，控制器要实现的方法和tableView几乎一样,也是实现numberofsection, rowsofsection, cellforrow 这些方法，甚至cell的复用方式都几乎一样的，只不过创建的时候不同。
+
+```objc
+// 创建一个布局方式,下面的是自动流式布局，即自动换行，和之前写的9宫格的demo的样子差不多
+UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
+
+// 和tableview不一样的就是，cell的样子要在layout中自己设置
+
+// 创建controller的时候吧布局方式也传进来
+UICollectionViewController *VC = [[UICollectionViewController alloc] initWithCollectionViewLayout:layout];
+```
+
+collectionView 可以直接给controller导入nib，这样不用cell就可以直接复用
+
+```objc
+// 写在viewdidLoad中
+UINib *nib = [UINib nibWithNibName:@"ProductCell" bundle:nil];
+[self.collectionView registerNib:nib forCellWithReuseIdentifier:reuseIdentifier];
+// cellforitem 和tableview那个差不多的
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    ProductCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    return cell;
+}
+```
+
+
+
 ### 数据选择控件
 
 #### UIPickerView
@@ -765,7 +794,7 @@ transform可以进行平移、缩放、旋转
 - (UIToolbar *)toolbar{
     if (!_toolbar) {
         _toolbar = [UIToolbar new];
-      // 只用设置键盘的高就可以了，toolbar系统会自动撑开
+      // 只用设置键盘的高就可以了，toolbar系统会自动撑开，但是会爆一大堆，警告，如果不想看到警告，把宽度也设置上就好了。 CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)
         _toolbar.frame = CGRectMake(0, 0, 0, 44);
         UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelItemClick)];
         UIBarButtonItem *confirmItem = [[UIBarButtonItem alloc] initWithTitle:@"确认" style:UIBarButtonItemStylePlain target:self action:@selector(confirmItemClick)];
@@ -854,6 +883,26 @@ transform可以进行平移、缩放、旋转
 }
 ```
 
+## JSON解析
+
+```objc
+@property (nonatomic, strong) NSArray *products;
+// 懒加载json
+- (NSArray *)products{
+    if (!_products) {
+        // 步骤和解析plist几乎一样，只是解析json文件要先转为NSData类型，再转为数组而已
+        // 获取文件路径
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"more_project.json" ofType:nil];
+        // 先转为NSData
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        // 在转为NSArray
+        NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        // 这个array就是解析好的数组了
+    }
+    return _products;
+}
+```
+
 ## xib封装
 
 新建文件 User Interface -> Empty 选择后创建的就是xib。然后想storyboard那样吧组件拉出来，组成想要的形状，之后创建一个与xib同名的类，把xib的继承对象修改给这个新创建的类，再像storyboard那样往新类中连线。然后UIViewController中创建新类的对象就好了，通过此对象的属性也能访问到xib的属性。
@@ -937,6 +986,8 @@ transform可以进行平移、缩放、旋转
 如果想在xib的类中调用自身的控件可以实现 \- (void)awakeFromNib; 在这个方法中就可以调用自身的控件了，相当于 UIViewController 的viewDidLoad方法。比如xib创建的子控件有轮播图，那个想要设置scrollView的contentSize，就要在awakeFromNib中设置。
 
 只有在这个方法中才能操作控件。
+
+**注意**：xib的名字和controller的名字不能重名即xxController 又有个 xx.xib这样会报一个[UIviewcontroller .... nib but the view outlet was not set. 的错
 
 ## 自定义代理
 
