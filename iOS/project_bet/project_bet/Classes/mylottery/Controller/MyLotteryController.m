@@ -8,7 +8,6 @@
 
 #import "MyLotteryController.h"
 #import "SettingController.h"
-
 @interface MyLotteryController ()
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
@@ -27,10 +26,12 @@
 }
 // 跳转到
 - (IBAction)settingClick:(id)sender {
+    // 国际化测试
     // 跳转到设置
     SettingController *setting = [[SettingController alloc] init];
-    setting.navigationItem.title = @"设置";
+    setting.navigationItem.title = NSLocalizedString(@"settingTitle", nil);
     [self.navigationController pushViewController:setting animated:YES];
+    
 }
 
 

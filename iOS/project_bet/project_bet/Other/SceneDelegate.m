@@ -36,7 +36,7 @@
 - (void)saveAppVersion{
     NSString *infoVersion = [self loadInfoVersion];
     // 往沙盒中存的版本号
-    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"oldVersion"];
+    [[NSUserDefaults standardUserDefaults] setObject:infoVersion forKey:@"oldVersion"];
 }
 
 - (NSString*)loadOldVersion{

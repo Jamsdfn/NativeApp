@@ -1521,6 +1521,7 @@ test.modalPresentationStyle = UIModalPresentationFullScreen;
 [self dismissViewControllerAnimated:YES completion:^{
   NSLog(@"跳出完成");
 }];
+// 其实A中调用Modal B，dismiss方法可以在B中 [self dismiss..] 调用也可以在A中 [self dismiss..] 调用(都是用self)，因为在B中调用dismiss方法本质是给A发消息，让A把B dismiss了
 ```
 
 也可以用 storyboard 做，和 navigation和 tabbar 一样，按钮连线过去下一个 controller 选择 show，在 sugue 线上 kind 修改成 model 的样式，跳转方式和 model 的样式也可以在那里改
@@ -2992,6 +2993,42 @@ item.anchored = YES;// 固定死一个view
 
 几乎很多属性都有一个tint属性，这个是修改系统默认渲染，比如设置了一个控件tintColor的颜色为红色，那个这个控件的文字等属性、甚至其子控件默认渲染的颜色都会变成红色。这个设置控制器tintColor，那个在这个控制器中默认出来的控件的默认颜色都是这个颜色。可以用来当主题颜色，一次设置后后面的控件都不用再手动设置了
 
+## 国际化
+
+![](./8.png)
+
+![](./9.png)
+
+**styoryboard国际化**：根据上述操作，操作完成后，第一步项目设置中添加时设置时选中的storyboard会多一个展开的箭头，这时候点进storyboard重复第二步，在已完成的storyboard的属性中勾上对应的语言，然后点开展开的箭头就会自动生成好key，和默认的value。直接修改就行了。如果中途要修改语言的话，要重新把国际化的√删掉重点，然后重新改
+
+**代码方式国际化**：图的第二步新建文件，文件名要变一下，为Localizable.strings，然后的步骤一样
+
+```objc
+// English
+"settingTitle"="settings";
+// Chinese
+"settingTitle"="设置";
+
+// 普通代码中使用，参数一为key 参数二也是一个字符串，用来作为注释的，通常都不用，所以传nil
+NSString *title = NSLocalizedString(@"settingTitle", nil);
+```
+
+**应用内国际化**：上述的国际化都是根据系统语言来判断的，我们可以设置应用内的国际化，就是那种，点击一个按钮，界面变成英文的那种，即不依赖与系统语言
+
+```objc
+// 这种国际化可以不用修改项目的设置，但是strings文件还是要建的，strings文件的名字可以随便取
+// English.strings 文件
+"settingTitle"="settings";
+// Chinese.strings 文件
+"settingTitle"="设置";
+
+// 普通代码中，参数一为key，参数二为哪个strings的文件名，参数三注释
+// 英文显示
+NSString *title = NSLocalizedStringFromTable(@"settingTitle",@"English", nil);
+// 中文显示
+NSString *title = NSLocalizedStringFromTable(@"settingTitle",@"Chinese", nil);
+```
+
 ## iOS 小技巧
 
 **状态栏状态设置**：
@@ -3094,7 +3131,7 @@ CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOA
 
 **info.plist文件**：生成项目自动生成的文件，修改这个文件可以控制一些app信息，比如app的名字，默认是项目名字，也可以修改一些版本号等
 
-- Bundle name ：app名字
+- Bundle name ：app名字(修改名字不建议修改这个)，自己添加一个key：Bundle display name，在这个key的value上输入名字就好了
 - Bundle version string, short：发布时候版本名字
 - Bundle version：内部测试的版本号
 - Bundle identifier：应用的唯一标识

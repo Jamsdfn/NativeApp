@@ -9,6 +9,7 @@
 #import "SettingController.h"
 #import "RedeemController.h"
 #import "SettingCell.h"
+#import "HelpWebController.h"
 @interface SettingController ()
 @property (nonatomic, strong) NSArray *groups;
 
@@ -38,6 +39,13 @@
     [self groups];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"NavBack"] style:UIBarButtonItemStylePlain target:self action:@selector(backClick)];
     self.navigationItem.leftBarButtonItem = item;
+    UIBarButtonItem *help = [[UIBarButtonItem alloc] initWithTitle:@"常见问题" style:UIBarButtonItemStylePlain target:self action:@selector(helpClick)];
+    self.navigationItem.rightBarButtonItem = help;
+}
+
+- (void)helpClick{
+    HelpWebController *webVC = [HelpWebController new];
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 - (void)backClick{

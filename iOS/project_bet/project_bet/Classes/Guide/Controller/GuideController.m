@@ -9,6 +9,7 @@
 #import "GuideController.h"
 #import "GuideCell.h"
 #import "UIView+Frame.h"
+#import "TabBarController.h"
 @interface GuideController ()
 
 @property (nonatomic, weak) UIImageView *largeImageView, *largeTextImageView, *smallTextImageView;
@@ -35,7 +36,6 @@ static NSString * const reuseIdentifier = @"guide_cell";
     largeImageView.x = (KScreenWidth-largeImageView.w)/2;
     largeImageView.y = (KScreenHeight-largeImageView.h)/2;
     self.largeImageView = largeImageView;
-    
     UIImageView *largeTextImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"guideLargeText1"]];
     largeTextImageView.x = (KScreenWidth-largeTextImageView.w)/2;
     largeTextImageView.y = KScreenHeight*0.7;
@@ -46,10 +46,32 @@ static NSString * const reuseIdentifier = @"guide_cell";
     smallTextImageView.y = KScreenHeight*0.8;
     self.smallTextImageView = smallTextImageView;
     
+    // 线的图片
+    UIImage *image = [UIImage imageNamed:@"guideLine"];
+    UIImageView *guideLine = [[UIImageView alloc] initWithImage:image];
+    guideLine.x = -20;
+    guideLine.y = KScreenHeight * 0.1;
+    [self.collectionView addSubview:guideLine];
+    
+    // 添加立即体验按钮
+    UIButton *tryNowBtn = [UIButton new];
+    [tryNowBtn setBackgroundImage:[UIImage imageNamed:@"guideStart"] forState:UIControlStateNormal];
+    [tryNowBtn sizeToFit];
+    tryNowBtn.x = 3*KScreenWidth + (KScreenWidth-tryNowBtn.w)/2;
+    tryNowBtn.y = KScreenHeight * 0.9;
+    [tryNowBtn addTarget:self action:@selector(tryNowClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.collectionView addSubview:tryNowBtn];
     [self.collectionView addSubview:largeImageView];
     [self.collectionView addSubview:largeTextImageView];
     [self.collectionView addSubview:smallTextImageView];
 }
+
+// 监听立即体验按钮
+- (void)tryNowClick{
+    UIWindow *mainWindow = [UIApplication sharedApplication].windows[0];
+    mainWindow.rootViewController = [TabBarController new];
+}
+
 // 监听collectionView滑动完成(scrollView减速完成)
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     CGFloat offsetX = scrollView.contentOffset.x;
