@@ -96,6 +96,7 @@
         }
         [self.navigationController pushViewController:vc animated:YES];
     }
+    // 执行方法名为funcName的方法
     if (item[@"funcName"] && [item[@"funcName"] length] > 0) {
         if ([self respondsToSelector:NSSelectorFromString(item[@"funcName"])]){
             #pragma clang diagnostic push

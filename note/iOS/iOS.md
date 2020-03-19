@@ -1328,13 +1328,13 @@ UIApplication *app = [UIApplication sharedApplication];
 [app openURL:[NSURL URLWithString:@"http://ios.icast.cn"] options:@{} completionHandler:NULL];// >iOS 10
 
 // 打电话
-[app openURL:[NSURL URLWithString:@"tel://10086"]];
+[app openURL:[NSURL URLWithString:@"tel://10086"] options:@{} completionHandler:^(BOOL success) {}];
 
 // 发短信
-[app openURL:[NSURL URLWithString:@"sms://10086"]];
+[app openURL:[NSURL URLWithString:@"sms://10086"] options:@{} completionHandler:^(BOOL success) {}];
 
 // 发邮件
-[app openURL:[NSURL URLWithString:@"mailto://12345@qq.com"]];
+[app openURL:[NSURL URLWithString:@"mailto://12345@qq.com"] options:@{} completionHandler:^(BOOL success) {}];
 ```
 
 * 使用openURL方法也可以打开其他应用，在不同应用之间互相调用对方。
@@ -3028,6 +3028,14 @@ NSString *title = NSLocalizedStringFromTable(@"settingTitle",@"English", nil);
 // 中文显示
 NSString *title = NSLocalizedStringFromTable(@"settingTitle",@"Chinese", nil);
 ```
+
+## 真机调试
+
+首先在xcode的preference中的accout中把自己的appleID添加上去，然后把右下角的按钮先点download，再点manage，弹出对话框后点左下角的+把account加上去后点done就添加好账户了
+
+添加好account后在项目设置，在build settings中搜索signing，然后development Team 改成刚添加的appleID就好了。手机上记得在通用中信任一下开发者
+
+![](./10.png)
 
 ## iOS 小技巧
 
