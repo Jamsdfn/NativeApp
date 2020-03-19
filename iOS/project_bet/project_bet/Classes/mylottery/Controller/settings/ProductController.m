@@ -64,7 +64,16 @@ static NSString* const reuseIdentifier = @"Product_cell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     Product *model = self.products[indexPath.row];
-    NSLog(@"%@", model.title);
+    UIApplication *app = [UIApplication sharedApplication];
+    // 获取本地的url
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", model.customUrl, model.identifier]];
+//    NSLog(@"%d",[app canOpenURL:url]);
+    [app openURL:url options:@{} completionHandler:^(BOOL success) {
+        if (!success) {
+//            NSLog(@"打开失败");
+            [app openURL:[NSURL URLWithString:model.url] options:@{} completionHandler:^(BOOL success) {}];
+        }
+    }];
 }
 
 // 为了可以复用代码，即不用重写settingCotroller的方法，我们重写init方法

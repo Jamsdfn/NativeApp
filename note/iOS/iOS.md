@@ -1324,8 +1324,8 @@ UIApplication *app = [UIApplication sharedApplication]; app.networkActivityIndic
 // 系统会自动根据协议识别使用某个app打开。
 UIApplication *app = [UIApplication sharedApplication];
 // 打开一个网页:
-[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"]];// <iOS 10
-[app openURL:[NSURL URLWithString:@"http://ios.icast.cn"] options:@{} completionHandler:NULL];// >iOS 10
+[app openURL:[NSURL URLWithString:@"https://www.baidu.com/"]];// <iOS 10
+[app openURL:[NSURL URLWithString:@"https://www.baidu.com/"] options:@{} completionHandler:NULL];// >iOS 10
 
 // 打电话
 [app openURL:[NSURL URLWithString:@"tel://10086"] options:@{} completionHandler:^(BOOL success) {}];
@@ -1335,6 +1335,14 @@ UIApplication *app = [UIApplication sharedApplication];
 
 // 发邮件
 [app openURL:[NSURL URLWithString:@"mailto://12345@qq.com"] options:@{} completionHandler:^(BOOL success) {}];
+// https://apps.apple.com/cn/app/zhi-fu-bao-rang-sheng-huo/id333206289
+// 跳转到下载页面
+[app openURL:[NSURL URLWithString:@"https://apps.apple.com/cn/app/zhi-fu-bao-rang-sheng-huo/id333206289"] options:@{} completionHandler:^(BOOL success) {}];
+
+// 打开已下载的应用，url中model.customURL、model.identifier就是对方应用urltype 中的scheme和identifier,这里的identifier是可以省略的，通常有scheme就可以跳转了即 %@://
+NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", model.customUrl, model.identifier]];
+[app openURL:url options:@{} completionHandler:^(BOOL success) {}];
+// 如果想自己的应用可以被第三方打开，也可以自己在设置的info 中 的 url type 添加URL scheme
 ```
 
 * 使用openURL方法也可以打开其他应用，在不同应用之间互相调用对方。
@@ -3036,6 +3044,17 @@ NSString *title = NSLocalizedStringFromTable(@"settingTitle",@"Chinese", nil);
 添加好account后在项目设置，在build settings中搜索signing，然后development Team 改成刚添加的appleID就好了。手机上记得在通用中信任一下开发者
 
 ![](./10.png)
+
+## 获取本机硬件信息
+
+可以根据官方的api获取，也可以用一个框架 github [Shmoopi](https://github.com/Shmoopi)/**[iOS-System-Services](https://github.com/Shmoopi/iOS-System-Services)**
+
+```objc
+#import "SystemServices.h"
+NSLog(@"All System Information: %@", [SystemServices sharedServices].allSystemInformation);	
+```
+
+这个框架帮我们获取完了所有能获取的硬件信息，具体有哪些信息，可以去GitHub看看
 
 ## iOS 小技巧
 

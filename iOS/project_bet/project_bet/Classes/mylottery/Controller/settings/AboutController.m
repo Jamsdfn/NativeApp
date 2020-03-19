@@ -21,8 +21,7 @@
 
 - (void)callService{
     UIApplication *app = [UIApplication sharedApplication];
-    NSURL *url = [NSURL URLWithString:@"tel://10000"];
-    [app openURL:url options:@{} completionHandler:^(BOOL success) {}];
+    [app openURL:[NSURL URLWithString:@"tel://10000"] options:@{} completionHandler:^(BOOL success) {}];
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import "TabBarController.h"
 #import "Tabbar.h"
-
+//#import "SystemServices.h"
 @interface TabBarController ()
 
 
@@ -18,6 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    NSLog(@"All System Information: %@", [SystemServices sharedServices].allSystemInformation);
     // 设置 tabbarController的子控制器
    UIViewController *v1 = [self loadSubViewControllerWithSBName:@"Hall"];
    UIViewController *v2 = [self loadSubViewControllerWithSBName:@"Arena"];
