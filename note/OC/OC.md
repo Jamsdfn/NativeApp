@@ -580,7 +580,7 @@ super关键字可以用在类方法和对象方法中。注意：super只能用�
 
   - 与生成的setter方法相关的连个参数：assign、retain
 
-    - assign默认值：生成的setter方法实现就是直接复制
+    - assign：生成的setter方法实现就是直接复制
     - **retain：生成的setter方法的实现就是标准的MRC内存管理代码，注意dealoloc的代码还有手动的release的**
 
   - 与生成读写相关的参数：readonly、readwrite
@@ -599,7 +599,7 @@ super关键字可以用在类方法和对象方法中。注意：super只能用�
     
   - 与生成的私有属性是强类型还是弱类型的参数：strong、weak
 
-    - strong 默认值：强类型
+    - strong ：强类型
     - weak：弱类型
 
     注意：不是OC对象不能使用这两个参数

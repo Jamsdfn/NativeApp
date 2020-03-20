@@ -2325,7 +2325,7 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
 
 这个方法可以在系统查找控件的过程中人为的截断响应的对象（打麻将截胡的感觉）。即本来不是你响应的，而你又比要响应的对象先被查询到，这时你 hitTest 方法返回值是 self，那就直接变成你响应了
 
-**事件的产生和传递**：
+### 事件的产生和传递
 
 - 发生触摸事件后，系统会将该事件加入到一个由UIApplication管理的事件队列中
 
@@ -2336,7 +2336,7 @@ UIApplication、UIViewController、UIView都继承自UIResponder，因此它们�
 - 主窗口会调用hitTest:withEvent:方法在视图继承树中找到一个最合适的子视图来处理触摸事件，该子视图即为hit-test视图
 - 找到合适的视图控件后，就会调用视图控件的touches方法来作具体的事件处理
 
-系统先从最低不的 UIApplication 开始找，一层一层往上找（如果是同一层则从后往前找），找到后如果控件调用了父类的触摸事件再自上而下的往下执行。一直到无法响应的父级为止。这些自上而下的响应者就是响应者链条，第一个响应的对象，就叫第一响应者
+系统先从最低层的 UIApplication 开始找，一层一层往上找（如果是同一层则从后往前找），找到后如果控件调用了父类的触摸事件再自上而下的往下执行。一直到无法响应的父级为止。这些自上而下的响应者就是响应者链条，第一个响应的对象，就叫第一响应者
 
 ### 手势识别
 
@@ -3223,18 +3223,29 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), di
 
 **把C的东西强转成OC**：`view.layer.contents = (__bridge id)([UIImage imageNamed:@"me"].CGImage);`
 
+(__bridge 类型) 有点强转的感觉，比如 
+
+```objc
+char *name = "test";
+NSString *n = (__bridge NSString*)(name);
+
+NSString *name = @"test";
+char *n = (__bridge void *)(name); // 这里的 void * 是C语言中的万能指针类似于OC 的id
+```
+
 
 
 **block 作为方法参数、属性**：
 
 ```objc
-// 作为属性
-@property (nonatomic, assign) void (^block)(void);
+// 作为属性，一定要用copy，用assign的话就是是栈block，如果调用的作用域不是给block赋值的作用域，这样的话因为已经超出作用域，block就已将被销毁了，在去执行的话就会出现僵尸对象错误的。
+// 如果用copy的话就直接从栈block copy成堆block在个属性赋值
+@property (nonatomic, copy) void (^block)(void);
 // 作为方法参数
 - (void)alertMessageTitle:(NSString *)title withContent:(NSString *)msg andAction:(void (^)(void))callback;
 ```
 
-
+block一般情况下都用copy修饰
 
 **取消高亮状态**：
 
