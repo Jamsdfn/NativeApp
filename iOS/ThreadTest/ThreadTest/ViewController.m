@@ -8,44 +8,58 @@
 
 #import "ViewController.h"
 #import <pthread.h>
+#import "Single.h"
 @interface ViewController ()
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) NSMutableArray *photoList;
 
 @end
 
 @implementation ViewController
 
-- (void)loadView{
-    self.scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.view = self.scrollView;
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.imageView = [[UIImageView alloc] init];
-    [self.view addSubview:self.imageView];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
+
+- (NSMutableArray *)photoList{
+    if (!_photoList) {
+        _photoList = [[NSMutableArray alloc] init];
+    }
+    return _photoList;
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self test];
     
-    [NSThread detachNewThreadWithBlock:^{
-        [self demo];
-    }];
-    NSLog(@"11111");
 }
-- (void)demo{
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.yunwen11.com/big_img/banner.png.1920x500_q85.png"]];
-    NSLog(@"%@",data);
-    // 只能在主线程中操作UI
-    // 最后一个参数YES则表示，等待这个方法执行完才会执行后面的代码。(是否同步操作)
-    [self performSelectorOnMainThread:@selector(showImg:) withObject:[UIImage imageWithData:data] waitUntilDone:NO];
-    NSLog(@"render finish");
+
+- (void)test{
+    // 创建组
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+    dispatch_group_async(group, queue, ^{
+        NSLog(@"正在下载第一首");
+    });
+    dispatch_group_async(group, queue, ^{
+        NSLog(@"正在下载第二首");
+    });
+    dispatch_group_async(group, queue, ^{
+        NSLog(@"正在下载第三首");
+    });
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        [self show];
+    });
+    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+    NSLog(@"test");
 }
-- (void)showImg:(UIImage *)image{
-    NSLog(@"render start");
-    self.imageView.image = image;
-    [self.imageView sizeToFit];
-    self.scrollView.contentSize = image.size;
+- (void)show{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"通知" message:@"已全部下载完成" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+       handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
-// https://iknow-pic.cdn.bcebos.com/d043ad4bd11373f092c78684a60f4bfbfbed0434
 @end

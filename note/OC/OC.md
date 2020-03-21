@@ -2139,7 +2139,7 @@ NSLog(@"%lu %lu %lu",year,month,day);
 + (instancetype)sharedSingle {
   return [self new];
 }
-+ (instacetype)defaultSingle {
++ (instancetype)defaultSingle {
   return [self new];
 }
 @end
