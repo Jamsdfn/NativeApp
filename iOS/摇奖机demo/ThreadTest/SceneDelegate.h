@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  SceneDelegate.h
 //  ThreadTest
 //
 //  Created by Jamsdfn on 2020/3/20.
@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UITableViewController
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
 
+@property (strong, nonatomic) UIWindow * window;
 
 @end
 

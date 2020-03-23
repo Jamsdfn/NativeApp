@@ -3301,3 +3301,23 @@ cell.accessoryView = [NSClassFromString(accessoryType) new];
 
 
 
+在**对象的方法中使用的block中使用self**，要把self变成弱引用，不然会发生循环引用
+
+Self -> block -> self
+
+```objc
+__weak typeof(self) *weakSelf = self;
+```
+
+
+
+**在一串路径中获得文件名**：
+
+```objc
+NSString *path = @"/ab/c/d/e.jpg";
+NSString *fileName = [path lastPathComponent];
+// 给路径拼接文件名
+NSString *tmpPath = NSTemporaryDirectory();
+NSString *filePath = [tmpPath stringByAppendingPathComponent:@"test.data"];
+```
+

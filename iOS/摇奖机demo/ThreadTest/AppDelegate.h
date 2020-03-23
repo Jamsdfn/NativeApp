@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  AppDelegate.h
 //  ThreadTest
 //
 //  Created by Jamsdfn on 2020/3/20.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UITableViewController
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 
 @end
