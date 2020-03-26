@@ -10,7 +10,7 @@
 #import <netinet/in.h>
 #import <arpa/inet.h>
 #import "ViewController.h"
-#import "MResponse.h"
+
 @interface ViewController ()
 @property (nonatomic, strong) NSOperationQueue *queue;
 @property (nonatomic, assign) int clientSocket;
@@ -22,37 +22,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.queue = [NSOperationQueue new];
-    // 获取网络数据的第一个方式
-    NSURL *url = [NSURL URLWithString:@"http://192.168.88.100/aaa/demo.json"];
-//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    // 设置缓存策略，和连接延时（超时后不管服务器断不断开连接，客户端都断开）
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15];
-    [NSURLConnection sendAsynchronousRequest:request queue:self.queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
-        if (connectionError) {
-            NSLog(@"connect error");
-            return;
-        }
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-        if (httpResponse.statusCode != 200 && httpResponse.statusCode != 304) {
-            NSLog(@"server error");
-            return;
-        }
-//        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSError *error;
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-        if (error) {
-            NSLog(@"JSONparse error: %@",error);
-            return;
-        }
-//        NSLog(@"%@",dict);
-        MResponse *msg = [MResponse messageWithDictionary:dict];
-        NSLog(@"%@,%@",msg.messageId,msg.message);
-    }];
+    // GET / HTTP/1.1\r\n
+    // Host: www.baidu.com\r\n\r\n
     
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    
+    BOOL res = [self connect:@"192.168.88.100" port:3000];
+    if (!res) {
+        return;
+    }
+    NSString *recMsg = [self sendAndRecv:@"GET / HTTP/1.1\r\n"
+    "Host: www.baidu.com\r\n"
+    "Connection: close\r\n\r\n"];
+    close(self.clientSocket);
+    NSRange range = [recMsg rangeOfString:@"\r\n\r\n"];
+    NSString *html = [recMsg substringFromIndex:range.location+range.length];
+    WKWebView *webview = [[WKWebView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [webview loadHTMLString:html baseURL:[NSURL URLWithString:@"http://192.168.88.100:3000"]];
+    [self.view addSubview:webview];
 }
 
 - (BOOL)connect:(NSString *)ip port:(int)port{

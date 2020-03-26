@@ -16,8 +16,6 @@
 		B74F4106242B208C00A3F1BB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F4105242B208C00A3F1BB /* main.m */; };
 		B74F4110242B208C00A3F1BB /* NetTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F410F242B208C00A3F1BB /* NetTestTests.m */; };
 		B74F411B242B208C00A3F1BB /* NetTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F411A242B208C00A3F1BB /* NetTestUITests.m */; };
-		B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */; };
-		B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52914242CB7BF00CAABB1 /* MResponse.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,10 +54,6 @@
 		B74F4116242B208C00A3F1BB /* NetTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B74F411A242B208C00A3F1BB /* NetTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetTestUITests.m; sourceTree = "<group>"; };
 		B74F411C242B208C00A3F1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B7C52910242CB15C00CAABB1 /* NSDictionary+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+EX.h"; sourceTree = "<group>"; };
-		B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EX.m"; sourceTree = "<group>"; };
-		B7C52913242CB7BF00CAABB1 /* MResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MResponse.h; sourceTree = "<group>"; };
-		B7C52914242CB7BF00CAABB1 /* MResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MResponse.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,10 +115,6 @@
 				B74F4101242B208C00A3F1BB /* LaunchScreen.storyboard */,
 				B74F4104242B208C00A3F1BB /* Info.plist */,
 				B74F4105242B208C00A3F1BB /* main.m */,
-				B7C52910242CB15C00CAABB1 /* NSDictionary+EX.h */,
-				B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */,
-				B7C52913242CB7BF00CAABB1 /* MResponse.h */,
-				B7C52914242CB7BF00CAABB1 /* MResponse.m */,
 			);
 			path = NetTest;
 			sourceTree = "<group>";
@@ -279,8 +269,6 @@
 			files = (
 				B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */,
 				B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */,
-				B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */,
-				B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */,
 				B74F4106242B208C00A3F1BB /* main.m in Sources */,
 				B74F40F8242B208A00A3F1BB /* SceneDelegate.m in Sources */,
 			);
