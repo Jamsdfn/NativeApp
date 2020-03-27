@@ -18,6 +18,7 @@
 		B74F411B242B208C00A3F1BB /* NetTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F411A242B208C00A3F1BB /* NetTestUITests.m */; };
 		B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */; };
 		B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52914242CB7BF00CAABB1 /* MResponse.m */; };
+		B7C8FF90242E2E8E00D3991F /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EX.m"; sourceTree = "<group>"; };
 		B7C52913242CB7BF00CAABB1 /* MResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MResponse.h; sourceTree = "<group>"; };
 		B7C52914242CB7BF00CAABB1 /* MResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MResponse.m; sourceTree = "<group>"; };
+		B7C8FF8E242E2E8D00D3991F /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				B74F40FF242B208C00A3F1BB /* Assets.xcassets */,
 				B74F4101242B208C00A3F1BB /* LaunchScreen.storyboard */,
 				B74F4104242B208C00A3F1BB /* Info.plist */,
+				B7C8FF8E242E2E8D00D3991F /* GDataXMLNode.h */,
+				B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */,
 				B74F4105242B208C00A3F1BB /* main.m */,
 				B7C52910242CB15C00CAABB1 /* NSDictionary+EX.h */,
 				B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */,
@@ -278,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */,
+				B7C8FF90242E2E8E00D3991F /* GDataXMLNode.m in Sources */,
 				B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */,
 				B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */,
 				B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */,
@@ -452,11 +458,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = NetTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_BUNDLE_IDENTIFIER = Jamsdfn.ios.NetTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -468,11 +476,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = NetTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_BUNDLE_IDENTIFIER = Jamsdfn.ios.NetTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

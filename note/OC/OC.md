@@ -2160,6 +2160,14 @@ Key-value coding 常用方法
   - 字典转模型常用的方法，就是把字典每一个key取出来，value赋值给调用它的对象的与key同名属性
   - 参数就是一个字典集合
 
+  注意，如果地点中有的key类的属性没用的话会报错，我们可以重写setValue:forUndefineKey:方法
+
+  ```objc
+  - (void)setValue:(id)value forUndefinedKey:(NSString *)key{
+     // 里面什么都不用写，这样就不会报错了 
+  }
+  ```
+
 - \- (void)setValue:(nullable id)value forKeyPath:(NSString *)keyPath;
 
   - 给对象key同名的属性赋值，值就是value

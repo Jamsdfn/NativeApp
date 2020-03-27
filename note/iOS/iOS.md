@@ -632,13 +632,17 @@ transform可以进行平移、缩放、旋转
 
 **静态单元格只能通过UITableViewController实现(纯使用Stroyboard就可以了，因为是代码实现所以不用关联代码的controller也行)**
 
-##### 动态创建行高：
+#### 动态创建行高
 
 **注意：如果每一行的行高是动态创建的，那么就要新建一个带fram的模型，在字典转模型的时候就要把每一行的行高算出来**，因为动态创建行高的方法是要比新建cell先执行的，如果在cell创建是再设行高是没办法给tableview的行高赋值的。
 
 详细例子可参考weibo[实例](https://github.com/Jamsdfn/NativeApp/tree/master/iOS/weibo/imgViewer)。
 
 可以纯用 storyboard 涉及 tableView，把 tableView 的属性 -> content ->static cells 就好了，如果设置的静态单元格，那个对应的 controller 可以不实现 DataSource 协议的方法
+
+#### 下拉刷新
+
+如果用**storyboard创建**tableViewController的话，在**controller的属性**那里有个**refresh属性**，改成enable，storyboard目录就会多一个refreshControl，我们可以**直接连线到方法上**，让刷新的时候调用方法。开启这个功能后，在tableViewController 中直接 **self.refreshControl** 就可以拿到这个控件了
 
 ### UICollectionView
 
@@ -3103,6 +3107,18 @@ NSString *path = [[NSBundle mainBundle] pathForResource:@"pic.plist" ofType:nil]
 ```objc
 // 例子是按照默认字体12号字来计算大小，因此在设置frame前要先发label的字体大小设置为12
 CGSize textSize = [self.lblNickName.text boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:12]} context:nil].size;
+```
+
+
+
+**计算一串字符串的长度**：
+
+\- (CGSize)sizeWithAttributes:(nullable NSDictionary<NSAttributedStringKey, id> *)attrs
+
+参数就是字体attributes的字典，也就是上一点技巧那个字典
+
+```objc
+CGSize size = [str sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12]}];
 ```
 
 
