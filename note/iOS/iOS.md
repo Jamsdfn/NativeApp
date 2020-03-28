@@ -3337,3 +3337,17 @@ NSString *tmpPath = NSTemporaryDirectory();
 NSString *filePath = [tmpPath stringByAppendingPathComponent:@"test.data"];
 ```
 
+
+
+**用代码的方式跳转到另一个storyboard上的controller**
+
+```objc
+// 加载storyboard
+UIStoryboard *sb = [UIStoryboard storyboardWithname:"Login" bundle:nil];
+// 把vc定义为sb为箭头指向的控制器 或者 在storyboard给控制器设置id，根据id控制要显示那个控制器
+//UIViewController *vc = [sb instantiateInitialViewController];
+UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"test"];
+// 把这个控制器设置为keywindow的根控制器
+[UIApplication sharedApplication].window[0].rootViewController = vc;
+```
+
