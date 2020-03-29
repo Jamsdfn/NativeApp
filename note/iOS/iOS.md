@@ -3351,3 +3351,13 @@ UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"test"];
 [UIApplication sharedApplication].window[0].rootViewController = vc;
 ```
 
+
+
+**遍历数组除了for for in 还可以**
+
+```objc
+[arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+	// obj就是每一项 idx就是下标 stop就是控制循环是否停止
+}];
+```
+
