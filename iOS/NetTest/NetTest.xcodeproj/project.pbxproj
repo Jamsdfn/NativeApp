@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B724F3C32431CB2200D2C04A /* DownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B724F3C22431CB2200D2C04A /* DownloadManager.m */; };
 		B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40F4242B208A00A3F1BB /* AppDelegate.m */; };
 		B74F40F8242B208A00A3F1BB /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40F7242B208A00A3F1BB /* SceneDelegate.m */; };
 		B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40FA242B208A00A3F1BB /* ViewController.m */; };
@@ -42,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B724F3C12431CB2200D2C04A /* DownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadManager.h; sourceTree = "<group>"; };
+		B724F3C22431CB2200D2C04A /* DownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadManager.m; sourceTree = "<group>"; };
 		B74F40F0242B208900A3F1BB /* NetTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B74F40F3242B208A00A3F1BB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B74F40F4242B208A00A3F1BB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -97,6 +100,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B724F3C02431CAF000D2C04A /* DemoClasses */ = {
+			isa = PBXGroup;
+			children = (
+				B724F3C12431CB2200D2C04A /* DownloadManager.h */,
+				B724F3C22431CB2200D2C04A /* DownloadManager.m */,
+			);
+			name = DemoClasses;
+			sourceTree = "<group>";
+		};
 		B74F40E7242B208900A3F1BB = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +132,7 @@
 		B74F40F2242B208900A3F1BB /* NetTest */ = {
 			isa = PBXGroup;
 			children = (
+				B724F3C02431CAF000D2C04A /* DemoClasses */,
 				B74F40F3242B208A00A3F1BB /* AppDelegate.h */,
 				B74F40F4242B208A00A3F1BB /* AppDelegate.m */,
 				B74F40F6242B208A00A3F1BB /* SceneDelegate.h */,
@@ -303,6 +316,7 @@
 				B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */,
 				B74F4106242B208C00A3F1BB /* main.m in Sources */,
 				B74F40F8242B208A00A3F1BB /* SceneDelegate.m in Sources */,
+				B724F3C32431CB2200D2C04A /* DownloadManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
