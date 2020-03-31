@@ -19,8 +19,12 @@
 		B74F4106242B208C00A3F1BB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F4105242B208C00A3F1BB /* main.m */; };
 		B74F4110242B208C00A3F1BB /* NetTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F410F242B208C00A3F1BB /* NetTestTests.m */; };
 		B74F411B242B208C00A3F1BB /* NetTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F411A242B208C00A3F1BB /* NetTestUITests.m */; };
+		B77B6FE724307485007694CD /* timg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B77B6FE624307485007694CD /* timg.jpeg */; };
+		B77B6FE924307E8B007694CD /* 01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B77B6FE824307E8B007694CD /* 01.jpg */; };
+		B7997031242F38B10017B804 /* NSString+Hash.m in Sources */ = {isa = PBXBuildFile; fileRef = B7997030242F38B10017B804 /* NSString+Hash.m */; };
 		B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */; };
 		B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C52914242CB7BF00CAABB1 /* MResponse.m */; };
+		B7C8FF90242E2E8E00D3991F /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,10 +69,16 @@
 		B74F4116242B208C00A3F1BB /* NetTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B74F411A242B208C00A3F1BB /* NetTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetTestUITests.m; sourceTree = "<group>"; };
 		B74F411C242B208C00A3F1BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B77B6FE624307485007694CD /* timg.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = timg.jpeg; sourceTree = "<group>"; };
+		B77B6FE824307E8B007694CD /* 01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 01.jpg; sourceTree = "<group>"; };
+		B799702F242F38B00017B804 /* NSString+Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hash.h"; sourceTree = "<group>"; };
+		B7997030242F38B10017B804 /* NSString+Hash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hash.m"; sourceTree = "<group>"; };
 		B7C52910242CB15C00CAABB1 /* NSDictionary+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+EX.h"; sourceTree = "<group>"; };
 		B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EX.m"; sourceTree = "<group>"; };
 		B7C52913242CB7BF00CAABB1 /* MResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MResponse.h; sourceTree = "<group>"; };
 		B7C52914242CB7BF00CAABB1 /* MResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MResponse.m; sourceTree = "<group>"; };
+		B7C8FF8E242E2E8D00D3991F /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +115,14 @@
 				B74F40F4242B208A00A3F1BB /* AppDelegate.m */,
 				B74F40F6242B208A00A3F1BB /* SceneDelegate.h */,
 				B74F40F7242B208A00A3F1BB /* SceneDelegate.m */,
+				B799702F242F38B00017B804 /* NSString+Hash.h */,
+				B7997030242F38B10017B804 /* NSString+Hash.m */,
 				B7C52910242CB15C00CAABB1 /* NSDictionary+EX.h */,
 				B7C52911242CB15C00CAABB1 /* NSDictionary+EX.m */,
+				B7C8FF8E242E2E8D00D3991F /* GDataXMLNode.h */,
+				B77B6FE624307485007694CD /* timg.jpeg */,
+				B7C8FF8F242E2E8E00D3991F /* GDataXMLNode.m */,
+				B77B6FE824307E8B007694CD /* 01.jpg */,
 				B74F4105242B208C00A3F1BB /* main.m */,
 			);
 			name = Others;
@@ -281,8 +297,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B77B6FE924307E8B007694CD /* 01.jpg in Resources */,
 				B74F4103242B208C00A3F1BB /* LaunchScreen.storyboard in Resources */,
 				B74F4100242B208C00A3F1BB /* Assets.xcassets in Resources */,
+				B77B6FE724307485007694CD /* timg.jpeg in Resources */,
 				B74F40FE242B208A00A3F1BB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,6 +328,8 @@
 			files = (
 				B703BD862433222100C552B1 /* ProcessView.m in Sources */,
 				B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */,
+				B7997031242F38B10017B804 /* NSString+Hash.m in Sources */,
+				B7C8FF90242E2E8E00D3991F /* GDataXMLNode.m in Sources */,
 				B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */,
 				B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */,
 				B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */,

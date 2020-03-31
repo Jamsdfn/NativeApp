@@ -43,7 +43,8 @@
 
 - (void)pause{
     [self.conn cancel];
-    
+    // 把自己从队列中移除
+    [self cancel];
 }
 
 + (instancetype)downloader:(NSString *)urlString successBlock:(nonnull void (^)(NSString * _Nonnull))successBlock processBlock:(nonnull void (^)(float))processBlock errorBlock:(nonnull void (^)(NSError * _Nonnull))errorBlock{

@@ -7,54 +7,69 @@
 //
 #import <WebKit/WebKit.h>
 #import "ViewController.h"
-#import "MResponse.h"
-#import "DownloadManager.h"
-#define kBOUNDARY @"myBoundary"
-@interface ViewController () <NSXMLParserDelegate>
+@interface ViewController ()<NSURLSessionDownloadDelegate>
 
-@property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) NSURLSessionDownloadTask *downloader;
+@property (nonatomic, strong) NSData *resumeData;
+
 @end
 
 @implementation ViewController
 
-
-- (NSOperationQueue *)queue{
-    if (!_queue) {
-        _queue = [NSOperationQueue new];
+- (NSURLSession *)session{
+    if (!_session) {
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
     }
-    return _queue;
+    return _session;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
 }
-//@"http://192.168.88.103/upload/upload.php"
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [self getHead];
-    DownloadManager *download = [DownloadManager new];
-    [download download:@"http://192.168.1.6/1.zip"];
+- (IBAction)start:(id)sender {
+    [self downloadTaskWithProcess];
+}
+- (IBAction)pause:(id)sender {
+    [self.downloader cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+        self.resumeData = resumeData;
+        // 为了防止多次点击停止，后resumeData重置为null
+        self.downloader = nil;
+    }];
+    
+}
+- (IBAction)goOn:(id)sender {
+    self.downloader = [self.session downloadTaskWithResumeData:self.resumeData];
+    [self.downloader resume];
 }
 
-- (void)getHead{
-    NSURL *url = [NSURL URLWithString:@"http://192.168.1.6/1.zip"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:15];
-    request.HTTPMethod = @"head";
-    [NSURLConnection sendAsynchronousRequest:request queue:self.queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
-        if (connectionError) {
-            NSLog(@"connection error");
-            return;
-        }
-        NSHTTPURLResponse *httpres = (NSHTTPURLResponse*)response;
-        if (httpres.statusCode != 200 && httpres.statusCode != 304) {
-            NSLog(@"server error");
-            return;
-        }
-//        NSLog(@"%@", data);
-//        NSLog(@"response head: %@",response);
-        NSLog(@"%lld", response.expectedContentLength);
-        NSLog(@"%@",response.suggestedFilename);
-    }];
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+//    [self downloadTask];
+//    NSLog(@"1");
+//    [self downloadTaskWithProcess];
 }
+
+- (void)downloadTaskWithProcess {
+    NSURLSessionDownloadTask *downloader = [self.session downloadTaskWithURL:[NSURL URLWithString:@"http://192.168.1.6/1.zip"]];
+    self.downloader = downloader;
+    [self.downloader resume];
+}
+// 开始续传的时候调用的方法
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes{
+    NSLog(@"续传");
+}
+// 获取进度
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite{
+    float process = totalBytesWritten * 1.0f / totalBytesExpectedToWrite;
+    NSLog(@"%f",process);
+}
+// 下载完成
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location{
+    NSLog(@"finish");
+}
+
 
 @end
