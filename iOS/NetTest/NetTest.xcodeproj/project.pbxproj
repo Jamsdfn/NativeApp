@@ -10,6 +10,11 @@
 		B703BD862433222100C552B1 /* ProcessView.m in Sources */ = {isa = PBXBuildFile; fileRef = B703BD852433222100C552B1 /* ProcessView.m */; };
 		B703BD8A24332B2300C552B1 /* Manager.m in Sources */ = {isa = PBXBuildFile; fileRef = B703BD8924332B2300C552B1 /* Manager.m */; };
 		B724F3C32431CB2200D2C04A /* DownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B724F3C22431CB2200D2C04A /* DownloadManager.m */; };
+		B74A70202434641500AC74E2 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = B74A70152434641500AC74E2 /* SSZipArchive.m */; };
+		B74A70212434641500AC74E2 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = B74A70182434641500AC74E2 /* ioapi.c */; };
+		B74A70222434641500AC74E2 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = B74A701A2434641500AC74E2 /* mztools.c */; };
+		B74A70232434641500AC74E2 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = B74A701C2434641500AC74E2 /* unzip.c */; };
+		B74A70242434641500AC74E2 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = B74A701E2434641500AC74E2 /* zip.c */; };
 		B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40F4242B208A00A3F1BB /* AppDelegate.m */; };
 		B74F40F8242B208A00A3F1BB /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40F7242B208A00A3F1BB /* SceneDelegate.m */; };
 		B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B74F40FA242B208A00A3F1BB /* ViewController.m */; };
@@ -47,6 +52,17 @@
 		B703BD8924332B2300C552B1 /* Manager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Manager.m; sourceTree = "<group>"; };
 		B724F3C12431CB2200D2C04A /* DownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadManager.h; sourceTree = "<group>"; };
 		B724F3C22431CB2200D2C04A /* DownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadManager.m; sourceTree = "<group>"; };
+		B74A70142434641500AC74E2 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		B74A70152434641500AC74E2 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		B74A70172434641500AC74E2 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		B74A70182434641500AC74E2 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		B74A70192434641500AC74E2 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		B74A701A2434641500AC74E2 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		B74A701B2434641500AC74E2 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		B74A701C2434641500AC74E2 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		B74A701D2434641500AC74E2 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		B74A701E2434641500AC74E2 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		B74A701F2434641500AC74E2 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		B74F40F0242B208900A3F1BB /* NetTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B74F40F3242B208A00A3F1BB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B74F40F4242B208A00A3F1BB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -125,6 +141,32 @@
 			name = DemoClasses;
 			sourceTree = "<group>";
 		};
+		B74A70132434641500AC74E2 /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				B74A70142434641500AC74E2 /* SSZipArchive.h */,
+				B74A70152434641500AC74E2 /* SSZipArchive.m */,
+				B74A70162434641500AC74E2 /* minizip */,
+			);
+			path = SSZipArchive;
+			sourceTree = "<group>";
+		};
+		B74A70162434641500AC74E2 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				B74A70172434641500AC74E2 /* crypt.h */,
+				B74A70182434641500AC74E2 /* ioapi.c */,
+				B74A70192434641500AC74E2 /* ioapi.h */,
+				B74A701A2434641500AC74E2 /* mztools.c */,
+				B74A701B2434641500AC74E2 /* mztools.h */,
+				B74A701C2434641500AC74E2 /* unzip.c */,
+				B74A701D2434641500AC74E2 /* unzip.h */,
+				B74A701E2434641500AC74E2 /* zip.c */,
+				B74A701F2434641500AC74E2 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		B74F40E7242B208900A3F1BB = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +190,7 @@
 		B74F40F2242B208900A3F1BB /* NetTest */ = {
 			isa = PBXGroup;
 			children = (
+				B74A70132434641500AC74E2 /* SSZipArchive */,
 				B703BD872433255100C552B1 /* Others */,
 				B724F3C02431CAF000D2C04A /* DemoClasses */,
 				B74F40F9242B208A00A3F1BB /* ViewController.h */,
@@ -310,11 +353,16 @@
 			files = (
 				B703BD862433222100C552B1 /* ProcessView.m in Sources */,
 				B74F40FB242B208A00A3F1BB /* ViewController.m in Sources */,
+				B74A70222434641500AC74E2 /* mztools.c in Sources */,
 				B74F40F5242B208A00A3F1BB /* AppDelegate.m in Sources */,
+				B74A70232434641500AC74E2 /* unzip.c in Sources */,
 				B7C52915242CB7BF00CAABB1 /* MResponse.m in Sources */,
 				B7C52912242CB15C00CAABB1 /* NSDictionary+EX.m in Sources */,
 				B74F4106242B208C00A3F1BB /* main.m in Sources */,
+				B74A70202434641500AC74E2 /* SSZipArchive.m in Sources */,
 				B74F40F8242B208A00A3F1BB /* SceneDelegate.m in Sources */,
+				B74A70212434641500AC74E2 /* ioapi.c in Sources */,
+				B74A70242434641500AC74E2 /* zip.c in Sources */,
 				B703BD8A24332B2300C552B1 /* Manager.m in Sources */,
 				B724F3C32431CB2200D2C04A /* DownloadManager.m in Sources */,
 			);
