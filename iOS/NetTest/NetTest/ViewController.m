@@ -8,88 +8,65 @@
 #import <WebKit/WebKit.h>
 #import "ViewController.h"
 #import "SSZipArchive.h"
-@interface ViewController ()<NSURLSessionDownloadDelegate>
+@interface ViewController ()<NSURLSessionDataDelegate>
 
 @property (nonatomic, strong) NSURLSession *session;
-@property (nonatomic, strong) NSURLSessionDownloadTask *downloader;
-@property (nonatomic, strong) NSData *resumeData;
-@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
 @end
 
 @implementation ViewController
 
+//controller遵守代理NSURLSessionDataDelegate
 - (NSURLSession *)session{
-    if (!_session) {
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        // 代理方法在主队列中执行，这样就可以方便控制UI控件
-        _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+    if (_session == nil) {
+     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+     _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     }
     return _session;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-}
-- (IBAction)start:(id)sender {
-    [self downloadTaskWithProcess];
-}
-- (IBAction)pause:(id)sender {
-    [self.downloader cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-        self.resumeData = resumeData;
-        // 暂停后吧数据保存进沙盒，这样用户重启app的时候就不怕数据丢失
-        NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"test"];
-        [self.resumeData writeToFile:path atomically:YES];
-        // 为了防止多次点击停止，后resumeData重置为null
-        self.downloader = nil;
-    }];
-    
-}
-- (IBAction)goOn:(id)sender {
-    
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"test"];
-    [self.resumeData writeToFile:path atomically:YES];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:path]) {
-        self.resumeData = [NSData dataWithContentsOfFile:path];
-    }
-    if (!self.resumeData) return;
-    self.downloader = [self.session downloadTaskWithResumeData:self.resumeData];
-    [self.downloader resume];
+//    [self deleteFile];
+    [[self.session dataTaskWithURL:[NSURL URLWithString:@"https://www.baidu.com"] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",html);
+    }] resume];
 }
 
+
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
+    if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(0,credential);
+    }
+}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    [self downloadTask];
-//    NSLog(@"1");
-//    [self downloadTaskWithProcess];
+//    [self deleteFile];
 }
 
-- (void)downloadTaskWithProcess {
-    NSURLSessionDownloadTask *downloader = [self.session downloadTaskWithURL:[NSURL URLWithString:@"http://192.168.1.6/1.zip"]];
-    self.downloader = downloader;
-    [self.downloader resume];
-}
-// 开始续传的时候调用的方法
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes{
-    NSLog(@"续传");
-}
-// 获取进度
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite{
-    float process = totalBytesWritten * 1.0f / totalBytesExpectedToWrite;
-    self.progressView.progress = process;
-    NSLog(@"%f",process);
-}
-// 下载完成
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location{
-    NSString *fileInTmp = NSTemporaryDirectory();
-//    [[NSFileManager defaultManager] copyItemAtPath:location.path toPath:fileInTmp error:NULL];
-    // 下载好后直接帮我们解压
-    [SSZipArchive unzipFileAtPath:location.path toDestination:fileInTmp uniqueId:nil];
-    [SSZipArchive createZipFileAtPath:@"/Users/duzuhua/Desktop/1.zip" withContentsOfDirectory:[NSTemporaryDirectory() stringByAppendingPathComponent:@"pro"]];
-    NSLog(@"finish");
+- (void)deleteFile{
+    NSURL *url = [NSURL URLWithString:@"http://192.168.1.6/uploads/Information.pdf"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"delete";
+    [request setValue:[self getAuthorizationValueWithuser:@"admin" pwd:@"123456"] forHTTPHeaderField:@"Authorization"];
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"删除成功%@",str);
+        NSLog(@"%@",response);
+    }] resume];
 }
 
+- (NSString*)getAuthorizationValueWithuser:(NSString*)name pwd:(NSString*)pwd{
+    NSString *value = [self base64Encode:[NSString stringWithFormat:@"%@:%@", name, pwd]];
+    return [NSString stringWithFormat:@"Basic %@",value];
+}
+
+- (NSString*)base64Encode:(NSString*)str{
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    return [data base64EncodedStringWithOptions:0];
+}
 
 @end
