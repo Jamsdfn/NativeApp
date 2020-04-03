@@ -8,8 +8,10 @@
 #import <WebKit/WebKit.h>
 #import "ViewController.h"
 #import "SSZipArchive.h"
-@interface ViewController ()<NSURLSessionDataDelegate>
+#import "AFHTTPSessionManager.h"
+@interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UIProgressView *pView;
 @property (nonatomic, strong) NSURLSession *session;
 
 @end
@@ -19,19 +21,16 @@
 //controller遵守代理NSURLSessionDataDelegate
 - (NSURLSession *)session{
     if (_session == nil) {
-     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-     _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+        config.HTTPAdditionalHeaders = @{@"Authorization": [self getAuthorizationValueWithuser:@"admin" pwd:@"123456"]};
+        _session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     }
     return _session;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self deleteFile];
-    [[self.session dataTaskWithURL:[NSURL URLWithString:@"https://www.baidu.com"] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"%@",html);
-    }] resume];
+
 }
 
 
@@ -44,6 +43,12 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
 //    [self deleteFile];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:@"http://192.168.1.6/aaa/demo.json" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",str);
+    } failure:nil];
 }
 
 - (void)deleteFile{
